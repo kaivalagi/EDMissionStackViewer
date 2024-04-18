@@ -1,6 +1,9 @@
+using EDMissionStackViewer.Extensions;
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Reflection;
+using System.Threading.Channels;
 using System.Windows.Forms;
 
 namespace EDMissionStackViewer
@@ -11,6 +14,9 @@ namespace EDMissionStackViewer
         private EDJournalWatcher _watcher;
         private bool _processQueues = true;
 
+        public Dictionary<string, List<object>> CmdrJournalEvents = new Dictionary<string, List<object>>();
+        public Dictionary<string, List<long>> CmdrMissionIds = new Dictionary<string, List<long>>();
+
         public EDMissionStackViewer()
         {
             InitializeComponent();
@@ -20,27 +26,24 @@ namespace EDMissionStackViewer
         {
             while (_watcher.CmdrJournalEventQueue[commander].Count > 0)
             {
-
-                // _watcher.CmdrJournalEventQueue[commander].TryDequeue(out var journalEntry);
-                var journalEntry = _watcher.CmdrJournalEventQueue[commander].First();                
-                if (journalEntry.Value != null)
+                _watcher.CmdrJournalEventQueue[commander].TryDequeue(out var journalEntry);
+                if (journalEntry != null)
                 {
-                    await AddJournalEntry(commander, journalEntry.Value, true);
+                    await AddJournalEntry(commander, journalEntry, true);
                 }
-                _watcher.CmdrJournalEventQueue[commander].Remove(journalEntry.Key);
 
                 Application.DoEvents();
             }
 
-            while (_watcher.CmdrMissions[commander].Count > 0)
+            while (_watcher.CmdrMissionIds[commander].Count > 0)
             {
 
-                var activeMission = _watcher.CmdrMissions[commander].First();
+                var activeMission = _watcher.CmdrMissionIds[commander].First();
                 if (activeMission != null)
                 {
                     await AddActiveMission(commander, activeMission, true);
                 }
-                _watcher.CmdrMissions[commander].Remove(activeMission);
+                _watcher.CmdrMissionIds[commander].Remove(activeMission);
 
                 Application.DoEvents();
             }
@@ -54,33 +57,52 @@ namespace EDMissionStackViewer
             await _watcher.InitializeAsync();
         }
 
-        private async Task AddJournalEntry(string commander, dynamic journalEntry, bool focus = false)
+        private async Task AddJournalEntry(string commander, object journalEntry, bool focus = false)
         {
 
-            if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
+            var journalEntryType = journalEntry.GetType().Name;
+            bool visible = false;
+
+            switch (journalEntryType)
             {
-                CreateUI(commander);
+                case "EDJournalCargoDepot":
+                    CmdrJournalEvents[commander].PopulateMissionsCargoDepot((EDJournalCargoDepot)journalEntry);
+                    break;
+                case "EDJournalBounty":
+                    CmdrJournalEvents[commander].PopulateMissionsBounty((EDJournalBounty)journalEntry);
+                    break;
+                case "EDJournalMissionMassacre":
+                case "EDJournalMissionMining":
+                case "EDJournalMissionCollect":
+                case "EDJournalMissionCourier":
+                case "EDJournalMissionBase":
+                    visible = true;
+                    CmdrJournalEvents[commander].Add(journalEntry);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Unsupported journal type of '{journalEntryType}'");
             }
 
-            var commanderTab = commanderTabs.TabPages[$"tabPage{commander}"];
-
-            var listViewEvents = (ListView)commanderTab.Controls[0].Controls[1].Controls[0];
-            ListViewItem listViewItem = null;
-
-            if (journalEntry.GetType().BaseType.Name == "EDJournalMissionBase")
+            if (visible)
             {
-                listViewItem = new ListViewItem(journalEntry.MissionId.ToString());
-            } else
-            {
-                listViewItem = new ListViewItem("");
-            }
-            
-            listViewItem.SubItems.Add(journalEntry.ToString());
-            listViewEvents.Items.Add(listViewItem);
+                if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
+                {
+                    CreateUI(commander);
+                }
 
-            if (focus)
-            {
-                commanderTab.Focus();
+                var commanderTab = commanderTabs.TabPages[$"tabPage{commander}"];
+
+                var listViewEvents = (ListView)commanderTab.Controls[0].Controls[1].Controls[0];
+
+                var mission = (EDJournalMissionBase)journalEntry;
+                var listViewItem = new ListViewItem(mission.MissionId.ToString());
+                listViewItem.SubItems.Add(mission.ToString());
+                listViewEvents.Items.Add(listViewItem);
+
+                if (focus)
+                {
+                    commanderTab.Focus();
+                }
             }
         }
 
@@ -167,6 +189,11 @@ namespace EDMissionStackViewer
         {
             foreach (var commander in _watcher.CmdrJournalEventQueue.Keys)
             {
+                if (!CmdrJournalEvents.ContainsKey(commander))
+                {
+                    CmdrJournalEvents[commander] = new List<object>();
+                }
+
                 if (_watcher.CmdrJournalEventQueue[commander].Count > 0)
                 {
                     refreshTimer.Enabled = false;
@@ -175,5 +202,40 @@ namespace EDMissionStackViewer
                 }
             }
         }
+
+
+
+//        def populate_missions_bounty(bounty: dict, missions: dict[int, dict]):
+//    changed = False
+//    associated_missions = [mission for mission in missions.values() if (mission["Name"].startswith("Mission_Massacre") and mission["TargetFaction"] == bounty["VictimFaction"])]
+//    if associated_missions:
+//        factions = []  
+//        for mission in associated_missions:
+//            if mission["Faction"] not in factions:
+                    
+//                if "VictimCount" not in mission or mission["VictimCount"] < mission["KillCount"]:
+//                    if "VictimCount" not in mission:
+//                        mission["VictimCount"] = 0
+//                    mission["VictimCount"] += 1
+//                    logger.info(f"Mission {mission['MissionID']} kill count increased")
+//                    factions.append(mission["Faction"])
+//                    changed = True
+//                else:
+//                    next
+
+//    return changed
+
+//def populate_missions_cargodepot(cargodepot: dict, missions: dict[int, dict]) :
+//    changed = False
+//    if cargodepot["MissionID"] in missions.keys():
+//        logger.info(f"Mission {cargodepot['MissionID']} cargo delivered")
+//        mission = missions[cargodepot["MissionID"]]
+//        if "DeliveredCount" not in mission:
+//            mission["DeliveredCount"] = 0
+//        mission["DeliveredCount"] += cargodepot["Count"]
+//        changes = True
+        
+//    return changed
+
     }
 }
