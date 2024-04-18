@@ -16,7 +16,7 @@ namespace EDMissionStackViewer
 
         public Dictionary<string, ConcurrentQueue<object>> CmdrJournalEventQueue = new Dictionary<string, ConcurrentQueue<object>>();
         public Dictionary<string, List<object>> CmdrJournalEventPreload = new Dictionary<string, List<object>>();
-        public Dictionary<string, List<long>> CmdrMissionIds = new Dictionary<string, List<long>>();
+        public Dictionary<string, Dictionary<long,EDJournalMission>> CmdrMissions = new Dictionary<string, Dictionary<long, EDJournalMission>>();
 
         private List<DirectoryInfo> _journalFolders = new List<DirectoryInfo>();
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
@@ -92,9 +92,9 @@ namespace EDMissionStackViewer
             }
 
             // now add only active missions to the queue from CmdrJournalEventPreload
-            foreach (var commanderName in CmdrMissionIds.Keys)
+            foreach (var commanderName in CmdrMissions.Keys)
             {
-                var activeMissions = CmdrJournalEventPreload[commanderName].OfType<EDJournalMissionBase>().Where(j => CmdrMissionIds[commanderName].Contains(j.MissionId));
+                var activeMissions = CmdrJournalEventPreload[commanderName].OfType<EDJournalMissionBase>().Where(j => CmdrMissions[commanderName].ContainsKey(j.MissionId));
 
                 foreach (var activeMission in activeMissions)
                 {
@@ -163,7 +163,7 @@ namespace EDMissionStackViewer
                                     // { "timestamp":"2024-02-27T17:05:30Z", "event":"Missions", "Active":[ { "MissionID":955337826, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":262323 }, { "MissionID":955419328, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":320172 }, { "MissionID":955449221, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":337814 }, { "MissionID":955459858, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":343286 }, { "MissionID":955461285, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":344759 }, { "MissionID":955463846, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":346046 }, { "MissionID":955478187, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":351933 }, { "MissionID":955483642, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":355237 }, { "MissionID":955566389, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":409926 }, { "MissionID":955570187, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":413081 }, { "MissionID":955581955, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":418324 }, { "MissionID":955583725, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":419640 }, { "MissionID":955583823, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":420502 }, { "MissionID":955588994, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":422996 }, { "MissionID":955611100, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":431214 }, { "MissionID":955645131, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":446121 }, { "MissionID":955720771, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":533166 } ], "Failed":[  ], "Complete":[  ] }
                                     var activeMissions = journalEntry["Active"];
 
-                                    CmdrMissionIds[commanderName] = new List<long>();
+                                    CmdrMissions[commanderName] = new Dictionary<long,EDJournalMission>();
 
                                     if (preload)
                                     {                                        
@@ -184,7 +184,7 @@ namespace EDMissionStackViewer
                                     {
                                         foreach (var activeMission in activeMissions)
                                         {
-                                            CmdrMissionIds[commanderName].Add((long)activeMission["MissionID"]);
+                                            CmdrMissions[commanderName].Add((long)activeMission["MissionID"], new EDJournalMission(activeMission));
                                         }
                                     }
 
@@ -194,15 +194,21 @@ namespace EDMissionStackViewer
                                     // { "timestamp":"2024-04-17T21:18:41Z", "event":"MissionAccepted", "Faction":"Partnership of Zemez", "Name":"Mission_Mining", "LocalisedName":"Mine 372 Units of Silver", "Commodity":"$Silver_Name;", "Commodity_Localised":"Silver", "Count":372, "DestinationSystem":"Wally Bei", "DestinationStation":"Malerba Orbital", "Expiry":"2024-04-24T20:52:35Z", "Wing":true, "Influence":"++", "Reputation":"++", "Reward":50000000, "MissionID":961673229 }
                                     var mission = journalEntry.Populate();
 
-                                    if (preload)
+                                    if (mission != null)
                                     {
-                                        CmdrJournalEventPreload[commanderName].Add(mission);
-                                    } 
-                                    else
-                                    {
-                                        CmdrJournalEventQueue[commanderName].Enqueue(mission);
+                                        if (preload)
+                                        {
+                                            CmdrJournalEventPreload[commanderName].Add(mission);
+                                        }
+                                        else
+                                        {
+                                            CmdrJournalEventQueue[commanderName].Enqueue(mission);
+                                        }
+
+                                        var missionBase = (EDJournalMissionBase)mission;
+                                        CmdrMissions[commanderName].Add(missionBase.MissionId, new EDJournalMission(missionBase));
                                     }
-                                    
+
                                     break;
 
                                 case "MissionAbandoned":
@@ -215,6 +221,12 @@ namespace EDMissionStackViewer
                                     if (preload)
                                     {
                                         CmdrJournalEventPreload[commanderName].Add(missionOther);
+
+                                        var missionOtherBase = (EDJournalMissionBase)missionOther;
+                                        if (CmdrMissions[commanderName].ContainsKey(missionOtherBase.MissionId)) {
+                                            CmdrMissions[commanderName].Remove(missionOtherBase.MissionId);
+                                        }
+                                        
                                     }
                                     else
                                     {

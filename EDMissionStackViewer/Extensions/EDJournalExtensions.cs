@@ -35,6 +35,11 @@ namespace EDMissionStackViewer.Extensions
                         entry = new EDJournalMissionCourier(journalEntry);
                     }
                     break;
+                case "MissionAbandoned":
+                case "MissionCompleted":
+                case "MissionRedirected":
+                    entry = new EDJournalMissionBase(journalEntry);
+                    break;
                 case "CargoDepot":
                     entry = new EDJournalCargoDepot(journalEntry);
                     break;

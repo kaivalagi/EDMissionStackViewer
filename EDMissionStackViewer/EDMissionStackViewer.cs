@@ -15,7 +15,7 @@ namespace EDMissionStackViewer
         private bool _processQueues = true;
 
         public Dictionary<string, List<object>> CmdrJournalEvents = new Dictionary<string, List<object>>();
-        public Dictionary<string, List<long>> CmdrMissionIds = new Dictionary<string, List<long>>();
+        public Dictionary<string, Dictionary<long,EDJournalMission>> CmdrMissions = new Dictionary<string, Dictionary<long, EDJournalMission>>();
 
         public EDMissionStackViewer()
         {
@@ -35,16 +35,10 @@ namespace EDMissionStackViewer
                 Application.DoEvents();
             }
 
-            while (_watcher.CmdrMissionIds[commander].Count > 0)
+            if (!CmdrMissions.ContainsKey(commander) || CmdrMissions[commander] != _watcher.CmdrMissions[commander])
             {
-
-                var activeMission = _watcher.CmdrMissionIds[commander].First();
-                if (activeMission != null)
-                {
-                    await AddActiveMission(commander, activeMission, true);
-                }
-                _watcher.CmdrMissionIds[commander].Remove(activeMission);
-
+                CmdrMissions[commander] = _watcher.CmdrMissions[commander];
+                await LoadActiveMissions(commander, true);
                 Application.DoEvents();
             }
 
@@ -106,7 +100,7 @@ namespace EDMissionStackViewer
             }
         }
 
-        private async Task AddActiveMission(string commander, dynamic activeMission, bool focus = false)
+        private async Task LoadActiveMissions(string commander, bool focus = false)
         {
 
             if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
@@ -117,8 +111,11 @@ namespace EDMissionStackViewer
             var commanderTab = commanderTabs.TabPages[$"tabPage{commander}"];
 
             var listBoxMissions = (ListBox)commanderTab.Controls[0].Controls[0].Controls[0];
-            listBoxMissions.Items.Add(activeMission.ToString());
-
+            foreach (var mission in CmdrMissions[commander].Values)
+            {
+                listBoxMissions.Items.Add(mission.ToString());
+            }
+            
             if (focus)
             {
                 commanderTab.Focus();

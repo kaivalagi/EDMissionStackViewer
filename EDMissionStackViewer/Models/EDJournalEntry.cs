@@ -40,28 +40,31 @@ namespace EDMissionStackViewer.Models
     {
         public long MissionId { get; set; }
         public string Name { get; set; }
-        public string DestinationSystem { get; set; }
-        public string DestinationStation { get; set; }
-        public string Faction { get; set; }
-        public int Reward { get; set; }        
-        public bool Wing { get; set; }
-        public DateTime Expiry { get; set; }
+        public string Status { get; set; }
 
 
         public EDJournalMissionBase(JToken entry)  : base(entry) {
-            MissionId = (long)entry["MissionID"];
+            MissionId = (long)entry["MissionID"];            
             Name = (string)entry["Name"];
-            DestinationSystem = (string)entry["DestinationSystem"];
-            DestinationStation = (string)entry["DestinationStation"];
-            Faction = (string)entry["Faction"];
-            Reward = (int)entry["Reward"];
-            Wing = (bool)entry["Wing"];
-            Expiry = (DateTime)entry["Expiry"];
+
+            Status = this switch
+            {
+                { Event: "MissionAccepted" } => "Active",
+                { Event: "MissionCompleted" } => "Completed",
+                { Event: "MissionAbandoned" } => "Abandoned",
+                { Event: "MissionRedirected" } => "Redirected"
+            };
         }
     }
 
     public class EDJournalMissionMassacre : EDJournalMissionBase
     {
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
+        public string Faction { get; set; }
+        public int Reward { get; set; }
+        public bool Wing { get; set; } = false;
+        public DateTime Expiry { get; set; }
         public string TargetType { get; set; }
         public string TargetFaction { get; set; }
         public int KillCount { get; set; }
@@ -70,20 +73,46 @@ namespace EDMissionStackViewer.Models
         public EDJournalMissionMassacre(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Massacre;
+            DestinationSystem = (string)entry["DestinationSystem"];
+            DestinationStation = (string)entry["DestinationStation"];
+            Faction = (string)entry["Faction"];
+            Reward = (int)entry["Reward"];
+
+            if (entry["Wing"] != null)
+            {
+                Wing = true;
+            }
+            Expiry = (DateTime)entry["Expiry"];
             TargetType = (string)entry["TargetType"];
             TargetFaction = (string)entry["TargetFaction"];
-            KillCount = (int)entry["KillCount"];
+            KillCount = (int)entry["KillCount"];          
         }
     }
 
     public class EDJournalMissionMining : EDJournalMissionBase
     {
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
+        public string Faction { get; set; }
+        public int Reward { get; set; }
+        public bool Wing { get; set; } = false;
+        public DateTime Expiry { get; set; }
         public string Commodity { get; set; }
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
 
         public EDJournalMissionMining(JToken entry) : base(entry)
         {
+            DestinationSystem = (string)entry["DestinationSystem"];
+            DestinationStation = (string)entry["DestinationStation"];
+            Faction = (string)entry["Faction"];
+            Reward = (int)entry["Reward"];
+
+            if (entry["Wing"] != null)
+            {
+                Wing = true;
+            }
+            Expiry = (DateTime)entry["Expiry"];
             Type = EDJournalEventType.Mining;
             Commodity = (string)entry["Commodity_Localised"];
             Count = (int)entry["Count"];
@@ -92,6 +121,12 @@ namespace EDMissionStackViewer.Models
 
     public class EDJournalMissionCollect: EDJournalMissionBase
     {
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
+        public string Faction { get; set; }
+        public int Reward { get; set; }
+        public bool Wing { get; set; } = false;
+        public DateTime Expiry { get; set; }
         public string Commodity { get; set; }
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
@@ -99,6 +134,16 @@ namespace EDMissionStackViewer.Models
         public EDJournalMissionCollect(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Collect;
+            DestinationSystem = (string)entry["DestinationSystem"];
+            DestinationStation = (string)entry["DestinationStation"];
+            Faction = (string)entry["Faction"];
+            Reward = (int)entry["Reward"];
+
+            if (entry["Wing"] != null)
+            {
+                Wing = true;
+            }
+            Expiry = (DateTime)entry["Expiry"];
             Commodity = (string)entry["Commodity_Localised"];
             Count = (int)entry["Count"];
         }
@@ -106,11 +151,27 @@ namespace EDMissionStackViewer.Models
 
     public class EDJournalMissionCourier: EDJournalMissionBase
     {
+        public string DestinationSystem { get; set; }
+        public string DestinationStation { get; set; }
+        public string Faction { get; set; }
+        public int Reward { get; set; }
+        public bool Wing { get; set; } = false;
+        public DateTime Expiry { get; set; }
         public string TargetFaction { get; set; }
 
         public EDJournalMissionCourier(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Courier;
+            DestinationSystem = (string)entry["DestinationSystem"];
+            DestinationStation = (string)entry["DestinationStation"];
+            Faction = (string)entry["Faction"];
+            Reward = (int)entry["Reward"];
+
+            if (entry["Wing"] != null)
+            {
+                Wing = true;
+            }
+            Expiry = (DateTime)entry["Expiry"];
             TargetFaction = (string)entry["TargetFaction"];
         }
     }
