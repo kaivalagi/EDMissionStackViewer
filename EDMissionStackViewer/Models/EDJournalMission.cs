@@ -17,7 +17,7 @@ namespace EDMissionStackViewer.Models
             Expires = (long)activeMission["Expires"];
         }
 
-        public EDJournalMission(EDJournalMissionBase acceptedMission)
+        public EDJournalMission(EDJournalEntryMissionBase acceptedMission)
         {
             JToken = acceptedMission.JToken;
             MissionId = acceptedMission.MissionId;

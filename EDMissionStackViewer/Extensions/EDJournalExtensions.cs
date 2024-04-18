@@ -20,34 +20,34 @@ namespace EDMissionStackViewer.Extensions
 
                     if (name.StartsWith("Mission_Massacre") && !onFoot && targetType)
                     {
-                        entry = new EDJournalMissionMassacre(journalEntry);
+                        entry = new EDJournalEntryMissionMassacre(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Mining") && !onFoot)
                     {
-                        entry = new EDJournalMissionMining(journalEntry);
+                        entry = new EDJournalEntryMissionMining(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Collect") && !onFoot)
                     {
-                        entry = new EDJournalMissionCollect(journalEntry);
+                        entry = new EDJournalEntryMissionCollect(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Courier") && !onFoot)
                     {
-                        entry = new EDJournalMissionCourier(journalEntry);
+                        entry = new EDJournalEntryMissionCourier(journalEntry);
                     }
                     break;
                 case "MissionAbandoned":
                 case "MissionCompleted":
                 case "MissionRedirected":
-                    entry = new EDJournalMissionBase(journalEntry);
+                    entry = new EDJournalEntryMissionBase(journalEntry);
                     break;
                 case "CargoDepot":
-                    entry = new EDJournalCargoDepot(journalEntry);
+                    entry = new EDJournalEntryCargoDepot(journalEntry);
                     break;
                 case "Bounty":
                     break;
-                    entry = new EDJournalBounty(journalEntry);
+                    entry = new EDJournalEntryBounty(journalEntry);
                 default:
-                    entry = new EDJournalEventBase(journalEntry);
+                    entry = new EDJournalEntryBase(journalEntry);
                     break;
             }
 
@@ -76,9 +76,9 @@ namespace EDMissionStackViewer.Extensions
 
         //    return changed
 
-        public static void PopulateMissionsBounty(this List<object> journalEvents, EDJournalBounty bounty)
+        public static void PopulateMissionsBounty(this List<object> journalEvents, EDJournalEntryBounty bounty)
         {
-            var associatedMissions = journalEvents.OfType<EDJournalMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+            var associatedMissions = journalEvents.OfType<EDJournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
             var factions = new List<string>();
 
             foreach (var mission in associatedMissions)
@@ -98,6 +98,29 @@ namespace EDMissionStackViewer.Extensions
             }
         }
 
+        public static void PopulateMissionsBounty(this List<EDJournalEntryMissionMassacre> journalEvents, EDJournalEntryBounty bounty)
+        {
+            var associatedMissions = journalEvents.Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+            var factions = new List<string>();
+
+            foreach (var mission in associatedMissions)
+            {
+                if (!factions.Contains(mission.Faction))
+                {
+                    if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
+                    {
+                        mission.VictimCount++;
+                        factions.Add(mission.Faction);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+
+
         //def populate_missions_cargodepot(cargodepot: dict, missions: dict[int, dict]) :
         //    changed = False
         //    if cargodepot["MissionID"] in missions.keys():
@@ -110,25 +133,44 @@ namespace EDMissionStackViewer.Extensions
 
         //    return changed
 
-        public static void PopulateMissionsCargoDepot(this List<object> journalEvents, EDJournalCargoDepot cargoDepot)
+        public static void PopulateMissionsCargoDepot(this List<object> journalEvents, EDJournalEntryCargoDepot cargoDepot)
         {
-            var mission = journalEvents.OfType<EDJournalMissionBase>().Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
+            var mission = journalEvents.OfType<EDJournalEntryMissionBase>().Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)
             {
                 var missionType = mission.GetType().Name;
                 switch (missionType)
                 {
-                    case "EDJournalMissionMining":
-                        ((EDJournalMissionMining)mission).DeliveredCount += cargoDepot.Count;
+                    case "EDJournalEntryMissionMining":
+                        ((EDJournalEntryMissionMining)mission).DeliveredCount += cargoDepot.Count;
                         break;
 
-                    case "EDJournalMissionCollect":
-                        ((EDJournalMissionCollect)mission).DeliveredCount += cargoDepot.Count;
+                    case "EDJournalEntryMissionCollect":
+                        ((EDJournalEntryMissionCollect)mission).DeliveredCount += cargoDepot.Count;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException($"Unsupported mission type of '{missionType}'");
                 }
             }
         }
+
+        public static void PopulateMissionsCargoDepot(this List<EDJournalEntryMissionMining> journalEvents, EDJournalEntryCargoDepot cargoDepot)
+        {
+            var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
+            if (mission != null)
+            {
+                mission.DeliveredCount += cargoDepot.Count;
+            }
+        }
+
+        public static void PopulateMissionsCargoDepot(this List<EDJournalEntryMissionCollect> journalEvents, EDJournalEntryCargoDepot cargoDepot)
+        {
+            var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
+            if (mission != null)
+            {
+                mission.DeliveredCount += cargoDepot.Count;
+            }
+        }
+
     }
 }

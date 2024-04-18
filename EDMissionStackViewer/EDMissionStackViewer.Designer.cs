@@ -1,4 +1,6 @@
-﻿namespace EDMissionStackViewer
+﻿using EDMissionStackViewer.Controls;
+
+namespace EDMissionStackViewer
 {
     partial class EDMissionStackViewer
     {
@@ -37,6 +39,7 @@
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             refreshTimer = new System.Windows.Forms.Timer(components);
+            edMissionMiningui1 = new EDMissionMiningUI();
             commanderTabs.SuspendLayout();
             tabPagekaivalagi.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerkaivalagi).BeginInit();
@@ -77,6 +80,7 @@
             // 
             // splitContainerkaivalagi.Panel2
             // 
+            splitContainerkaivalagi.Panel2.Controls.Add(edMissionMiningui1);
             splitContainerkaivalagi.Panel2.Controls.Add(listViewkaivalagi);
             splitContainerkaivalagi.Size = new Size(2572, 871);
             splitContainerkaivalagi.SplitterDistance = 390;
@@ -96,10 +100,9 @@
             // listViewkaivalagi
             // 
             listViewkaivalagi.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
-            listViewkaivalagi.Dock = DockStyle.Fill;
-            listViewkaivalagi.Location = new Point(0, 0);
+            listViewkaivalagi.Location = new Point(1304, 447);
             listViewkaivalagi.Name = "listViewkaivalagi";
-            listViewkaivalagi.Size = new Size(2178, 871);
+            listViewkaivalagi.Size = new Size(841, 341);
             listViewkaivalagi.TabIndex = 1;
             listViewkaivalagi.UseCompatibleStateImageBehavior = false;
             listViewkaivalagi.View = View.Details;
@@ -119,6 +122,13 @@
             refreshTimer.Enabled = true;
             refreshTimer.Interval = 1000;
             refreshTimer.Tick += refreshTimer_Tick;
+            // 
+            // edMissionMiningui1
+            // 
+            edMissionMiningui1.Location = new Point(19, 28);
+            edMissionMiningui1.Name = "edMissionMiningui1";
+            edMissionMiningui1.Size = new Size(1218, 682);
+            edMissionMiningui1.TabIndex = 2;
             // 
             // EDMissionStackViewer
             // 
@@ -148,5 +158,6 @@
         private ListView listViewkaivalagi;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
+        private EDMissionMiningUI edMissionMiningui1;
     }
 }

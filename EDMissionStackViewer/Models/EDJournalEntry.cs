@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace EDMissionStackViewer.Models
 {
@@ -16,14 +14,14 @@ namespace EDMissionStackViewer.Models
     }
 
     
-    public class EDJournalEventBase
+    public class EDJournalEntryBase
     {
         public JToken JToken { get; set; }
         public DateTime Timestamp { get; set; }
         public string Event { get; set; }
         public EDJournalEventType Type { get; set; }
 
-        public EDJournalEventBase(JToken entry)
+        public EDJournalEntryBase(JToken entry)
         {
             JToken = entry;
             Timestamp = (DateTime)entry["timestamp"];
@@ -36,14 +34,14 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalMissionBase : EDJournalEventBase
+    public class EDJournalEntryMissionBase : EDJournalEntryBase
     {
         public long MissionId { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
 
 
-        public EDJournalMissionBase(JToken entry)  : base(entry) {
+        public EDJournalEntryMissionBase(JToken entry)  : base(entry) {
             MissionId = (long)entry["MissionID"];            
             Name = (string)entry["Name"];
 
@@ -57,7 +55,7 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalMissionMassacre : EDJournalMissionBase
+    public class EDJournalEntryMissionMassacre : EDJournalEntryMissionBase
     {
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
@@ -70,7 +68,7 @@ namespace EDMissionStackViewer.Models
         public int KillCount { get; set; }
         public int VictimCount { get; set; } = 0;
 
-        public EDJournalMissionMassacre(JToken entry) : base(entry)
+        public EDJournalEntryMissionMassacre(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Massacre;
             DestinationSystem = (string)entry["DestinationSystem"];
@@ -89,7 +87,7 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalMissionMining : EDJournalMissionBase
+    public class EDJournalEntryMissionMining : EDJournalEntryMissionBase
     {
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
@@ -101,7 +99,7 @@ namespace EDMissionStackViewer.Models
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
 
-        public EDJournalMissionMining(JToken entry) : base(entry)
+        public EDJournalEntryMissionMining(JToken entry) : base(entry)
         {
             DestinationSystem = (string)entry["DestinationSystem"];
             DestinationStation = (string)entry["DestinationStation"];
@@ -119,7 +117,7 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalMissionCollect: EDJournalMissionBase
+    public class EDJournalEntryMissionCollect: EDJournalEntryMissionBase
     {
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
@@ -131,7 +129,7 @@ namespace EDMissionStackViewer.Models
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
 
-        public EDJournalMissionCollect(JToken entry) : base(entry)
+        public EDJournalEntryMissionCollect(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Collect;
             DestinationSystem = (string)entry["DestinationSystem"];
@@ -149,7 +147,7 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalMissionCourier: EDJournalMissionBase
+    public class EDJournalEntryMissionCourier: EDJournalEntryMissionBase
     {
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
@@ -159,7 +157,7 @@ namespace EDMissionStackViewer.Models
         public DateTime Expiry { get; set; }
         public string TargetFaction { get; set; }
 
-        public EDJournalMissionCourier(JToken entry) : base(entry)
+        public EDJournalEntryMissionCourier(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Courier;
             DestinationSystem = (string)entry["DestinationSystem"];
@@ -176,7 +174,7 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalCargoDepot : EDJournalEventBase
+    public class EDJournalEntryCargoDepot : EDJournalEntryBase
     {
         public long MissionId { get; set; }
         public string UpdateType { get; set; }
@@ -184,7 +182,7 @@ namespace EDMissionStackViewer.Models
         public int Count { get; set; }
 
 
-        public EDJournalCargoDepot(JToken entry) : base(entry)
+        public EDJournalEntryCargoDepot(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.CargoDepot;
             MissionId = (long)entry["MissionID"];
@@ -194,14 +192,14 @@ namespace EDMissionStackViewer.Models
         }
     }
 
-    public class EDJournalBounty : EDJournalEventBase
+    public class EDJournalEntryBounty : EDJournalEntryBase
     {
         public string VictimFaction { get; set; }
         public int TotalReward { get; set; }
         public string PilotName { get; set; }
 
 
-        public EDJournalBounty(JToken entry) : base(entry)
+        public EDJournalEntryBounty(JToken entry) : base(entry)
         {
             Type = EDJournalEventType.Bounty;
             VictimFaction = (string)entry["VictimFaction"];

@@ -14,8 +14,8 @@ namespace EDMissionStackViewer
 
         #region Class Data
 
-        public Dictionary<string, ConcurrentQueue<object>> CmdrJournalEventQueue = new Dictionary<string, ConcurrentQueue<object>>();
-        public Dictionary<string, List<object>> CmdrJournalEventPreload = new Dictionary<string, List<object>>();
+        public Dictionary<string, ConcurrentQueue<object>> CmdrJournalEntryQueue = new Dictionary<string, ConcurrentQueue<object>>();
+        public Dictionary<string, List<object>> CmdrJournalEntryPreload = new Dictionary<string, List<object>>();
         public Dictionary<string, Dictionary<long,EDJournalMission>> CmdrMissions = new Dictionary<string, Dictionary<long, EDJournalMission>>();
 
         private List<DirectoryInfo> _journalFolders = new List<DirectoryInfo>();
@@ -94,15 +94,15 @@ namespace EDMissionStackViewer
             // now add only active missions to the queue from CmdrJournalEventPreload
             foreach (var commanderName in CmdrMissions.Keys)
             {
-                var activeMissions = CmdrJournalEventPreload[commanderName].OfType<EDJournalMissionBase>().Where(j => CmdrMissions[commanderName].ContainsKey(j.MissionId));
+                var activeMissions = CmdrJournalEntryPreload[commanderName].OfType<EDJournalEntryMissionBase>().Where(j => CmdrMissions[commanderName].ContainsKey(j.MissionId));
 
                 foreach (var activeMission in activeMissions)
                 {
-                    if (!CmdrJournalEventQueue.ContainsKey(commanderName))
+                    if (!CmdrJournalEntryQueue.ContainsKey(commanderName))
                     {
-                        CmdrJournalEventQueue[commanderName] = new ConcurrentQueue<object>();
+                        CmdrJournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
                     }
-                    CmdrJournalEventQueue[commanderName].Enqueue(activeMission);
+                    CmdrJournalEntryQueue[commanderName].Enqueue(activeMission);
                 }
             }
         }
@@ -167,16 +167,16 @@ namespace EDMissionStackViewer
 
                                     if (preload)
                                     {                                        
-                                        if (!CmdrJournalEventPreload.ContainsKey(commanderName))
+                                        if (!CmdrJournalEntryPreload.ContainsKey(commanderName))
                                         {
-                                            CmdrJournalEventPreload[commanderName] = new List<object>();
+                                            CmdrJournalEntryPreload[commanderName] = new List<object>();
                                         }
                                     } 
                                     else
                                     {
-                                        if (!CmdrJournalEventQueue.ContainsKey(commanderName))
+                                        if (!CmdrJournalEntryQueue.ContainsKey(commanderName))
                                         {
-                                            CmdrJournalEventQueue[commanderName] = new ConcurrentQueue<object>();
+                                            CmdrJournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
                                         }
                                     }
                                     
@@ -192,21 +192,20 @@ namespace EDMissionStackViewer
 
                                 case "MissionAccepted":
                                     // { "timestamp":"2024-04-17T21:18:41Z", "event":"MissionAccepted", "Faction":"Partnership of Zemez", "Name":"Mission_Mining", "LocalisedName":"Mine 372 Units of Silver", "Commodity":"$Silver_Name;", "Commodity_Localised":"Silver", "Count":372, "DestinationSystem":"Wally Bei", "DestinationStation":"Malerba Orbital", "Expiry":"2024-04-24T20:52:35Z", "Wing":true, "Influence":"++", "Reputation":"++", "Reward":50000000, "MissionID":961673229 }
-                                    var mission = journalEntry.Populate();
+                                    var missionAccepted = journalEntry.Populate();
 
-                                    if (mission != null)
+                                    if (missionAccepted != null)
                                     {
                                         if (preload)
                                         {
-                                            CmdrJournalEventPreload[commanderName].Add(mission);
+                                            CmdrJournalEntryPreload[commanderName].Add(missionAccepted);
                                         }
                                         else
                                         {
-                                            CmdrJournalEventQueue[commanderName].Enqueue(mission);
+                                            CmdrJournalEntryQueue[commanderName].Enqueue(missionAccepted);
                                         }
 
-                                        var missionBase = (EDJournalMissionBase)mission;
-                                        CmdrMissions[commanderName].Add(missionBase.MissionId, new EDJournalMission(missionBase));
+                                        CmdrMissions[commanderName].Add(((EDJournalEntryMissionBase)missionAccepted).MissionId, new EDJournalMission((EDJournalEntryMissionBase)missionAccepted));
                                     }
 
                                     break;
@@ -216,52 +215,50 @@ namespace EDMissionStackViewer
                                 case "MissionRedirected":
                                     // { "timestamp":"2024-02-27T16:47:41Z", "event":"MissionCompleted", "Faction":"Traditional Wally Bei Constitution Party", "Name":"Mission_AltruismCredits_CivilUnrest_name", "LocalisedName":"Provide 1,000,000 Cr to Tackle Civil Unrest", "MissionID":955797651, "Donation":"1000000", "Donated":1000000, "FactionEffects":[ { "Faction":"Traditional Wally Bei Constitution Party", "Effects":[ { "Effect":"$MISSIONUTIL_Interaction_Summary_EP_up;", "Effect_Localised":"The economic status of $#MinorFaction; has improved in the $#System; system.", "Trend":"UpGood" } ], "Influence":[ { "SystemAddress":5031654855394, "Trend":"UpGood", "Influence":"++" } ], "ReputationTrend":"UpGood", "Reputation":"++" } ] }
                                     // { "timestamp":"2024-02-04T13:24:55Z", "event":"MissionRedirected", "MissionID":953030920, "Name":"Mission_Massacre", "LocalisedName":"Kill LP 932-12 Society faction Pirates", "NewDestinationStation":"Braun Station", "NewDestinationSystem":"Gliese 868", "OldDestinationStation":"", "OldDestinationSystem":"LP 932-12" }
-                                    var missionOther = journalEntry.Populate();
+                                    var missionRemoved = journalEntry.Populate();
 
                                     if (preload)
                                     {
-                                        CmdrJournalEventPreload[commanderName].Add(missionOther);
+                                        CmdrJournalEntryPreload[commanderName].Add(missionRemoved);
 
-                                        var missionOtherBase = (EDJournalMissionBase)missionOther;
-                                        if (CmdrMissions[commanderName].ContainsKey(missionOtherBase.MissionId)) {
-                                            CmdrMissions[commanderName].Remove(missionOtherBase.MissionId);
+                                        var missionRemovedId = ((EDJournalEntryMissionBase)missionRemoved).MissionId;
+                                        if (CmdrMissions[commanderName].ContainsKey(missionRemovedId)) {
+                                            CmdrMissions[commanderName].Remove(missionRemovedId);
                                         }
                                         
                                     }
                                     else
                                     {
-                                        CmdrJournalEventQueue[commanderName].Enqueue(missionOther);
+                                        CmdrJournalEntryQueue[commanderName].Enqueue(missionRemoved);
                                     }
                                     break;
 
                                 case "CargoDepot":
                                     // { "timestamp":"2024-02-05T11:47:22Z", "event":"CargoDepot", "MissionID":953167866, "UpdateType":"Deliver", "CargoType":"DomesticAppliances", "CargoType_Localised":"Domestic Appliances", "Count":643, "StartMarketID":0, "EndMarketID":3230588160, "ItemsCollected":0, "ItemsDelivered":643, "TotalItemsToDeliver":1090, "Progress":0.000000 }
-                                    var cargoDepot = (EDJournalCargoDepot)journalEntry.Populate();
+                                    var cargoDepot = (EDJournalEntryCargoDepot)journalEntry.Populate();
                                     if (cargoDepot.UpdateType == "Deliver")
                                     {
                                         if (preload)
                                         {
-                                            //CmdrJournalEventPreload[commanderName].Add(cargoDepot); //populate existing mission with this
-                                            CmdrJournalEventPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
+                                            CmdrJournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
                                         }
                                         else
                                         {
-                                            CmdrJournalEventQueue[commanderName].Enqueue(cargoDepot);
+                                            CmdrJournalEntryQueue[commanderName].Enqueue(cargoDepot);
                                         }
                                     }
                                     break;
 
                                 case "Bounty":
                                     // { "timestamp":"2023-08-26T10:04:19Z", "event":"Bounty", "Rewards":[ { "Faction":"Arbor Caelum Internal Defense", "Reward":527187 } ], "Target":"python", "TotalReward":527187, "VictimFaction":"Zeta Trianguli Australis Corporation" }                                    
-                                    var bounty = (EDJournalBounty)journalEntry.Populate();
+                                    var bounty = (EDJournalEntryBounty)journalEntry.Populate();
                                     if (preload)
                                     {
-                                        //CmdrJournalEventPreload[commanderName].Add(Guid.NewGuid(), bounty); //populate existing mission with this
-                                        CmdrJournalEventPreload[commanderName].PopulateMissionsBounty(bounty);
+                                        CmdrJournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
                                     }
                                     else
                                     {
-                                        CmdrJournalEventQueue[commanderName].Enqueue(bounty);
+                                        CmdrJournalEntryQueue[commanderName].Enqueue(bounty);
                                     }
 
                                     break;
