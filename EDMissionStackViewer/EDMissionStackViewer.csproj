@@ -12,4 +12,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Controls\EDMissionCourierUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\EDMissionCollectUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\EDMissionMassacreUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
