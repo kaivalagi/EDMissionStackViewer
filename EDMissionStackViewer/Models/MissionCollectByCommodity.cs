@@ -16,6 +16,18 @@ namespace EDMissionStackViewer.Models
         public DateTime MinExpiry { get; set; }
         public DateTime MaxExpiry { get; set; }
 
+        public MissionCollectByCommodity(List<MissionCollectByCommodity> summaryDataSource)
+        {
+            this.Commodity = "Total";
+            this.Required = summaryDataSource.Sum(m => m.Required);
+            this.Delivered = summaryDataSource.Sum(m => m.Delivered);
+            this.TotalMissions = summaryDataSource.Sum(m => m.TotalMissions);
+            this.TotalReward = summaryDataSource.Sum(m => m.TotalReward);
+            this.SharedReward = summaryDataSource.Sum(m => m.SharedReward);
+            this.MinExpiry = summaryDataSource.Min(m => m.MinExpiry);
+            this.MaxExpiry = summaryDataSource.Max(m => m.MaxExpiry);
+        }
+
         public MissionCollectByCommodity(IGrouping<string,JournalEntryMissionCollect> missions) {            
             this.Commodity = missions.Key;
             this.Required = missions.Sum(m=>m.Count);

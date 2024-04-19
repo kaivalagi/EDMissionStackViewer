@@ -16,6 +16,17 @@ namespace EDMissionStackViewer.Models
         public DateTime MinExpiry { get; set; }
         public DateTime MaxExpiry { get; set; }
 
+        public MissionMiningByCommodity(List<MissionMiningByCommodity> summaryDataSource)
+        {
+            this.Commodity = "Total";
+            this.Required = summaryDataSource.Sum(m => m.Required);
+            this.Delivered = summaryDataSource.Sum(m => m.Delivered);
+            this.TotalMissions = summaryDataSource.Sum(m => m.TotalMissions);
+            this.TotalReward = summaryDataSource.Sum(m => m.TotalReward);
+            this.SharedReward = summaryDataSource.Sum(m => m.SharedReward);
+            this.MinExpiry = summaryDataSource.Min(m => m.MinExpiry);
+            this.MaxExpiry = summaryDataSource.Max(m => m.MaxExpiry);
+        }
         public MissionMiningByCommodity(IGrouping<string,JournalEntryMissionMining> missions) {            
             this.Commodity = missions.Key;
             this.TotalMissions = missions.Count();
@@ -25,7 +36,6 @@ namespace EDMissionStackViewer.Models
             this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);
             this.MinExpiry = missions.Min(m => m.Expiry);
             this.MaxExpiry = missions.Max(m => m.Expiry);
-
         }
     }
 }

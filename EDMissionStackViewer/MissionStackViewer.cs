@@ -3,6 +3,7 @@ using EDJournalQueue.Events;
 using EDJournalQueue.Extensions;
 using EDJournalQueue.Models;
 using EDMissionStackViewer.Controls;
+using System.ComponentModel.Design;
 
 namespace EDMissionStackViewer
 {
@@ -23,13 +24,17 @@ namespace EDMissionStackViewer
             InitializeComponent();
         }
 
-        private async Task ProcessQueues(string commander)
+        private async Task ProcessCommanderMissions(string commander)
         {
             if (!Missions.ContainsKey(commander) || Missions[commander] != _watcher.ActiveMissions[commander])
             {
                 Missions[commander] = _watcher.ActiveMissions[commander];
                 Application.DoEvents();
             }
+        }
+
+        private async Task ProcessCommanderJournalEntries(string commander)
+        {
 
             while (_watcher.JournalEntryQueue[commander].Count > 0)
             {
@@ -41,9 +46,9 @@ namespace EDMissionStackViewer
 
                 Application.DoEvents();
             }
-
-
         }
+
+
 
         #region Events
 
@@ -58,12 +63,22 @@ namespace EDMissionStackViewer
 
         private void Watcher_MissionsChanged(object? sender, MissionsChangedEventArgs e)
         {
-            Console.WriteLine($"MissionsChanged for '{e.CommanderName}': {e.JToken.ToString()}");
+            Console.WriteLine($"MissionsChanged for '{e.CommanderName}': {e.JToken?.ToString()}");
+
+            ProcessCommanderMissions(e.CommanderName);
         }
 
         private void Watcher_JournalEntryQueueChanged(object? sender, JournalEntryQueueChangedEventArgs e)
         {
-            Console.WriteLine($"JournalEntryQueueChanged for '{e.CommanderName}': {e.JToken.ToString()}");
+            Console.WriteLine($"JournalEntryQueueChanged for '{e.CommanderName}': {e.JToken?.ToString()}");
+
+            CreateUI(e.CommanderName);
+
+            if (_watcher.JournalEntryQueue[e.CommanderName].Count > 0)
+            {
+                ProcessCommanderJournalEntries(e.CommanderName);
+                LoadJournalEntryData(e.CommanderName);
+            }            
         }
 
         #endregion
@@ -102,7 +117,6 @@ namespace EDMissionStackViewer
 
         private void CreateUI(string commander)
         {
-
             if (!JournalEntryMissionMassacreList.ContainsKey(commander))
             {
                 JournalEntryMissionMassacreList[commander] = new List<JournalEntryMissionMassacre>();
@@ -227,7 +241,7 @@ namespace EDMissionStackViewer
             }
         }
 
-        private void LoadData(string commander)
+        private void LoadJournalEntryData(string commander)
         {
             var commanderTab = commanderTabs.TabPages[$"tabPage{commander}"];
             var missionsTab = (TabControl)(commanderTab.Controls[0]);
@@ -237,6 +251,8 @@ namespace EDMissionStackViewer
                 var massacreTab = (TabPage)(missionsTab.TabPages[$"massacreTab{commander}"]);
                 var edMissionMassacreUI = (UIMissionMassacre)(massacreTab.Controls[0]);
                 edMissionMassacreUI.LoadData(JournalEntryMissionMassacreList[commander]);
+                commanderTab.Focus();
+                missionsTab.Focus();
                 massacreTab.Focus();
             }
 
@@ -245,6 +261,8 @@ namespace EDMissionStackViewer
                 var miningTab = (TabPage)(missionsTab.TabPages[$"miningTab{commander}"]);
                 var edMissionMiningUI = (UIMissionMining)(miningTab.Controls[0]);
                 edMissionMiningUI.LoadData(JournalEntryMissionMiningList[commander]);
+                commanderTab.Focus();
+                missionsTab.Focus();
                 miningTab.Focus();
             }
 
@@ -253,6 +271,8 @@ namespace EDMissionStackViewer
                 var collectTab = (TabPage)(missionsTab.TabPages[$"collectTab{commander}"]);
                 var edMissionCollectUI = (UIMissionCollect)(collectTab.Controls[0]);
                 edMissionCollectUI.LoadData(JournalEntryMissionCollectList[commander]);
+                commanderTab.Focus();
+                missionsTab.Focus();
                 collectTab.Focus();
             }
 
@@ -261,28 +281,28 @@ namespace EDMissionStackViewer
                 var courierTab = (TabPage)(missionsTab.TabPages[$"courierTab{commander}"]);
                 var edMissionCourierUI = (UIMissionCourier)(courierTab.Controls[0]);
                 edMissionCourierUI.LoadData(JournalEntryMissionCourierList[commander]);
+                commanderTab.Focus();
+                missionsTab.Focus();
                 courierTab.Focus();
 
             }
         }
 
+        //TODO: Remove timer based logic once event handling from the watcher is confirmed to work fine
         private void refreshTimer_Tick(object sender, EventArgs e)
         {
             refreshTimer.Enabled = false;
 
-            foreach (var commander in _watcher.JournalEntryQueue.Keys)
+            foreach (var commanderName in _watcher.JournalEntryQueue.Keys)
             {
-                if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
-                {
-                    CreateUI(commander);
-                }
+                CreateUI(commanderName);
+                ProcessCommanderMissions(commanderName);
 
-                if (_watcher.JournalEntryQueue[commander].Count > 0)
+                if (_watcher.JournalEntryQueue[commanderName].Count > 0)
                 {
-                    ProcessQueues(commander);
+                    ProcessCommanderJournalEntries(commanderName);
+                    LoadJournalEntryData(commanderName);
                 }
-
-                LoadData(commander);
             }
 
             refreshTimer.Enabled = true;

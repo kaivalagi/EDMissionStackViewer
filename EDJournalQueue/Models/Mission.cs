@@ -27,7 +27,7 @@ namespace EDJournalQueue.Models
 
         public string ToString()
         {
-            return JToken.ToString();
+            return JToken?.ToString();
         }
     }
 }

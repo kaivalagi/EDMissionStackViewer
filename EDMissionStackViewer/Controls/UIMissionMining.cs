@@ -42,7 +42,17 @@ namespace EDMissionStackViewer.Controls
                 summaryDataSource.Add(new MissionMiningByCommodity(commodityMissions));
             }
 
+            summaryDataSource.Add(new MissionMiningByCommodity(summaryDataSource));
+
             return summaryDataSource;
+        }
+
+        private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
+            {
+                cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
+            }
         }
     }
 }

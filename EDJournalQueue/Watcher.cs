@@ -123,6 +123,11 @@ namespace EDJournalQueue
                     }
                     JournalEntryQueue[commanderName].Enqueue(activeMission);
                 }
+
+                if (JournalEntryQueue.ContainsKey(commanderName) && JournalEntryQueue[commanderName].Count > 0)
+                {
+                    OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName });
+                }                
             }
         }
 
@@ -162,7 +167,6 @@ namespace EDJournalQueue
 
                     if (!string.IsNullOrEmpty(line))
                     {
-                        //var journalEntry = JsonConvert.DeserializeObject<JObject>(line);
                         var journalEntry = JObject.Parse(line);
 
                         if (journalEntry != null)

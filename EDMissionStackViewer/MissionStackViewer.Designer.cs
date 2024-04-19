@@ -119,7 +119,7 @@ namespace EDMissionStackViewer
             // 
             // refreshTimer
             // 
-            refreshTimer.Enabled = true;
+            refreshTimer.Enabled = false;
             refreshTimer.Interval = 1000;
             refreshTimer.Tick += refreshTimer_Tick;
             // 
