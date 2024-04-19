@@ -28,33 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgMissionMassacre = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dgMissionMassacre).BeginInit();
+            dgSummary = new DataGridView();
+            dgMissions = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgSummary).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgMissions).BeginInit();
             SuspendLayout();
             // 
-            // dgMissionMining
+            // dgSummary
             // 
-            dgMissionMassacre.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgMissionMassacre.Dock = DockStyle.Fill;
-            dgMissionMassacre.Location = new Point(0, 0);
-            dgMissionMassacre.Name = "dgMissionMassacre";
-            dgMissionMassacre.RowHeadersWidth = 62;
-            dgMissionMassacre.Size = new Size(916, 583);
-            dgMissionMassacre.TabIndex = 0;
+            dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgSummary.Dock = DockStyle.Bottom;
+            dgSummary.Location = new Point(0, 313);
+            dgSummary.Name = "dgSummary";
+            dgSummary.RowHeadersWidth = 62;
+            dgSummary.Size = new Size(916, 270);
+            dgSummary.TabIndex = 3;
             // 
-            // EDMissionMiningUI
+            // dgMissions
+            // 
+            dgMissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgMissions.Dock = DockStyle.Top;
+            dgMissions.Location = new Point(0, 0);
+            dgMissions.Name = "dgMissions";
+            dgMissions.RowHeadersWidth = 62;
+            dgMissions.Size = new Size(916, 307);
+            dgMissions.TabIndex = 2;
+            // 
+            // UIMissionMassacre
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(dgMissionMassacre);
-            Name = "EDMissionMiningUI";
+            Controls.Add(dgSummary);
+            Controls.Add(dgMissions);
+            Name = "UIMissionMassacre";
             Size = new Size(916, 583);
-            ((System.ComponentModel.ISupportInitialize)dgMissionMassacre).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgSummary).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgMissions).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DataGridView dgMissionMassacre;
+        private DataGridView dgSummary;
+        private DataGridView dgMissions;
     }
 }
