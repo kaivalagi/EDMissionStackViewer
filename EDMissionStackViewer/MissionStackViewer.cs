@@ -1,42 +1,39 @@
+using EDJournalQueue;
+using EDJournalQueue.Events;
+using EDJournalQueue.Extensions;
+using EDJournalQueue.Models;
 using EDMissionStackViewer.Controls;
-using EDMissionStackViewer.Extensions;
-using EDMissionStackViewer.Models;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Reflection;
-using System.Threading.Channels;
-using System.Windows.Forms;
 
 namespace EDMissionStackViewer
 {
-    public partial class EDMissionStackViewer : Form
+    public partial class MissionStackViewer : Form
     {
 
-        private EDJournalWatcher _watcher;
+        private Watcher _watcher;
         private bool _processQueues = true;
 
-        public Dictionary<string, List<EDJournalEntryMissionMassacre>> CmdrJournalEntryMissionMassacreList = new Dictionary<string, List<EDJournalEntryMissionMassacre>>();
-        public Dictionary<string, List<EDJournalEntryMissionMining>> CmdrJournalEntryMissionMiningList = new Dictionary<string, List<EDJournalEntryMissionMining>>();
-        public Dictionary<string, List<EDJournalEntryMissionCollect>> CmdrJournalEntryMissionCollectList= new Dictionary<string, List<EDJournalEntryMissionCollect>>();
-        public Dictionary<string, List<EDJournalEntryMissionCourier>> CmdrJournalEntryMissionCourierList = new Dictionary<string, List<EDJournalEntryMissionCourier>>();
-        public Dictionary<string, Dictionary<long,EDJournalMission>> CmdrMissions = new Dictionary<string, Dictionary<long, EDJournalMission>>();
+        public Dictionary<string, List<JournalEntryMissionMassacre>> JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
+        public Dictionary<string, List<JournalEntryMissionMining>> JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
+        public Dictionary<string, List<JournalEntryMissionCollect>> JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
+        public Dictionary<string, List<JournalEntryMissionCourier>> JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
+        public Dictionary<string, Dictionary<long, Mission>> Missions = new Dictionary<string, Dictionary<long, Mission>>();
 
-        public EDMissionStackViewer()
+        public MissionStackViewer()
         {
             InitializeComponent();
         }
 
         private async Task ProcessQueues(string commander)
         {
-            if (!CmdrMissions.ContainsKey(commander) || CmdrMissions[commander] != _watcher.CmdrMissions[commander])
+            if (!Missions.ContainsKey(commander) || Missions[commander] != _watcher.ActiveMissions[commander])
             {
-                CmdrMissions[commander] = _watcher.CmdrMissions[commander];
+                Missions[commander] = _watcher.ActiveMissions[commander];
                 Application.DoEvents();
             }
-            
-            while (_watcher.CmdrJournalEntryQueue[commander].Count > 0)
+
+            while (_watcher.JournalEntryQueue[commander].Count > 0)
             {
-                _watcher.CmdrJournalEntryQueue[commander].TryDequeue(out var journalEntry);
+                _watcher.JournalEntryQueue[commander].TryDequeue(out var journalEntry);
                 if (journalEntry != null)
                 {
                     await AddJournalEntry(commander, journalEntry, true);
@@ -48,43 +45,54 @@ namespace EDMissionStackViewer
 
         }
 
+        #region Events
+
         private async void MissionStackViewer_Load(object sender, EventArgs e)
         {
             commanderTabs.TabPages.Clear();
-            _watcher = new EDJournalWatcher(new List<string> { "E:\\Users\\Mark\\Saved Games\\Frontier Developments\\Elite Dangerous" });
+            _watcher = new Watcher(new List<string> { "E:\\Users\\Mark\\Saved Games\\Frontier Developments\\Elite Dangerous" });
+            _watcher.JournalEntryQueueChanged += Watcher_JournalEntryQueueChanged;
+            _watcher.MissionsChanged += Watcher_MissionsChanged;
             await _watcher.InitializeAsync();
         }
+
+        private void Watcher_MissionsChanged(object? sender, MissionsChangedEventArgs e)
+        {
+            Console.WriteLine($"MissionsChanged for '{e.CommanderName}': {e.JToken.ToString()}");
+        }
+
+        private void Watcher_JournalEntryQueueChanged(object? sender, JournalEntryQueueChangedEventArgs e)
+        {
+            Console.WriteLine($"JournalEntryQueueChanged for '{e.CommanderName}': {e.JToken.ToString()}");
+        }
+
+        #endregion
 
         private async Task AddJournalEntry(string commander, object journalEntry, bool focus = false)
         {
 
             var journalEntryType = journalEntry.GetType().Name;
-            bool visible = false;
 
             switch (journalEntryType)
             {
-                case "EDJournalEntryCargoDepot":
-                    CmdrJournalEntryMissionMiningList[commander].PopulateMissionsCargoDepot((EDJournalEntryCargoDepot)journalEntry);
-                    CmdrJournalEntryMissionCollectList[commander].PopulateMissionsCargoDepot((EDJournalEntryCargoDepot)journalEntry);
+                case "JournalEntryCargoDepot":
+                    JournalEntryMissionMiningList[commander].PopulateMissionsCargoDepot((JournalEntryCargoDepot)journalEntry);
+                    JournalEntryMissionCollectList[commander].PopulateMissionsCargoDepot((JournalEntryCargoDepot)journalEntry);
                     break;
-                case "EDJournalEntryBounty":
-                    CmdrJournalEntryMissionMassacreList[commander].PopulateMissionsBounty((EDJournalEntryBounty)journalEntry);
+                case "JournalEntryBounty":
+                    JournalEntryMissionMassacreList[commander].PopulateMissionsBounty((JournalEntryBounty)journalEntry);
                     break;
-                case "EDJournalEntryMissionMassacre":
-                    visible = true;
-                    CmdrJournalEntryMissionMassacreList[commander].Add((EDJournalEntryMissionMassacre)journalEntry);
+                case "JournalEntryMissionMassacre":
+                    JournalEntryMissionMassacreList[commander].Add((JournalEntryMissionMassacre)journalEntry);
                     break;
-                case "EDJournalEntryMissionMining":
-                    visible = true;
-                    CmdrJournalEntryMissionMiningList[commander].Add((EDJournalEntryMissionMining)journalEntry);
+                case "JournalEntryMissionMining":
+                    JournalEntryMissionMiningList[commander].Add((JournalEntryMissionMining)journalEntry);
                     break;
-                case "EDJournalEntryMissionCollect":
-                    visible = true;
-                    CmdrJournalEntryMissionCollectList[commander].Add((EDJournalEntryMissionCollect)journalEntry);
+                case "JournalEntryMissionCollect":
+                    JournalEntryMissionCollectList[commander].Add((JournalEntryMissionCollect)journalEntry);
                     break;
-                case "EDJournalEntryMissionCourier":
-                    visible = true;
-                    CmdrJournalEntryMissionCourierList[commander].Add((EDJournalEntryMissionCourier)journalEntry);
+                case "JournalEntryMissionCourier":
+                    JournalEntryMissionCourierList[commander].Add((JournalEntryMissionCourier)journalEntry);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Unsupported journal type of '{journalEntryType}'");
@@ -95,25 +103,25 @@ namespace EDMissionStackViewer
         private void CreateUI(string commander)
         {
 
-            if (!CmdrJournalEntryMissionMassacreList.ContainsKey(commander))
+            if (!JournalEntryMissionMassacreList.ContainsKey(commander))
             {
-                CmdrJournalEntryMissionMassacreList[commander] = new List<EDJournalEntryMissionMassacre>();
+                JournalEntryMissionMassacreList[commander] = new List<JournalEntryMissionMassacre>();
             }
 
-            if (!CmdrJournalEntryMissionMiningList.ContainsKey(commander))
+            if (!JournalEntryMissionMiningList.ContainsKey(commander))
             {
-                CmdrJournalEntryMissionMiningList[commander] = new List<EDJournalEntryMissionMining>();
+                JournalEntryMissionMiningList[commander] = new List<JournalEntryMissionMining>();
             }
 
-            if (!CmdrJournalEntryMissionCollectList.ContainsKey(commander))
+            if (!JournalEntryMissionCollectList.ContainsKey(commander))
             {
 
-                CmdrJournalEntryMissionCollectList[commander] = new List<EDJournalEntryMissionCollect>();
+                JournalEntryMissionCollectList[commander] = new List<JournalEntryMissionCollect>();
             }
 
-            if (!CmdrJournalEntryMissionCourierList.ContainsKey(commander))
+            if (!JournalEntryMissionCourierList.ContainsKey(commander))
             {
-                CmdrJournalEntryMissionCourierList[commander] = new List<EDJournalEntryMissionCourier>();
+                JournalEntryMissionCourierList[commander] = new List<JournalEntryMissionCourier>();
             }
 
             if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
@@ -136,7 +144,7 @@ namespace EDMissionStackViewer
                 missionTabs.TabIndex = 3;
                 tabPage.Controls.Add(missionTabs);
 
-                if (CmdrJournalEntryMissionMassacreList[commander] != null)
+                if (JournalEntryMissionMassacreList[commander] != null)
                 {
                     var massacreTab = new TabPage();
                     massacreTab.Location = new Point(4, 34);
@@ -147,7 +155,7 @@ namespace EDMissionStackViewer
                     massacreTab.UseVisualStyleBackColor = true;
                     missionTabs.Controls.Add(massacreTab);
 
-                    var edMissionMassacreUI = new EDMissionMassacreUI();
+                    var edMissionMassacreUI = new UIMissionMassacre();
                     edMissionMassacreUI.Dock = DockStyle.Fill;
                     edMissionMassacreUI.Location = new Point(0, 0);
                     edMissionMassacreUI.Name = $"edMissionMassacreUI{commander}";
@@ -156,9 +164,9 @@ namespace EDMissionStackViewer
                     massacreTab.Controls.Add(edMissionMassacreUI);
                 }
 
-                if (CmdrJournalEntryMissionMiningList[commander] != null)
+                if (JournalEntryMissionMiningList[commander] != null)
                 {
-                    var miningTab = new TabPage();                    
+                    var miningTab = new TabPage();
                     miningTab.Location = new Point(4, 34);
                     miningTab.Name = $"miningTab{commander}";
                     miningTab.Size = new Size(2572, 871);
@@ -166,8 +174,8 @@ namespace EDMissionStackViewer
                     miningTab.Text = "Mining";
                     miningTab.UseVisualStyleBackColor = true;
                     missionTabs.Controls.Add(miningTab);
-                    
-                    var edMissionMiningUI = new EDMissionMiningUI();
+
+                    var edMissionMiningUI = new UIMissionMining();
                     edMissionMiningUI.Dock = DockStyle.Fill;
                     edMissionMiningUI.Location = new Point(0, 0);
                     edMissionMiningUI.Name = $"edMissionMiningUI{commander}";
@@ -176,7 +184,7 @@ namespace EDMissionStackViewer
                     miningTab.Controls.Add(edMissionMiningUI);
                 }
 
-                if (CmdrJournalEntryMissionCollectList[commander] != null)
+                if (JournalEntryMissionCollectList[commander] != null)
                 {
                     var collectTab = new TabPage();
                     collectTab.Location = new Point(4, 34);
@@ -187,7 +195,7 @@ namespace EDMissionStackViewer
                     collectTab.UseVisualStyleBackColor = true;
                     missionTabs.Controls.Add(collectTab);
 
-                    var edMissionCollectUI = new EDMissionCollectUI();
+                    var edMissionCollectUI = new UIMissionCollect();
                     edMissionCollectUI.Dock = DockStyle.Fill;
                     edMissionCollectUI.Location = new Point(0, 0);
                     edMissionCollectUI.Name = $"edMissionCollectUI{commander}";
@@ -196,7 +204,7 @@ namespace EDMissionStackViewer
                     collectTab.Controls.Add(edMissionCollectUI);
                 }
 
-                if (CmdrJournalEntryMissionCourierList[commander] != null)
+                if (JournalEntryMissionCourierList[commander] != null)
                 {
                     var courierTab = new TabPage();
                     courierTab.Location = new Point(4, 34);
@@ -207,7 +215,7 @@ namespace EDMissionStackViewer
                     courierTab.UseVisualStyleBackColor = true;
                     missionTabs.Controls.Add(courierTab);
 
-                    var edMissionCourierUI = new EDMissionCourierUI();
+                    var edMissionCourierUI = new UIMissionCourier();
                     edMissionCourierUI.Dock = DockStyle.Fill;
                     edMissionCourierUI.Location = new Point(0, 0);
                     edMissionCourierUI.Name = $"edMissionCourierUI{commander}";
@@ -224,35 +232,35 @@ namespace EDMissionStackViewer
             var commanderTab = commanderTabs.TabPages[$"tabPage{commander}"];
             var missionsTab = (TabControl)(commanderTab.Controls[0]);
 
-            if (CmdrJournalEntryMissionMassacreList[commander].Count > 0)
+            if (JournalEntryMissionMassacreList[commander].Count > 0)
             {
                 var massacreTab = (TabPage)(missionsTab.TabPages[$"massacreTab{commander}"]);
-                var edMissionMassacreUI = (EDMissionMassacreUI)(massacreTab.Controls[0]);
-                edMissionMassacreUI.LoadData(CmdrJournalEntryMissionMassacreList[commander]);
+                var edMissionMassacreUI = (UIMissionMassacre)(massacreTab.Controls[0]);
+                edMissionMassacreUI.LoadData(JournalEntryMissionMassacreList[commander]);
                 massacreTab.Focus();
             }
 
-            if (CmdrJournalEntryMissionMiningList[commander].Count > 0)
+            if (JournalEntryMissionMiningList[commander].Count > 0)
             {
                 var miningTab = (TabPage)(missionsTab.TabPages[$"miningTab{commander}"]);
-                var edMissionMiningUI = (EDMissionMiningUI)(miningTab.Controls[0]);
-                edMissionMiningUI.LoadData(CmdrJournalEntryMissionMiningList[commander]);
+                var edMissionMiningUI = (UIMissionMining)(miningTab.Controls[0]);
+                edMissionMiningUI.LoadData(JournalEntryMissionMiningList[commander]);
                 miningTab.Focus();
             }
 
-            if (CmdrJournalEntryMissionCollectList[commander].Count > 0)
+            if (JournalEntryMissionCollectList[commander].Count > 0)
             {
-                var collectTab= (TabPage)(missionsTab.TabPages[$"collectTab{commander}"]);
-                var edMissionCollectUI = (EDMissionCollectUI)(collectTab.Controls[0]);
-                edMissionCollectUI.LoadData(CmdrJournalEntryMissionCollectList[commander]);
+                var collectTab = (TabPage)(missionsTab.TabPages[$"collectTab{commander}"]);
+                var edMissionCollectUI = (UIMissionCollect)(collectTab.Controls[0]);
+                edMissionCollectUI.LoadData(JournalEntryMissionCollectList[commander]);
                 collectTab.Focus();
             }
 
-            if (CmdrJournalEntryMissionCourierList[commander].Count > 0)
+            if (JournalEntryMissionCourierList[commander].Count > 0)
             {
                 var courierTab = (TabPage)(missionsTab.TabPages[$"courierTab{commander}"]);
-                var edMissionCourierUI = (EDMissionCourierUI)(courierTab.Controls[0]);
-                edMissionCourierUI.LoadData(CmdrJournalEntryMissionCourierList[commander]);
+                var edMissionCourierUI = (UIMissionCourier)(courierTab.Controls[0]);
+                edMissionCourierUI.LoadData(JournalEntryMissionCourierList[commander]);
                 courierTab.Focus();
 
             }
@@ -262,15 +270,15 @@ namespace EDMissionStackViewer
         {
             refreshTimer.Enabled = false;
 
-            foreach (var commander in _watcher.CmdrJournalEntryQueue.Keys)
+            foreach (var commander in _watcher.JournalEntryQueue.Keys)
             {
                 if (!commanderTabs.TabPages.ContainsKey($"tabPage{commander}"))
                 {
                     CreateUI(commander);
                 }
 
-                if (_watcher.CmdrJournalEntryQueue[commander].Count > 0)
-                {                    
+                if (_watcher.JournalEntryQueue[commander].Count > 0)
+                {
                     ProcessQueues(commander);
                 }
 

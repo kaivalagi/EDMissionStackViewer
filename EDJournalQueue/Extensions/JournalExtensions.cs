@@ -1,14 +1,13 @@
-﻿using EDMissionStackViewer.Models;
+﻿using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 
-namespace EDMissionStackViewer.Extensions
+namespace EDJournalQueue.Extensions
 {
-    public static class EDJournalExtensions
+    public static class JournalExtensions
     {
         public static object Populate(this JObject journalEntry)
         {
-            object entry = null;            
+            object entry = null;
 
             switch (journalEntry["event"].ToString())
             {
@@ -20,34 +19,34 @@ namespace EDMissionStackViewer.Extensions
 
                     if (name.StartsWith("Mission_Massacre") && !onFoot && targetType)
                     {
-                        entry = new EDJournalEntryMissionMassacre(journalEntry);
+                        entry = new JournalEntryMissionMassacre(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Mining") && !onFoot)
                     {
-                        entry = new EDJournalEntryMissionMining(journalEntry);
+                        entry = new JournalEntryMissionMining(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Collect") && !onFoot)
                     {
-                        entry = new EDJournalEntryMissionCollect(journalEntry);
+                        entry = new JournalEntryMissionCollect(journalEntry);
                     }
                     else if (name.StartsWith("Mission_Courier") && !onFoot)
                     {
-                        entry = new EDJournalEntryMissionCourier(journalEntry);
+                        entry = new JournalEntryMissionCourier(journalEntry);
                     }
                     break;
                 case "MissionAbandoned":
                 case "MissionCompleted":
                 case "MissionRedirected":
-                    entry = new EDJournalEntryMissionBase(journalEntry);
+                    entry = new JournalEntryMissionBase(journalEntry);
                     break;
                 case "CargoDepot":
-                    entry = new EDJournalEntryCargoDepot(journalEntry);
+                    entry = new JournalEntryCargoDepot(journalEntry);
                     break;
                 case "Bounty":
                     break;
-                    entry = new EDJournalEntryBounty(journalEntry);
+                    entry = new JournalEntryBounty(journalEntry);
                 default:
-                    entry = new EDJournalEntryBase(journalEntry);
+                    entry = new JournalEntryBase(journalEntry);
                     break;
             }
 
@@ -76,9 +75,9 @@ namespace EDMissionStackViewer.Extensions
 
         //    return changed
 
-        public static void PopulateMissionsBounty(this List<object> journalEvents, EDJournalEntryBounty bounty)
+        public static void PopulateMissionsBounty(this List<object> journalEvents, JournalEntryBounty bounty)
         {
-            var associatedMissions = journalEvents.OfType<EDJournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+            var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
             var factions = new List<string>();
 
             foreach (var mission in associatedMissions)
@@ -89,7 +88,7 @@ namespace EDMissionStackViewer.Extensions
                     {
                         mission.VictimCount++;
                         factions.Add(mission.Faction);
-                    } 
+                    }
                     else
                     {
                         continue;
@@ -98,7 +97,7 @@ namespace EDMissionStackViewer.Extensions
             }
         }
 
-        public static void PopulateMissionsBounty(this List<EDJournalEntryMissionMassacre> journalEvents, EDJournalEntryBounty bounty)
+        public static void PopulateMissionsBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
         {
             var associatedMissions = journalEvents.Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
             var factions = new List<string>();
@@ -133,20 +132,20 @@ namespace EDMissionStackViewer.Extensions
 
         //    return changed
 
-        public static void PopulateMissionsCargoDepot(this List<object> journalEvents, EDJournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionsCargoDepot(this List<object> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
-            var mission = journalEvents.OfType<EDJournalEntryMissionBase>().Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
+            var mission = journalEvents.OfType<JournalEntryMissionBase>().Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)
             {
                 var missionType = mission.GetType().Name;
                 switch (missionType)
                 {
-                    case "EDJournalEntryMissionMining":
-                        ((EDJournalEntryMissionMining)mission).DeliveredCount += cargoDepot.Count;
+                    case "JournalEntryMissionMining":
+                        ((JournalEntryMissionMining)mission).DeliveredCount += cargoDepot.Count;
                         break;
 
-                    case "EDJournalEntryMissionCollect":
-                        ((EDJournalEntryMissionCollect)mission).DeliveredCount += cargoDepot.Count;
+                    case "JournalEntryMissionCollect":
+                        ((JournalEntryMissionCollect)mission).DeliveredCount += cargoDepot.Count;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException($"Unsupported mission type of '{missionType}'");
@@ -154,7 +153,7 @@ namespace EDMissionStackViewer.Extensions
             }
         }
 
-        public static void PopulateMissionsCargoDepot(this List<EDJournalEntryMissionMining> journalEvents, EDJournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionsCargoDepot(this List<JournalEntryMissionMining> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
             var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)
@@ -163,7 +162,7 @@ namespace EDMissionStackViewer.Extensions
             }
         }
 
-        public static void PopulateMissionsCargoDepot(this List<EDJournalEntryMissionCollect> journalEvents, EDJournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionsCargoDepot(this List<JournalEntryMissionCollect> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
             var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)

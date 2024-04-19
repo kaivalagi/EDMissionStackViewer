@@ -1,6 +1,6 @@
 ﻿namespace EDMissionStackViewer.Controls
 {
-    partial class EDMissionMassacreUI
+    partial class UIMissionCollect
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgMissionMassacre = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dgMissionMassacre).BeginInit();
+            dgMissionCollect = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgMissionCollect).BeginInit();
             SuspendLayout();
             // 
             // dgMissionMining
             // 
-            dgMissionMassacre.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgMissionMassacre.Dock = DockStyle.Fill;
-            dgMissionMassacre.Location = new Point(0, 0);
-            dgMissionMassacre.Name = "dgMissionMassacre";
-            dgMissionMassacre.RowHeadersWidth = 62;
-            dgMissionMassacre.Size = new Size(916, 583);
-            dgMissionMassacre.TabIndex = 0;
+            dgMissionCollect.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgMissionCollect.Dock = DockStyle.Fill;
+            dgMissionCollect.Location = new Point(0, 0);
+            dgMissionCollect.Name = "dgMissionMassacre";
+            dgMissionCollect.RowHeadersWidth = 62;
+            dgMissionCollect.Size = new Size(916, 583);
+            dgMissionCollect.TabIndex = 0;
             // 
             // EDMissionMiningUI
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(dgMissionMassacre);
+            Controls.Add(dgMissionCollect);
             Name = "EDMissionMiningUI";
             Size = new Size(916, 583);
-            ((System.ComponentModel.ISupportInitialize)dgMissionMassacre).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgMissionCollect).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DataGridView dgMissionMassacre;
+        private DataGridView dgMissionCollect;
     }
 }

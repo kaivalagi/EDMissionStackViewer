@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace EDMissionStackViewer.Models
+namespace EDJournalQueue.Models
 {
-    public class EDJournalMission
+    public class Mission
     {
         public JToken JToken { get; set; }
         public long MissionId { get; set; }
@@ -10,14 +10,15 @@ namespace EDMissionStackViewer.Models
         public bool PassengerMission { get; set; }
         public long Expires { get; set; } = 0;
 
-        public EDJournalMission(JToken activeMission) { 
+        public Mission(JToken activeMission)
+        {
             JToken = activeMission;
             MissionId = (long)activeMission["MissionID"];
             Name = (string)activeMission["Name"];
             Expires = (long)activeMission["Expires"];
         }
 
-        public EDJournalMission(EDJournalEntryMissionBase acceptedMission)
+        public Mission(JournalEntryMissionBase acceptedMission)
         {
             JToken = acceptedMission.JToken;
             MissionId = acceptedMission.MissionId;

@@ -13,15 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\EDMissionCourierUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\EDMissionCollectUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Controls\EDMissionMassacreUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <ProjectReference Include="..\EDJournalQueue\EDJournalQueue.csproj" />
   </ItemGroup>
 
 </Project>

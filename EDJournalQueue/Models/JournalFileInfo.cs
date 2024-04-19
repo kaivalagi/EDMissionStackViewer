@@ -1,11 +1,11 @@
-﻿namespace EDMissionStackViewer.Models
+﻿namespace EDJournalQueue.Models
 {
-    public class EDJournalFileInfo
+    public class JournalFileInfo
     {
         public string FilePath { get; set; }
         public string CmdrName { get; set; }
         public long FilePosition { get; set; }
-        public EDJournalFileInfo(string filePath, string cmdrName)
+        public JournalFileInfo(string filePath, string cmdrName)
         {
             FilePath = filePath;
             CmdrName = cmdrName;

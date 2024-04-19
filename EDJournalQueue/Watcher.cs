@@ -1,32 +1,32 @@
-﻿using EDMissionStackViewer.Extensions;
-using EDMissionStackViewer.Models;
-using Newtonsoft.Json;
+﻿using EDJournalQueue.Events;
+using EDJournalQueue.Extensions;
+using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
-using System.Dynamic;
-using System.Security.Policy;
 using System.Text;
 
-namespace EDMissionStackViewer
+namespace EDJournalQueue
 {
-    public class EDJournalWatcher
+    public class Watcher
     {
-
         #region Class Data
 
-        public Dictionary<string, ConcurrentQueue<object>> CmdrJournalEntryQueue = new Dictionary<string, ConcurrentQueue<object>>();
-        public Dictionary<string, List<object>> CmdrJournalEntryPreload = new Dictionary<string, List<object>>();
-        public Dictionary<string, Dictionary<long,EDJournalMission>> CmdrMissions = new Dictionary<string, Dictionary<long, EDJournalMission>>();
+        public Dictionary<string, ConcurrentQueue<object>> JournalEntryQueue = new Dictionary<string, ConcurrentQueue<object>>();
+        public Dictionary<string, List<object>> JournalEntryPreload = new Dictionary<string, List<object>>();
+        public Dictionary<string, Dictionary<long, Mission>> ActiveMissions = new Dictionary<string, Dictionary<long, Mission>>();
 
         private List<DirectoryInfo> _journalFolders = new List<DirectoryInfo>();
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
-        private Dictionary<string, EDJournalFileInfo> _journalFileInfo = new Dictionary<string, EDJournalFileInfo>();
+        private Dictionary<string, JournalFileInfo> _journalFileInfo = new Dictionary<string, JournalFileInfo>();
+
+        public event EventHandler<JournalEntryQueueChangedEventArgs> JournalEntryQueueChanged;
+        public event EventHandler<MissionsChangedEventArgs> MissionsChanged;
 
         #endregion region
 
         #region Constructor
 
-        public EDJournalWatcher(List<string> journalFolders)
+        public Watcher(List<string> journalFolders)
         {
             foreach (var journalFolder in journalFolders)
             {
@@ -46,6 +46,24 @@ namespace EDMissionStackViewer
         #endregion
 
         #region Events
+
+        protected virtual void OnJournalEntryQueueChanged(JournalEntryQueueChangedEventArgs e)
+        {
+            EventHandler<JournalEntryQueueChangedEventArgs> handler = JournalEntryQueueChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnMissionsChanged(MissionsChangedEventArgs e)
+        {
+            EventHandler<MissionsChangedEventArgs> handler = MissionsChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
@@ -73,7 +91,8 @@ namespace EDMissionStackViewer
 
         public async Task InitializeAsync(bool loadExistingJournalFiles = true)
         {
-            if (loadExistingJournalFiles) { 
+            if (loadExistingJournalFiles)
+            {
                 await PreloadJournalFilesAsync();
             }
             await WatchJournalFilesAsync();
@@ -92,17 +111,17 @@ namespace EDMissionStackViewer
             }
 
             // now add only active missions to the queue from CmdrJournalEventPreload
-            foreach (var commanderName in CmdrMissions.Keys)
+            foreach (var commanderName in ActiveMissions.Keys)
             {
-                var activeMissions = CmdrJournalEntryPreload[commanderName].OfType<EDJournalEntryMissionBase>().Where(j => CmdrMissions[commanderName].ContainsKey(j.MissionId));
+                var activeMissions = JournalEntryPreload[commanderName].OfType<JournalEntryMissionBase>().Where(j => ActiveMissions[commanderName].ContainsKey(j.MissionId));
 
                 foreach (var activeMission in activeMissions)
                 {
-                    if (!CmdrJournalEntryQueue.ContainsKey(commanderName))
+                    if (!JournalEntryQueue.ContainsKey(commanderName))
                     {
-                        CmdrJournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
+                        JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
                     }
-                    CmdrJournalEntryQueue[commanderName].Enqueue(activeMission);
+                    JournalEntryQueue[commanderName].Enqueue(activeMission);
                 }
             }
         }
@@ -138,9 +157,9 @@ namespace EDMissionStackViewer
                     fs.Position = _journalFileInfo[journalFilePath].FilePosition;
                 }
                 while (!sr.EndOfStream)
-                    {
+                {
                     var line = sr.ReadLine();
-                    
+
                     if (!string.IsNullOrEmpty(line))
                     {
                         //var journalEntry = JsonConvert.DeserializeObject<JObject>(line);
@@ -156,37 +175,42 @@ namespace EDMissionStackViewer
                                 case "Commander":
                                     // { "timestamp":"2024-02-27T17:07:05Z", "event":"Commander", "FID":"F184262", "Name":"Kaivalagi" }
                                     commanderName = (string)journalEntry["Name"];
-                                    _journalFileInfo[journalFilePath] = new EDJournalFileInfo(journalFilePath, commanderName);
+                                    _journalFileInfo[journalFilePath] = new JournalFileInfo(journalFilePath, commanderName);
                                     break;
 
                                 case "Missions":
                                     // { "timestamp":"2024-02-27T17:05:30Z", "event":"Missions", "Active":[ { "MissionID":955337826, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":262323 }, { "MissionID":955419328, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":320172 }, { "MissionID":955449221, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":337814 }, { "MissionID":955459858, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":343286 }, { "MissionID":955461285, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":344759 }, { "MissionID":955463846, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":346046 }, { "MissionID":955478187, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":351933 }, { "MissionID":955483642, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":355237 }, { "MissionID":955566389, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":409926 }, { "MissionID":955570187, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":413081 }, { "MissionID":955581955, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":418324 }, { "MissionID":955583725, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":419640 }, { "MissionID":955583823, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":420502 }, { "MissionID":955588994, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":422996 }, { "MissionID":955611100, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":431214 }, { "MissionID":955645131, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":446121 }, { "MissionID":955720771, "Name":"Mission_Mining_name", "PassengerMission":false, "Expires":533166 } ], "Failed":[  ], "Complete":[  ] }
                                     var activeMissions = journalEntry["Active"];
 
-                                    CmdrMissions[commanderName] = new Dictionary<long,EDJournalMission>();
+                                    ActiveMissions[commanderName] = new Dictionary<long, Mission>();
 
                                     if (preload)
-                                    {                                        
-                                        if (!CmdrJournalEntryPreload.ContainsKey(commanderName))
-                                        {
-                                            CmdrJournalEntryPreload[commanderName] = new List<object>();
-                                        }
-                                    } 
-                                    else
                                     {
-                                        if (!CmdrJournalEntryQueue.ContainsKey(commanderName))
+                                        if (!JournalEntryPreload.ContainsKey(commanderName))
                                         {
-                                            CmdrJournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
+                                            JournalEntryPreload[commanderName] = new List<object>();
                                         }
                                     }
-                                    
+                                    else
+                                    {
+                                        if (!JournalEntryQueue.ContainsKey(commanderName))
+                                        {
+                                            JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
+                                        }
+                                    }
+
                                     if (activeMissions.Count() > 0)
                                     {
                                         foreach (var activeMission in activeMissions)
                                         {
-                                            CmdrMissions[commanderName].Add((long)activeMission["MissionID"], new EDJournalMission(activeMission));
+                                            ActiveMissions[commanderName].Add((long)activeMission["MissionID"], new Mission(activeMission));
                                         }
                                     }
+
+                                    if (!preload) // Only raise events post preload
+                                    {
+                                        OnMissionsChanged(new MissionsChangedEventArgs() { CommanderName = commanderName, JToken = activeMissions });
+                                    }                                    
 
                                     break;
 
@@ -198,14 +222,20 @@ namespace EDMissionStackViewer
                                     {
                                         if (preload)
                                         {
-                                            CmdrJournalEntryPreload[commanderName].Add(missionAccepted);
+                                            JournalEntryPreload[commanderName].Add(missionAccepted);
                                         }
                                         else
                                         {
-                                            CmdrJournalEntryQueue[commanderName].Enqueue(missionAccepted);
+                                            JournalEntryQueue[commanderName].Enqueue(missionAccepted);
+                                            OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
                                         }
 
-                                        CmdrMissions[commanderName].Add(((EDJournalEntryMissionBase)missionAccepted).MissionId, new EDJournalMission((EDJournalEntryMissionBase)missionAccepted));
+                                        ActiveMissions[commanderName].Add(((JournalEntryMissionBase)missionAccepted).MissionId, new Mission((JournalEntryMissionBase)missionAccepted));
+
+                                        if (!preload) // Only raise events post preload
+                                        {
+                                            OnMissionsChanged(new MissionsChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
+                                        }
                                     }
 
                                     break;
@@ -219,46 +249,50 @@ namespace EDMissionStackViewer
 
                                     if (preload)
                                     {
-                                        CmdrJournalEntryPreload[commanderName].Add(missionRemoved);
+                                        JournalEntryPreload[commanderName].Add(missionRemoved);
 
-                                        var missionRemovedId = ((EDJournalEntryMissionBase)missionRemoved).MissionId;
-                                        if (CmdrMissions[commanderName].ContainsKey(missionRemovedId)) {
-                                            CmdrMissions[commanderName].Remove(missionRemovedId);
+                                        var missionRemovedId = ((JournalEntryMissionBase)missionRemoved).MissionId;
+                                        if (ActiveMissions[commanderName].ContainsKey(missionRemovedId))
+                                        {
+                                            ActiveMissions[commanderName].Remove(missionRemovedId);
                                         }
-                                        
+
                                     }
                                     else
                                     {
-                                        CmdrJournalEntryQueue[commanderName].Enqueue(missionRemoved);
+                                        JournalEntryQueue[commanderName].Enqueue(missionRemoved);
+                                        OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
                                     }
                                     break;
 
                                 case "CargoDepot":
                                     // { "timestamp":"2024-02-05T11:47:22Z", "event":"CargoDepot", "MissionID":953167866, "UpdateType":"Deliver", "CargoType":"DomesticAppliances", "CargoType_Localised":"Domestic Appliances", "Count":643, "StartMarketID":0, "EndMarketID":3230588160, "ItemsCollected":0, "ItemsDelivered":643, "TotalItemsToDeliver":1090, "Progress":0.000000 }
-                                    var cargoDepot = (EDJournalEntryCargoDepot)journalEntry.Populate();
+                                    var cargoDepot = (JournalEntryCargoDepot)journalEntry.Populate();
                                     if (cargoDepot.UpdateType == "Deliver")
                                     {
                                         if (preload)
                                         {
-                                            CmdrJournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
+                                            JournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
                                         }
                                         else
                                         {
-                                            CmdrJournalEntryQueue[commanderName].Enqueue(cargoDepot);
+                                            JournalEntryQueue[commanderName].Enqueue(cargoDepot);
+                                            OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
                                         }
                                     }
                                     break;
 
                                 case "Bounty":
                                     // { "timestamp":"2023-08-26T10:04:19Z", "event":"Bounty", "Rewards":[ { "Faction":"Arbor Caelum Internal Defense", "Reward":527187 } ], "Target":"python", "TotalReward":527187, "VictimFaction":"Zeta Trianguli Australis Corporation" }                                    
-                                    var bounty = (EDJournalEntryBounty)journalEntry.Populate();
+                                    var bounty = (JournalEntryBounty)journalEntry.Populate();
                                     if (preload)
                                     {
-                                        CmdrJournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
+                                        JournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
                                     }
                                     else
                                     {
-                                        CmdrJournalEntryQueue[commanderName].Enqueue(bounty);
+                                        JournalEntryQueue[commanderName].Enqueue(bounty);
+                                        OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
                                     }
 
                                     break;
@@ -271,7 +305,7 @@ namespace EDMissionStackViewer
                 {
                     _journalFileInfo[journalFilePath].FilePosition = fs.Position;
                 }
-                
+
             }
         }
 

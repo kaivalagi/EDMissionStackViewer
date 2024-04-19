@@ -2,7 +2,7 @@
 
 namespace EDMissionStackViewer
 {
-    partial class EDMissionStackViewer
+    partial class MissionStackViewer
     {
         /// <summary>
         ///  Required designer variable.
@@ -39,7 +39,7 @@ namespace EDMissionStackViewer
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             refreshTimer = new System.Windows.Forms.Timer(components);
-            edMissionMiningui1 = new EDMissionMiningUI();
+            edMissionMiningui1 = new UIMissionMining();
             commanderTabs.SuspendLayout();
             tabPagekaivalagi.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerkaivalagi).BeginInit();
@@ -158,6 +158,6 @@ namespace EDMissionStackViewer
         private ListView listViewkaivalagi;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private EDMissionMiningUI edMissionMiningui1;
+        private UIMissionMining edMissionMiningui1;
     }
 }

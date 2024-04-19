@@ -1,6 +1,6 @@
 ﻿namespace EDMissionStackViewer.Controls
 {
-    partial class EDMissionCourierUI
+    partial class UIMissionMining
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgMissionCourier = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dgMissionCourier).BeginInit();
+            dgMissionMining = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgMissionMining).BeginInit();
             SuspendLayout();
             // 
             // dgMissionMining
             // 
-            dgMissionCourier.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgMissionCourier.Dock = DockStyle.Fill;
-            dgMissionCourier.Location = new Point(0, 0);
-            dgMissionCourier.Name = "dgMissionMassacre";
-            dgMissionCourier.RowHeadersWidth = 62;
-            dgMissionCourier.Size = new Size(916, 583);
-            dgMissionCourier.TabIndex = 0;
+            dgMissionMining.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgMissionMining.Dock = DockStyle.Fill;
+            dgMissionMining.Location = new Point(0, 0);
+            dgMissionMining.Name = "dgMissionMining";
+            dgMissionMining.RowHeadersWidth = 62;
+            dgMissionMining.Size = new Size(916, 583);
+            dgMissionMining.TabIndex = 0;
             // 
             // EDMissionMiningUI
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(dgMissionCourier);
+            Controls.Add(dgMissionMining);
             Name = "EDMissionMiningUI";
             Size = new Size(916, 583);
-            ((System.ComponentModel.ISupportInitialize)dgMissionCourier).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgMissionMining).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DataGridView dgMissionCourier;
+        private DataGridView dgMissionMining;
     }
 }
