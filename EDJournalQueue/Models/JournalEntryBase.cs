@@ -10,16 +10,23 @@ namespace EDJournalQueue.Models
         Collect = 3,
         Courier = 4,
         CargoDepot = 5,
-        Bounty = 6
+        Bounty = 6,
     }
 
 
     public class JournalEntryBase
     {
+
+        #region Properties
+
         public JToken JToken { get; set; }
         public DateTime Timestamp { get; set; }
         public string Event { get; set; }
         public JournalEntryType Type { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public JournalEntryBase(JToken entry)
         {
@@ -28,9 +35,15 @@ namespace EDJournalQueue.Models
             Event = (string)entry["event"];
         }
 
-        public string ToString()
+        #endregion
+
+        #region Methods
+
+        public override string ToString()
         {
             return JToken?.ToString();
         }
+
+        #endregion
     }
 }

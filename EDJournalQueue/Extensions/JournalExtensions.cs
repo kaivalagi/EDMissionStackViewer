@@ -1,10 +1,14 @@
 ﻿using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 
 namespace EDJournalQueue.Extensions
 {
     public static class JournalExtensions
     {
+
+        #region Methods
+
         public static object Populate(this JObject journalEntry)
         {
             object entry = null;
@@ -13,31 +17,31 @@ namespace EDJournalQueue.Extensions
             {
                 case "MissionAccepted":
 
-                    var name = (string)journalEntry["Name"];
+                    var acceptedName = (string)journalEntry["Name"];
                     var onFoot = journalEntry.ContainsKey("OnFoot");
                     var targetType = journalEntry.ContainsKey("TargetType");
 
-                    if (name.StartsWith("Mission_Massacre") && !onFoot && targetType)
+                    if (acceptedName.StartsWith("Mission_Massacre") && !onFoot && targetType)
                     {
                         entry = new JournalEntryMissionMassacre(journalEntry);
                     }
-                    else if (name.StartsWith("Mission_Mining") && !onFoot)
+                    else if (acceptedName.StartsWith("Mission_Mining") && !onFoot)
                     {
                         entry = new JournalEntryMissionMining(journalEntry);
                     }
-                    else if (name.StartsWith("Mission_Collect") && !onFoot)
+                    else if (acceptedName.StartsWith("Mission_Collect") && !onFoot)
                     {
                         entry = new JournalEntryMissionCollect(journalEntry);
                     }
-                    else if (name.StartsWith("Mission_Courier") && !onFoot)
+                    else if (acceptedName.StartsWith("Mission_Courier") && !onFoot)
                     {
                         entry = new JournalEntryMissionCourier(journalEntry);
                     }
                     break;
-                case "MissionAbandoned":
                 case "MissionCompleted":
+                case "MissionAbandoned":
                 case "MissionRedirected":
-                    entry = new JournalEntryMissionBase(journalEntry);
+                    entry = new JournalEntryMissionRemoved(journalEntry);
                     break;
                 case "CargoDepot":
                     entry = new JournalEntryCargoDepot(journalEntry);
@@ -51,50 +55,6 @@ namespace EDJournalQueue.Extensions
             }
 
             return entry;
-        }
-
-
-
-        //        def populate_missions_bounty(bounty: dict, missions: dict[int, dict]):
-        //    changed = False
-        //    associated_missions = [mission for mission in missions.values() if (mission["Name"].startswith("Mission_Massacre") and mission["TargetFaction"] == bounty["VictimFaction"])]
-        //    if associated_missions:
-        //        factions = []  
-        //        for mission in associated_missions:
-        //            if mission["Faction"] not in factions:
-
-        //                if "VictimCount" not in mission or mission["VictimCount"] < mission["KillCount"]:
-        //                    if "VictimCount" not in mission:
-        //                        mission["VictimCount"] = 0
-        //                    mission["VictimCount"] += 1
-        //                    logger.info(f"Mission {mission['MissionID']} kill count increased")
-        //                    factions.append(mission["Faction"])
-        //                    changed = True
-        //                else:
-        //                    next
-
-        //    return changed
-
-        public static void PopulateMissionsBounty(this List<object> journalEvents, JournalEntryBounty bounty)
-        {
-            var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
-            var factions = new List<string>();
-
-            foreach (var mission in associatedMissions)
-            {
-                if (!factions.Contains(mission.Faction))
-                {
-                    if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
-                    {
-                        mission.VictimCount++;
-                        factions.Add(mission.Faction);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-            }
         }
 
         public static void PopulateMissionsBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
@@ -118,19 +78,6 @@ namespace EDJournalQueue.Extensions
                 }
             }
         }
-
-
-        //def populate_missions_cargodepot(cargodepot: dict, missions: dict[int, dict]) :
-        //    changed = False
-        //    if cargodepot["MissionID"] in missions.keys():
-        //        logger.info(f"Mission {cargodepot['MissionID']} cargo delivered")
-        //        mission = missions[cargodepot["MissionID"]]
-        //        if "DeliveredCount" not in mission:
-        //            mission["DeliveredCount"] = 0
-        //        mission["DeliveredCount"] += cargodepot["Count"]
-        //        changes = True
-
-        //    return changed
 
         public static void PopulateMissionsCargoDepot(this List<object> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
@@ -170,6 +117,8 @@ namespace EDJournalQueue.Extensions
                 mission.DeliveredCount += cargoDepot.Count;
             }
         }
+
+        #endregion
 
     }
 }

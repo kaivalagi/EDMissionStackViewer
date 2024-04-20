@@ -5,6 +5,9 @@ namespace EDJournalQueue.Models
 
     public class JournalEntryMissionMining : JournalEntryMissionBase
     {
+
+        #region Properties
+
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
         public string Faction { get; set; }
@@ -14,6 +17,10 @@ namespace EDJournalQueue.Models
         public string Commodity { get; set; }
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
+
+        #endregion
+
+        #region Constructor
 
         public JournalEntryMissionMining(JToken entry) : base(entry)
         {
@@ -31,6 +38,9 @@ namespace EDJournalQueue.Models
             Commodity = (string)entry["Commodity_Localised"];
             Count = (int)entry["Count"];
         }
+
+        #endregion
+
     }
 
 }

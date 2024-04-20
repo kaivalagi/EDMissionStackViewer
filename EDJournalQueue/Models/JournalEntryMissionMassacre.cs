@@ -5,6 +5,9 @@ namespace EDJournalQueue.Models
 
     public class JournalEntryMissionMassacre : JournalEntryMissionBase
     {
+
+        #region Properties
+
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
         public string Faction { get; set; }
@@ -15,6 +18,10 @@ namespace EDJournalQueue.Models
         public string TargetFaction { get; set; }
         public int KillCount { get; set; }
         public int VictimCount { get; set; } = 0;
+
+        #endregion
+
+        #region Constructor
 
         public JournalEntryMissionMassacre(JToken entry) : base(entry)
         {
@@ -33,6 +40,8 @@ namespace EDJournalQueue.Models
             TargetFaction = (string)entry["TargetFaction"];
             KillCount = (int)entry["KillCount"];
         }
-    }
 
+        #endregion
+
+    }
 }

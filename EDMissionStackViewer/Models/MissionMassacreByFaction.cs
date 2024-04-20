@@ -5,6 +5,8 @@ namespace EDMissionStackViewer.Models
     public class MissionMassacreByFaction
     {
 
+        #region Properties
+
         public string Faction { get; set; }
         public int TotalMissions { get; set; }
         public int Required { get; set; }
@@ -15,6 +17,10 @@ namespace EDMissionStackViewer.Models
         public int RewardPerTon => TotalReward / Required;
         public DateTime MinExpiry { get; set; }
         public DateTime MaxExpiry { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public MissionMassacreByFaction(IGrouping<string,JournalEntryMissionMassacre> missions) {            
             this.Faction = missions.Key;
@@ -27,5 +33,8 @@ namespace EDMissionStackViewer.Models
             this.MaxExpiry = missions.Max(m => m.Expiry);
 
         }
+
+        #endregion
+
     }
 }

@@ -5,6 +5,8 @@ namespace EDMissionStackViewer.Models
     public class MissionCollectByCommodity
     {
 
+        #region Properties
+
         public string Commodity { get; set; }
         public int TotalMissions { get; set; }
         public int Required { get; set; }
@@ -15,6 +17,10 @@ namespace EDMissionStackViewer.Models
         public int RewardPerTon => TotalReward / Required;
         public DateTime MinExpiry { get; set; }
         public DateTime MaxExpiry { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public MissionCollectByCommodity(List<MissionCollectByCommodity> summaryDataSource)
         {
@@ -38,5 +44,8 @@ namespace EDMissionStackViewer.Models
             this.MinExpiry = missions.Min(m => m.Expiry);
             this.MaxExpiry = missions.Max(m => m.Expiry);
         }
+
+        #endregion
+
     }
 }

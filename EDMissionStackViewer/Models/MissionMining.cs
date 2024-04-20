@@ -4,6 +4,9 @@ namespace EDMissionStackViewer.Models
 {
     public class MissionMining
     {
+
+        #region Properties
+
         public string Location { get; set; }
         public string Commodity { get; set; }
         public int Required { get; set; }
@@ -12,6 +15,10 @@ namespace EDMissionStackViewer.Models
         public int Reward { get; set; }
         public bool Shared { get; set; }
         public DateTime Expiry { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public MissionMining(JournalEntryMissionMining mission) {
             this.Location = $"{mission.DestinationSystem}\\{mission.DestinationStation}";
@@ -22,5 +29,8 @@ namespace EDMissionStackViewer.Models
             this.Shared = mission.Wing;
             this.Expiry = mission.Expiry;
         }
+
+        #endregion
+
     }
 }

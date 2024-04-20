@@ -2,13 +2,18 @@
 
 namespace EDJournalQueue.Models
 {
-
     public class JournalEntryBounty : JournalEntryBase
     {
+
+        #region Properties
+
         public string VictimFaction { get; set; }
         public int TotalReward { get; set; }
         public string PilotName { get; set; }
 
+        #endregion
+
+        #region Constructor
 
         public JournalEntryBounty(JToken entry) : base(entry)
         {
@@ -17,7 +22,8 @@ namespace EDJournalQueue.Models
             TotalReward = (int)entry["TotalReward"];
             PilotName = (string)entry["PilotName_Localised"];
         }
+
+        #endregion
+
     }
-
-
 }

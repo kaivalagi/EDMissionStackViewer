@@ -5,11 +5,17 @@ namespace EDJournalQueue.Models
 
     public class JournalEntryCargoDepot : JournalEntryBase
     {
+
+        #region Properties
+
         public long MissionId { get; set; }
         public string UpdateType { get; set; }
         public string CargoType { get; set; }
         public int Count { get; set; }
 
+        #endregion
+
+        #region Constructor
 
         public JournalEntryCargoDepot(JToken entry) : base(entry)
         {
@@ -19,6 +25,8 @@ namespace EDJournalQueue.Models
             CargoType = (string)entry["CargoType_Localised"];
             Count = (int)entry["Count"];
         }
-    }
 
+        #endregion
+
+    }
 }

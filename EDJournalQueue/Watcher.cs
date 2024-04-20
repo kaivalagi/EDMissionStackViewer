@@ -1,5 +1,4 @@
-﻿using EDJournalQueue.Events;
-using EDJournalQueue.Extensions;
+﻿using EDJournalQueue.Extensions;
 using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
@@ -19,10 +18,7 @@ namespace EDJournalQueue
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
         private Dictionary<string, JournalFileInfo> _journalFileInfo = new Dictionary<string, JournalFileInfo>();
 
-        public event EventHandler<JournalEntryQueueChangedEventArgs> JournalEntryQueueChanged;
-        public event EventHandler<MissionsChangedEventArgs> MissionsChanged;
-
-        #endregion region
+        #endregion
 
         #region Constructor
 
@@ -38,7 +34,7 @@ namespace EDJournalQueue
                 }
                 else
                 {
-                    Console.WriteLine($"Journal folder '{journalFolder}' doesn't exist!");
+                    throw new IndexOutOfRangeException($"Journal folder '{journalFolder}' doesn't exist!");
                 }
             }
         }
@@ -47,25 +43,7 @@ namespace EDJournalQueue
 
         #region Events
 
-        protected virtual void OnJournalEntryQueueChanged(JournalEntryQueueChangedEventArgs e)
-        {
-            EventHandler<JournalEntryQueueChangedEventArgs> handler = JournalEntryQueueChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        protected virtual void OnMissionsChanged(MissionsChangedEventArgs e)
-        {
-            EventHandler<MissionsChangedEventArgs> handler = MissionsChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        private void OnChanged(object sender, FileSystemEventArgs e)
+        private async void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType != WatcherChangeTypes.Changed)
             {
@@ -74,15 +52,15 @@ namespace EDJournalQueue
 
             Console.WriteLine($"Processing change to '{e.FullPath}'");
 
-            ReadJournal(e.FullPath).Wait();
+            await ReadJournal(e.FullPath);
 
         }
 
-        private void OnCreated(object sender, FileSystemEventArgs e)
+        private async void OnCreated(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine($"Processing '{e.FullPath}' creation");
 
-            ReadJournal(e.FullPath).Wait();
+            await ReadJournal(e.FullPath);
         }
 
         #endregion
@@ -100,14 +78,17 @@ namespace EDJournalQueue
 
         private async Task PreloadJournalFilesAsync(int maxAgeDays = 28)
         {
+            var journalFiles = new List<FileInfo>();
             foreach (var journalFolder in _journalFolders)
             {
-                var journalFileInfos = journalFolder.GetFiles("*.log").ToList().Where(f => (DateTime.UtcNow - f.LastWriteTimeUtc).TotalDays < maxAgeDays).OrderBy(f => f.LastWriteTimeUtc);
+                journalFiles.AddRange(journalFolder.GetFiles("*.log").ToList());
+            }
 
-                foreach (var journalFileInfo in journalFileInfos)
-                {
-                    await ReadJournal(journalFileInfo.FullName, true);
-                }
+            var journalFilesFiltered = journalFiles.Where(f => (DateTime.UtcNow - f.LastWriteTimeUtc).TotalDays < maxAgeDays).OrderBy(f => f.LastWriteTimeUtc);
+
+            foreach (var journalFile in journalFilesFiltered)
+            {
+                await ReadJournal(journalFile.FullName, true);
             }
 
             // now add only active missions to the queue from CmdrJournalEventPreload
@@ -117,19 +98,29 @@ namespace EDJournalQueue
 
                 foreach (var activeMission in activeMissions)
                 {
-                    if (!JournalEntryQueue.ContainsKey(commanderName))
-                    {
-                        JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
-                    }
-                    JournalEntryQueue[commanderName].Enqueue(activeMission);
+                    await EnqueueJournalEntry(commanderName, activeMission);
                 }
-
-                if (JournalEntryQueue.ContainsKey(commanderName) && JournalEntryQueue[commanderName].Count > 0)
-                {
-                    OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName });
-                }                
             }
         }
+
+        private async Task PreloadJournalEntry(string commanderName, object journalEntry)
+        {
+            if (!JournalEntryPreload.ContainsKey(commanderName))
+            {
+                JournalEntryPreload[commanderName] = new List<object>();
+            }
+            JournalEntryPreload[commanderName].Add(journalEntry);
+        }
+
+        private async Task EnqueueJournalEntry(string commanderName, object journalEntry)
+        {
+            if (!JournalEntryQueue.ContainsKey(commanderName))
+            {
+                JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
+            }
+            JournalEntryQueue[commanderName].Enqueue(journalEntry);
+        }
+
 
         private async Task WatchJournalFilesAsync()
         {
@@ -188,33 +179,13 @@ namespace EDJournalQueue
 
                                     ActiveMissions[commanderName] = new Dictionary<long, Mission>();
 
-                                    if (preload)
-                                    {
-                                        if (!JournalEntryPreload.ContainsKey(commanderName))
-                                        {
-                                            JournalEntryPreload[commanderName] = new List<object>();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (!JournalEntryQueue.ContainsKey(commanderName))
-                                        {
-                                            JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
-                                        }
-                                    }
-
                                     if (activeMissions.Count() > 0)
                                     {
                                         foreach (var activeMission in activeMissions)
                                         {
                                             ActiveMissions[commanderName].Add((long)activeMission["MissionID"], new Mission(activeMission));
                                         }
-                                    }
-
-                                    if (!preload) // Only raise events post preload
-                                    {
-                                        OnMissionsChanged(new MissionsChangedEventArgs() { CommanderName = commanderName, JToken = activeMissions });
-                                    }                                    
+                                    }                              
 
                                     break;
 
@@ -226,20 +197,14 @@ namespace EDJournalQueue
                                     {
                                         if (preload)
                                         {
-                                            JournalEntryPreload[commanderName].Add(missionAccepted);
+                                            await PreloadJournalEntry(commanderName,missionAccepted);
                                         }
                                         else
                                         {
-                                            JournalEntryQueue[commanderName].Enqueue(missionAccepted);
-                                            OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
+                                            await EnqueueJournalEntry(commanderName, missionAccepted);
                                         }
 
                                         ActiveMissions[commanderName].Add(((JournalEntryMissionBase)missionAccepted).MissionId, new Mission((JournalEntryMissionBase)missionAccepted));
-
-                                        if (!preload) // Only raise events post preload
-                                        {
-                                            OnMissionsChanged(new MissionsChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
-                                        }
                                     }
 
                                     break;
@@ -253,9 +218,9 @@ namespace EDJournalQueue
 
                                     if (preload)
                                     {
-                                        JournalEntryPreload[commanderName].Add(missionRemoved);
+                                        await PreloadJournalEntry(commanderName, missionRemoved);
 
-                                        var missionRemovedId = ((JournalEntryMissionBase)missionRemoved).MissionId;
+                                        var missionRemovedId = ((JournalEntryMissionRemoved)missionRemoved).MissionId;
                                         if (ActiveMissions[commanderName].ContainsKey(missionRemovedId))
                                         {
                                             ActiveMissions[commanderName].Remove(missionRemovedId);
@@ -264,8 +229,7 @@ namespace EDJournalQueue
                                     }
                                     else
                                     {
-                                        JournalEntryQueue[commanderName].Enqueue(missionRemoved);
-                                        OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
+                                        await EnqueueJournalEntry(commanderName, missionRemoved);
                                     }
                                     break;
 
@@ -276,12 +240,11 @@ namespace EDJournalQueue
                                     {
                                         if (preload)
                                         {
-                                            JournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
+                                            await PreloadJournalEntry(commanderName, cargoDepot);   
                                         }
                                         else
                                         {
-                                            JournalEntryQueue[commanderName].Enqueue(cargoDepot);
-                                            OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
+                                            await EnqueueJournalEntry(commanderName, cargoDepot);
                                         }
                                     }
                                     break;
@@ -291,12 +254,11 @@ namespace EDJournalQueue
                                     var bounty = (JournalEntryBounty)journalEntry.Populate();
                                     if (preload)
                                     {
-                                        JournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
+                                        await PreloadJournalEntry(commanderName, bounty); 
                                     }
                                     else
                                     {
-                                        JournalEntryQueue[commanderName].Enqueue(bounty);
-                                        OnJournalEntryQueueChanged(new JournalEntryQueueChangedEventArgs() { CommanderName = commanderName, JToken = journalEntry });
+                                        await EnqueueJournalEntry(commanderName, bounty);
                                     }
 
                                     break;
@@ -305,6 +267,7 @@ namespace EDJournalQueue
                         }
                     }
                 }
+
                 if (_journalFileInfo.ContainsKey(journalFilePath))
                 {
                     _journalFileInfo[journalFilePath].FilePosition = fs.Position;
@@ -314,5 +277,6 @@ namespace EDJournalQueue
         }
 
         #endregion
+
     }
 }

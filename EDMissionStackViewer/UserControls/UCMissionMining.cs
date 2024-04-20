@@ -2,15 +2,32 @@
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
 
-namespace EDMissionStackViewer.Controls
+namespace EDMissionStackViewer.UserControls
 {
-    public partial class UIMissionMining : UserControl
+    public partial class UCMissionMining : UserControl
     {
 
-        public UIMissionMining()
+        #region Constructor
+        public UCMissionMining()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Events
+
+        private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
+            {
+                cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         public void LoadData(List<JournalEntryMissionMining> missions)
         {
@@ -47,12 +64,7 @@ namespace EDMissionStackViewer.Controls
             return summaryDataSource;
         }
 
-        private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
-        {
-            foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
-            {
-                cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
-            }
-        }
+        #endregion
+
     }
 }

@@ -2,14 +2,33 @@
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
 
-namespace EDMissionStackViewer.Controls
+namespace EDMissionStackViewer.UserControls
 {
-    public partial class UIMissionCourier : UserControl
+    public partial class UCMissionCourier : UserControl
     {
-        public UIMissionCourier()
+
+        #region Constructor
+
+        public UCMissionCourier()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Events
+
+        private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
+            {
+                cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         public void LoadData(List<JournalEntryMissionCourier> missions)
         {
@@ -45,5 +64,8 @@ namespace EDMissionStackViewer.Controls
 
             return summaryDataSource;
         }
+
+        #endregion
+
     }
 }

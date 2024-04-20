@@ -4,11 +4,18 @@ namespace EDJournalQueue.Models
 {
     public class Mission
     {
+
+        #region Properties
+
         public JToken JToken { get; set; }
         public long MissionId { get; set; }
         public string Name { get; set; }
         public bool PassengerMission { get; set; }
         public long Expires { get; set; } = 0;
+
+        #endregion
+
+        #region Constructor
 
         public Mission(JToken activeMission)
         {
@@ -25,9 +32,16 @@ namespace EDJournalQueue.Models
             Name = acceptedMission.Name;
         }
 
-        public string ToString()
+        #endregion
+
+        #region Methods
+
+        public override string ToString()
         {
             return JToken?.ToString();
         }
+
+        #endregion
+
     }
 }

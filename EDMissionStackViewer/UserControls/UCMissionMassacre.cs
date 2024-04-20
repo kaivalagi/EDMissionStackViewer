@@ -2,14 +2,33 @@
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
 
-namespace EDMissionStackViewer.Controls
+namespace EDMissionStackViewer.UserControls
 {
-    public partial class UIMissionMassacre : UserControl
+    public partial class UCMissionMassacre : UserControl
     {
-        public UIMissionMassacre()
+
+        #region Constructor
+
+        public UCMissionMassacre()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Events
+
+        private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
+            {
+                cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         public void LoadData(List<JournalEntryMissionMassacre> missions)
         {
@@ -43,5 +62,8 @@ namespace EDMissionStackViewer.Controls
 
             return summaryDataSource;
         }
+
+        #endregion
+
     }
 }
