@@ -12,7 +12,6 @@ namespace EDMissionStackViewer
         #region Class Data
 
         private Watcher _watcher;
-        private bool _processQueues = true;
 
         public Dictionary<string, Dictionary<long, Mission>> Missions = new Dictionary<string, Dictionary<long, Mission>>();
         public Dictionary<string, List<JournalEntryMissionMassacre>> JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();

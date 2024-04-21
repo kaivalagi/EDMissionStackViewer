@@ -38,6 +38,7 @@
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            splitContainer = new SplitContainer();
             dgMissions = new DataGridView();
             colMissionsLocation = new DataGridViewTextBoxColumn();
             colMissionsCommodity = new DataGridViewTextBoxColumn();
@@ -58,11 +59,33 @@
             colSummaryRewardPerTon = new DataGridViewTextBoxColumn();
             colSummaryMinExpiry = new DataGridViewTextBoxColumn();
             colSummaryMaxExpiry = new DataGridViewTextBoxColumn();
-            layoutPanel = new TableLayoutPanel();
+            ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
+            splitContainer.Panel1.SuspendLayout();
+            splitContainer.Panel2.SuspendLayout();
+            splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgMissions).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgSummary).BeginInit();
-            layoutPanel.SuspendLayout();
             SuspendLayout();
+            // 
+            // splitContainer
+            // 
+            splitContainer.Dock = DockStyle.Fill;
+            splitContainer.Location = new Point(0, 0);
+            splitContainer.Name = "splitContainer";
+            splitContainer.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer.Panel1
+            // 
+            splitContainer.Panel1.Controls.Add(dgMissions);
+            splitContainer.Panel1MinSize = 125;
+            // 
+            // splitContainer.Panel2
+            // 
+            splitContainer.Panel2.Controls.Add(dgSummary);
+            splitContainer.Panel2MinSize = 125;
+            splitContainer.Size = new Size(1369, 633);
+            splitContainer.SplitterDistance = 418;
+            splitContainer.TabIndex = 0;
             // 
             // dgMissions
             // 
@@ -87,7 +110,7 @@
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dgMissions.DefaultCellStyle = dataGridViewCellStyle3;
             dgMissions.Dock = DockStyle.Fill;
-            dgMissions.Location = new Point(3, 3);
+            dgMissions.Location = new Point(0, 0);
             dgMissions.Name = "dgMissions";
             dgMissions.ReadOnly = true;
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -100,8 +123,8 @@
             dgMissions.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgMissions.RowHeadersVisible = false;
             dgMissions.RowHeadersWidth = 62;
-            dgMissions.Size = new Size(1363, 437);
-            dgMissions.TabIndex = 4;
+            dgMissions.Size = new Size(1369, 418);
+            dgMissions.TabIndex = 5;
             // 
             // colMissionsLocation
             // 
@@ -203,7 +226,7 @@
             dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
             dgSummary.DefaultCellStyle = dataGridViewCellStyle9;
             dgSummary.Dock = DockStyle.Fill;
-            dgSummary.Location = new Point(3, 446);
+            dgSummary.Location = new Point(0, 0);
             dgSummary.Name = "dgSummary";
             dgSummary.ReadOnly = true;
             dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -216,8 +239,8 @@
             dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgSummary.RowHeadersVisible = false;
             dgSummary.RowHeadersWidth = 62;
-            dgSummary.Size = new Size(1363, 184);
-            dgSummary.TabIndex = 5;
+            dgSummary.Size = new Size(1369, 211);
+            dgSummary.TabIndex = 6;
             dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colSummaryCommodity
@@ -319,37 +342,34 @@
             colSummaryMaxExpiry.ReadOnly = true;
             colSummaryMaxExpiry.Width = 132;
             // 
-            // layoutPanel
-            // 
-            layoutPanel.ColumnCount = 1;
-            layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            layoutPanel.Controls.Add(dgSummary, 0, 1);
-            layoutPanel.Controls.Add(dgMissions, 0, 0);
-            layoutPanel.Dock = DockStyle.Fill;
-            layoutPanel.Location = new Point(0, 0);
-            layoutPanel.Name = "layoutPanel";
-            layoutPanel.RowCount = 2;
-            layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
-            layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            layoutPanel.Size = new Size(1369, 633);
-            layoutPanel.TabIndex = 4;
-            // 
             // UCMissionMining
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(layoutPanel);
+            Controls.Add(splitContainer);
             Name = "UCMissionMining";
             Size = new Size(1369, 633);
+            splitContainer.Panel1.ResumeLayout(false);
+            splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
+            splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgMissions).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgSummary).EndInit();
-            layoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
+        private TableLayoutPanel tlcPanel;
+        private SplitContainer splitContainer;
         private DataGridView dgMissions;
+        private DataGridViewTextBoxColumn colMissionsLocation;
+        private DataGridViewTextBoxColumn colMissionsCommodity;
+        private DataGridViewTextBoxColumn colMissionsRequired;
+        private DataGridViewTextBoxColumn colMissionsDelivered;
+        private DataGridViewTextBoxColumn colMissionsRemaining;
+        private DataGridViewTextBoxColumn colMissionsReward;
+        private DataGridViewCheckBoxColumn colMissionsShared;
+        private DataGridViewTextBoxColumn colMissionsExpiry;
         private DataGridView dgSummary;
         private DataGridViewTextBoxColumn colSummaryCommodity;
         private DataGridViewTextBoxColumn colSummaryTotalMissions;
@@ -361,15 +381,5 @@
         private DataGridViewTextBoxColumn colSummaryRewardPerTon;
         private DataGridViewTextBoxColumn colSummaryMinExpiry;
         private DataGridViewTextBoxColumn colSummaryMaxExpiry;
-        private TableLayoutPanel tlcPanel;
-        private DataGridViewTextBoxColumn colMissionsLocation;
-        private DataGridViewTextBoxColumn colMissionsCommodity;
-        private DataGridViewTextBoxColumn colMissionsRequired;
-        private DataGridViewTextBoxColumn colMissionsDelivered;
-        private DataGridViewTextBoxColumn colMissionsRemaining;
-        private DataGridViewTextBoxColumn colMissionsReward;
-        private DataGridViewCheckBoxColumn colMissionsShared;
-        private DataGridViewTextBoxColumn colMissionsExpiry;
-        private TableLayoutPanel layoutPanel;
     }
 }
