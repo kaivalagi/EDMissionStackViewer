@@ -75,7 +75,7 @@ namespace EDMissionStackViewer.UserControls
         {
             var summaryDataSource = new List<MissionCourierByLocation>();
 
-            var locationMissionsGroups = missions.GroupBy(m => $"{m.DestinationSystem}\\{m.DestinationStation}");
+            var locationMissionsGroups = missions.GroupBy(m => $"{m.DestinationSystem}\\{m.DestinationStation}").OrderBy(m => m.Key);
 
             foreach (var locationMissions in locationMissionsGroups)
             {

@@ -75,7 +75,7 @@ namespace EDMissionStackViewer.UserControls
         {
             var summaryDataSource = new List<MissionMassacreByFaction>();
 
-            foreach (var factionMissions in missions.GroupBy(m => m.Faction))
+            foreach (var factionMissions in missions.GroupBy(m => m.Faction).OrderBy(m => m.Key))
             {
                 summaryDataSource.Add(new MissionMassacreByFaction(factionMissions));
             }

@@ -78,7 +78,7 @@ namespace EDMissionStackViewer.UserControls
         {
             var summaryDataSource = new List<MissionMiningByCommodity>();
 
-            foreach (var commodityMissions in missions.GroupBy(m => m.Commodity))
+            foreach (var commodityMissions in missions.GroupBy(m => m.Commodity).OrderBy(m => m.Key))
             {
                 summaryDataSource.Add(new MissionMiningByCommodity(commodityMissions));
             }
