@@ -180,7 +180,7 @@
             // colMissionsReward
             // 
             colMissionsReward.DataPropertyName = "Reward";
-            dataGridViewCellStyle3.Format = "C0";
+            dataGridViewCellStyle3.Format = "N0";
             dataGridViewCellStyle3.NullValue = null;
             colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
             colMissionsReward.HeaderText = "Reward";
@@ -301,7 +301,7 @@
             // colSummaryTotalReward
             // 
             colSummaryTotalReward.DataPropertyName = "TotalReward";
-            dataGridViewCellStyle8.Format = "C0";
+            dataGridViewCellStyle8.Format = "N0";
             dataGridViewCellStyle8.NullValue = null;
             colSummaryTotalReward.DefaultCellStyle = dataGridViewCellStyle8;
             colSummaryTotalReward.HeaderText = "Total Reward";
@@ -313,7 +313,7 @@
             // colSummarySharedReward
             // 
             colSummarySharedReward.DataPropertyName = "SharedReward";
-            dataGridViewCellStyle9.Format = "C0";
+            dataGridViewCellStyle9.Format = "N0";
             dataGridViewCellStyle9.NullValue = null;
             colSummarySharedReward.DefaultCellStyle = dataGridViewCellStyle9;
             colSummarySharedReward.HeaderText = "Shared Reward";
@@ -325,7 +325,7 @@
             // colSummaryRewardPerTon
             // 
             colSummaryRewardPerTon.DataPropertyName = "RewardPerTon";
-            dataGridViewCellStyle10.Format = "C0";
+            dataGridViewCellStyle10.Format = "N0";
             dataGridViewCellStyle10.NullValue = null;
             colSummaryRewardPerTon.DefaultCellStyle = dataGridViewCellStyle10;
             colSummaryRewardPerTon.HeaderText = "Reward/Ton";
