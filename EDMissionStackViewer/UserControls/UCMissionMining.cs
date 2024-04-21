@@ -1,6 +1,6 @@
 ﻿using EDJournalQueue.Models;
-using EDMissionStackViewer.Models;
 using EDMissionStackViewer.Helpers;
+using EDMissionStackViewer.Models;
 using System.ComponentModel;
 
 namespace EDMissionStackViewer.UserControls
@@ -12,6 +12,13 @@ namespace EDMissionStackViewer.UserControls
         public UCMissionMining()
         {
             InitializeComponent();
+
+            dgMissions.EnableHeadersVisualStyles = false;
+            dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
+            dgSummary.EnableHeadersVisualStyles = false;
+            dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
         }
 
         #endregion
@@ -20,14 +27,18 @@ namespace EDMissionStackViewer.UserControls
 
         private void dgMissions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value != null && dgMissions.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+            if (e.Value != null && e.Value is TimeSpan)
+            {
                 e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+            }
         }
 
         private void dgSummary_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value != null && dgSummary.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+            if (e.Value != null && e.Value is TimeSpan)
+            {
                 e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+            }
         }
 
         private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
@@ -44,7 +55,7 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionMining> missions)
         {
-            var missionsBindingList = new BindingList<MissionMining>(GetMissionsData(missions));
+            var missionsBindingList = new SortableBindingList<MissionMining>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionMiningByCommodity>(GetSummaryData(missions));

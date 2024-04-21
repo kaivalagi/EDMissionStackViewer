@@ -22,7 +22,8 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionCourierByLocation(IGrouping<string,JournalEntryMissionCourier> missions) {            
+        public MissionCourierByLocation(IGrouping<string, JournalEntryMissionCourier> missions)
+        {
             this.Location = missions.Key;
             this.TotalMissions = missions.Count();
             this.Required = missions.Sum(m => m.Required);

@@ -20,7 +20,8 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionMassacre(JournalEntryMissionMassacre mission) {
+        public MissionMassacre(JournalEntryMissionMassacre mission)
+        {
             this.Location = $"{mission.DestinationSystem}\\{mission.DestinationStation}";
             this.Faction = mission.Faction;
             this.Required = mission.KillCount;

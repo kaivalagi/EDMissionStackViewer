@@ -22,10 +22,11 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionMassacreByFaction(IGrouping<string,JournalEntryMissionMassacre> missions) {            
+        public MissionMassacreByFaction(IGrouping<string, JournalEntryMissionMassacre> missions)
+        {
             this.Faction = missions.Key;
             this.TotalMissions = missions.Count();
-            this.Required = missions.Sum(m=>m.KillCount);
+            this.Required = missions.Sum(m => m.KillCount);
             this.Killed = missions.Sum(m => m.VictimCount);
             this.TotalReward = missions.Sum(m => m.Reward);
             this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);

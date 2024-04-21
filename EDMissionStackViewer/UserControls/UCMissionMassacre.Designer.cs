@@ -123,7 +123,8 @@
             dgMissions.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgMissions.RowHeadersVisible = false;
             dgMissions.RowHeadersWidth = 62;
-            dgMissions.Size = new Size(1369, 456);
+            dgMissions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgMissions.Size = new Size(1369, 418);
             dgMissions.TabIndex = 5;
             dgMissions.CellFormatting += dgMissions_CellFormatting;
             // 
@@ -240,7 +241,8 @@
             dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgSummary.RowHeadersVisible = false;
             dgSummary.RowHeadersWidth = 62;
-            dgSummary.Size = new Size(1369, 173);
+            dgSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgSummary.Size = new Size(1369, 211);
             dgSummary.TabIndex = 6;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
             // 

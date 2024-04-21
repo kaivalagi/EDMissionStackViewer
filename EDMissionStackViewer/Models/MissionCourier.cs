@@ -20,11 +20,12 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionCourier(JournalEntryMissionCourier mission) {
+        public MissionCourier(JournalEntryMissionCourier mission)
+        {
             this.Location = $"{mission.DestinationSystem}\\{mission.DestinationStation}";
             this.Faction = mission.Faction;
             this.Required = mission.Required;
-            this.Delivered = mission.Delivered; 
+            this.Delivered = mission.Delivered;
             this.Reward = mission.Reward;
             this.Shared = mission.Wing;
             this.Expiry = mission.Expiry;

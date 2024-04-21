@@ -13,6 +13,13 @@ namespace EDMissionStackViewer.UserControls
         public UCMissionMassacre()
         {
             InitializeComponent();
+
+            dgMissions.EnableHeadersVisualStyles = false;
+            dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
+            dgSummary.EnableHeadersVisualStyles = false;
+            dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
         }
 
         #endregion
@@ -45,7 +52,7 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionMassacre> missions)
         {
-            var missionsBindingList = new BindingList<MissionMassacre>(GetMissionsData(missions));
+            var missionsBindingList = new SortableBindingList<MissionMassacre>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionMassacreByFaction>(GetSummaryData(missions));

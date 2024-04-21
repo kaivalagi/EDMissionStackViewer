@@ -11,7 +11,7 @@
             try
             {
                 _semaphore = Semaphore.OpenExisting($"Global\\{Identifier}");
-                
+
                 Close();
                 return true;
             }

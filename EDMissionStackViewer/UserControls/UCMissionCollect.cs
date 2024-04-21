@@ -13,6 +13,13 @@ namespace EDMissionStackViewer.UserControls
         public UCMissionCollect()
         {
             InitializeComponent();
+
+            dgMissions.EnableHeadersVisualStyles = false;
+            dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
+            dgSummary.EnableHeadersVisualStyles = false;
+            dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
         }
 
         #endregion
@@ -45,7 +52,7 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionCollect> missions)
         {
-            var missionsBindingList = new BindingList<Models.MissionCollect>(GetMissionsData(missions));
+            var missionsBindingList = new SortableBindingList<Models.MissionCollect>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionCollectByCommodity>(GetSummaryData(missions));

@@ -9,11 +9,10 @@ namespace EDJournalQueue.Models
 
         public JournalEntryMissionRemoved(JToken entry) : base(entry)
         {
-            
+
         }
 
         #endregion
 
     }
-
 }

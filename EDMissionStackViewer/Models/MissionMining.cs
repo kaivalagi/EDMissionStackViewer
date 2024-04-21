@@ -20,7 +20,8 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionMining(JournalEntryMissionMining mission) {
+        public MissionMining(JournalEntryMissionMining mission)
+        {
             this.Location = $"{mission.DestinationSystem}\\{mission.DestinationStation}";
             this.Commodity = mission.Commodity;
             this.Required = mission.Count;

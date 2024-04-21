@@ -1,6 +1,5 @@
 ﻿using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
-using System.Collections.Concurrent;
 
 namespace EDJournalQueue.Extensions
 {

@@ -15,18 +15,21 @@ namespace EDMissionStackViewer.UserControls
         public void ShowMissionCollect(List<JournalEntryMissionCollect> missions)
         {
             uiMissionCollect.LoadData(missions);
+            tabPageMissionCollect.Text = $"Collect [{missions.Count}]";
             tabPageMissionCollect.Parent = tabControlMissions;
             tabControlMissions.SelectTab(tabPageMissionCollect);
         }
         public void ShowMissionCourier(List<JournalEntryMissionCourier> missions)
         {
             uiMissionCourier.LoadData(missions);
+            tabPageMissionCourier.Text = $"Courier [{missions.Count}]";
             tabPageMissionCourier.Parent = tabControlMissions;
             tabControlMissions.SelectTab(tabPageMissionCourier);
         }
         public void ShowMissionMassacre(List<JournalEntryMissionMassacre> missions)
         {
             uiMissionMassacre.LoadData(missions);
+            tabPageMissionMassacre.Text = $"Massacre [{missions.Count}]";
             tabPageMissionMassacre.Parent = tabControlMissions;
             tabControlMissions.SelectTab(tabPageMissionMassacre);
         }
@@ -34,6 +37,7 @@ namespace EDMissionStackViewer.UserControls
         public void ShowMissionMining(List<JournalEntryMissionMining> missions)
         {
             uiMissionMining.LoadData(missions);
+            tabPageMissionMining.Text = $"Mining [{missions.Count}]";
             tabPageMissionMining.Parent = tabControlMissions;
             tabControlMissions.SelectTab(tabPageMissionMining);
         }

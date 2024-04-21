@@ -49,7 +49,7 @@ namespace EDMissionStackViewer
         }
 
         public async Task InitialiseWatcher()
-        {            
+        {
             _watcher = new Watcher(_journalFolders);
             await _watcher.InitializeAsync();
         }
@@ -114,7 +114,7 @@ namespace EDMissionStackViewer
 
                 Application.DoEvents();
             }
-        }        
+        }
 
         private async Task ProcessJournalEntry(string commanderName, object journalEntry)
         {

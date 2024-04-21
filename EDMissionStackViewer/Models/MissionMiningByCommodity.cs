@@ -1,5 +1,4 @@
 ﻿using EDJournalQueue.Models;
-using System;
 
 namespace EDMissionStackViewer.Models
 {
@@ -34,10 +33,11 @@ namespace EDMissionStackViewer.Models
             this.MinExpiry = summaryDataSource.Min(m => m.MinExpiry);
             this.MaxExpiry = summaryDataSource.Max(m => m.MaxExpiry);
         }
-        public MissionMiningByCommodity(IGrouping<string,JournalEntryMissionMining> missions) {            
+        public MissionMiningByCommodity(IGrouping<string, JournalEntryMissionMining> missions)
+        {
             this.Commodity = missions.Key;
             this.TotalMissions = missions.Count();
-            this.Required = missions.Sum(m=>m.Count);
+            this.Required = missions.Sum(m => m.Count);
             this.Delivered = missions.Sum(m => m.DeliveredCount);
             this.TotalReward = missions.Sum(m => m.Reward);
             this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);

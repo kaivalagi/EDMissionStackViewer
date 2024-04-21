@@ -9,7 +9,7 @@ namespace EDMissionStackViewer
         {
             if (AppInstance.IsRunning())
             {
-                MessageBox.Show($"{Application.ProductName} is already running",Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"{Application.ProductName} is already running", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

@@ -34,13 +34,14 @@ namespace EDMissionStackViewer.Models
             this.MaxExpiry = summaryDataSource.Max(m => m.MaxExpiry);
         }
 
-        public MissionCollectByCommodity(IGrouping<string,JournalEntryMissionCollect> missions) {            
+        public MissionCollectByCommodity(IGrouping<string, JournalEntryMissionCollect> missions)
+        {
             this.Commodity = missions.Key;
-            this.Required = missions.Sum(m=>m.Count);
+            this.Required = missions.Sum(m => m.Count);
             this.Delivered = missions.Sum(m => m.DeliveredCount);
             this.TotalMissions = missions.Count();
             this.TotalReward = missions.Sum(m => m.Reward);
-            this.SharedReward = missions.Where(m=>m.Wing).Sum(m => m.Reward);
+            this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);
             this.MinExpiry = missions.Min(m => m.Expiry);
             this.MaxExpiry = missions.Max(m => m.Expiry);
         }

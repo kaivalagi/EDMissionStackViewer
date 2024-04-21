@@ -13,6 +13,13 @@ namespace EDMissionStackViewer.UserControls
         public UCMissionCourier()
         {
             InitializeComponent();
+
+            dgMissions.EnableHeadersVisualStyles = false;
+            dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
+            dgSummary.EnableHeadersVisualStyles = false;
+            dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+
         }
 
         #endregion
@@ -45,7 +52,7 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionCourier> missions)
         {
-            var missionsBindingList = new BindingList<MissionCourier>(GetMissionsData(missions));
+            var missionsBindingList = new SortableBindingList<MissionCourier>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionCourierByLocation>(GetSummaryData(missions));

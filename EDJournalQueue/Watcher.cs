@@ -185,7 +185,7 @@ namespace EDJournalQueue
                                         {
                                             ActiveMissions[commanderName].Add((long)activeMission["MissionID"], new Mission(activeMission));
                                         }
-                                    }                              
+                                    }
 
                                     break;
 
@@ -197,7 +197,7 @@ namespace EDJournalQueue
                                     {
                                         if (preload)
                                         {
-                                            await PreloadJournalEntry(commanderName,missionAccepted);
+                                            await PreloadJournalEntry(commanderName, missionAccepted);
                                         }
                                         else
                                         {
@@ -240,7 +240,7 @@ namespace EDJournalQueue
                                     {
                                         if (preload)
                                         {
-                                            await PreloadJournalEntry(commanderName, cargoDepot);   
+                                            await PreloadJournalEntry(commanderName, cargoDepot);
                                         }
                                         else
                                         {
@@ -254,7 +254,7 @@ namespace EDJournalQueue
                                     var bounty = (JournalEntryBounty)journalEntry.Populate();
                                     if (preload)
                                     {
-                                        await PreloadJournalEntry(commanderName, bounty); 
+                                        await PreloadJournalEntry(commanderName, bounty);
                                     }
                                     else
                                     {
