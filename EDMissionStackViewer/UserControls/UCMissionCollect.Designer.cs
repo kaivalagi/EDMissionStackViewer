@@ -1,6 +1,6 @@
 ﻿namespace EDMissionStackViewer.UserControls
 {
-    partial class UCMissionCollect2
+    partial class UCMissionCollect
     {
         /// <summary> 
         /// Required designer variable.
