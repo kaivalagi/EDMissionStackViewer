@@ -56,6 +56,28 @@ namespace EDJournalQueue.Extensions
             return entry;
         }
 
+        public static void PopulateMissionsBounty(this List<object> journalEvents, JournalEntryBounty bounty)
+        {
+            var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+            var factions = new List<string>();
+
+            foreach (var mission in associatedMissions)
+            {
+                if (!factions.Contains(mission.Faction))
+                {
+                    if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
+                    {
+                        mission.VictimCount++;
+                        factions.Add(mission.Faction);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+
         public static void PopulateMissionsBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
         {
             var associatedMissions = journalEvents.Where(j => j.TargetFaction == bounty.VictimFaction).ToList();

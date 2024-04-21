@@ -236,11 +236,12 @@ namespace EDJournalQueue
                                 case "CargoDepot":
                                     // { "timestamp":"2024-02-05T11:47:22Z", "event":"CargoDepot", "MissionID":953167866, "UpdateType":"Deliver", "CargoType":"DomesticAppliances", "CargoType_Localised":"Domestic Appliances", "Count":643, "StartMarketID":0, "EndMarketID":3230588160, "ItemsCollected":0, "ItemsDelivered":643, "TotalItemsToDeliver":1090, "Progress":0.000000 }
                                     var cargoDepot = (JournalEntryCargoDepot)journalEntry.Populate();
+                                    //962031653
                                     if (cargoDepot.UpdateType == "Deliver")
                                     {
                                         if (preload)
                                         {
-                                            await PreloadJournalEntry(commanderName, cargoDepot);
+                                            JournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
                                         }
                                         else
                                         {
@@ -254,7 +255,7 @@ namespace EDJournalQueue
                                     var bounty = (JournalEntryBounty)journalEntry.Populate();
                                     if (preload)
                                     {
-                                        await PreloadJournalEntry(commanderName, bounty);
+                                        JournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
                                     }
                                     else
                                     {
