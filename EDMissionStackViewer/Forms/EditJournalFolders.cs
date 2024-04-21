@@ -1,6 +1,6 @@
 ﻿namespace EDMissionStackViewer.Forms
 {
-    public partial class FormJournalFolders : Form
+    public partial class EditJournalFolders : Form
     {
 
         #region Class Data
@@ -11,7 +11,7 @@
 
         #region Constructor
 
-        public FormJournalFolders()
+        public EditJournalFolders()
         {
             InitializeComponent();
         }

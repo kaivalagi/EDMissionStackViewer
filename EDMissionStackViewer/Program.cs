@@ -14,7 +14,7 @@ namespace EDMissionStackViewer
             }
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormMissionStackViewer());
+            Application.Run(new MissionStackViewer());
 
             AppInstance.Close();
         }

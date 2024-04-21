@@ -6,7 +6,7 @@ using EDMissionStackViewer.UserControls;
 
 namespace EDMissionStackViewer
 {
-    public partial class FormMissionStackViewer : Form
+    public partial class MissionStackViewer : Form
     {
 
         #region Class Data
@@ -26,7 +26,7 @@ namespace EDMissionStackViewer
 
         #region Constructor
 
-        public FormMissionStackViewer()
+        public MissionStackViewer()
         {
             InitializeComponent();
         }
@@ -78,7 +78,7 @@ namespace EDMissionStackViewer
 
         private async void menuSettingsJournalFolder_Click(object sender, EventArgs e)
         {
-            var formJournalFolders = new FormJournalFolders();
+            var formJournalFolders = new EditJournalFolders();
             var result = formJournalFolders.ShowDialog();
             if (result == DialogResult.OK)
             {

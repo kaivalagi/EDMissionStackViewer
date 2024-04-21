@@ -38,7 +38,7 @@
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            tlcPanel = new TableLayoutPanel();
+            layoutPanel = new TableLayoutPanel();
             dgSummary = new DataGridView();
             colSummaryCommodity = new DataGridViewTextBoxColumn();
             colSummaryTotalMissions = new DataGridViewTextBoxColumn();
@@ -59,26 +59,25 @@
             colMissionsReward = new DataGridViewTextBoxColumn();
             colMissionsShared = new DataGridViewCheckBoxColumn();
             colMissionsExpiry = new DataGridViewTextBoxColumn();
-            tlcPanel.SuspendLayout();
+            layoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgSummary).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgMissions).BeginInit();
             SuspendLayout();
             // 
-            // tlcPanel
+            // layoutPanel
             // 
-            tlcPanel.ColumnCount = 1;
-            tlcPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlcPanel.Controls.Add(dgSummary, 0, 1);
-            tlcPanel.Controls.Add(dgMissions, 0, 0);
-            tlcPanel.Dock = DockStyle.Fill;
-            tlcPanel.Location = new Point(0, 0);
-            tlcPanel.Name = "tlcPanel";
-            tlcPanel.RowCount = 2;
-            tlcPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 62.5F));
-            tlcPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 37.5F));
-            tlcPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlcPanel.Size = new Size(1487, 684);
-            tlcPanel.TabIndex = 5;
+            layoutPanel.ColumnCount = 1;
+            layoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            layoutPanel.Controls.Add(dgSummary, 0, 1);
+            layoutPanel.Controls.Add(dgMissions, 0, 0);
+            layoutPanel.Dock = DockStyle.Fill;
+            layoutPanel.Location = new Point(0, 0);
+            layoutPanel.Name = "layoutPanel";
+            layoutPanel.RowCount = 2;
+            layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
+            layoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            layoutPanel.Size = new Size(1369, 633);
+            layoutPanel.TabIndex = 5;
             // 
             // dgSummary
             // 
@@ -103,7 +102,7 @@
             dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
             dgSummary.DefaultCellStyle = dataGridViewCellStyle5;
             dgSummary.Dock = DockStyle.Fill;
-            dgSummary.Location = new Point(3, 430);
+            dgSummary.Location = new Point(3, 446);
             dgSummary.Name = "dgSummary";
             dgSummary.ReadOnly = true;
             dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -116,7 +115,7 @@
             dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgSummary.RowHeadersVisible = false;
             dgSummary.RowHeadersWidth = 62;
-            dgSummary.Size = new Size(1481, 251);
+            dgSummary.Size = new Size(1363, 184);
             dgSummary.TabIndex = 5;
             // 
             // colSummaryCommodity
@@ -254,7 +253,7 @@
             dgMissions.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgMissions.RowHeadersVisible = false;
             dgMissions.RowHeadersWidth = 62;
-            dgMissions.Size = new Size(1481, 421);
+            dgMissions.Size = new Size(1363, 437);
             dgMissions.TabIndex = 4;
             // 
             // colMissionsLocation
@@ -334,14 +333,14 @@
             colMissionsExpiry.ReadOnly = true;
             colMissionsExpiry.Width = 95;
             // 
-            // UIMissionCollect
+            // UCMissionCollect
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(tlcPanel);
-            Name = "UIMissionCollect";
-            Size = new Size(1487, 684);
-            tlcPanel.ResumeLayout(false);
+            Controls.Add(layoutPanel);
+            Name = "UCMissionCollect";
+            Size = new Size(1369, 633);
+            layoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgSummary).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgMissions).EndInit();
             ResumeLayout(false);
@@ -370,5 +369,6 @@
         private DataGridViewTextBoxColumn colMissionsReward;
         private DataGridViewCheckBoxColumn colMissionsShared;
         private DataGridViewTextBoxColumn colMissionsExpiry;
+        private TableLayoutPanel layoutPanel;
     }
 }

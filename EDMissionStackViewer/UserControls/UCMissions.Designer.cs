@@ -57,7 +57,7 @@ namespace EDMissionStackViewer.UserControls
             tabControlMissions.Location = new Point(0, 0);
             tabControlMissions.Name = "tabControlMissions";
             tabControlMissions.SelectedIndex = 0;
-            tabControlMissions.Size = new Size(1439, 715);
+            tabControlMissions.Size = new Size(1375, 670);
             tabControlMissions.TabIndex = 0;
             // 
             // tabPageMissionCollect
@@ -121,7 +121,7 @@ namespace EDMissionStackViewer.UserControls
             tabPageMissionMining.Controls.Add(uiMissionMining);
             tabPageMissionMining.Location = new Point(4, 37);
             tabPageMissionMining.Name = "tabPageMissionMining";
-            tabPageMissionMining.Size = new Size(1431, 674);
+            tabPageMissionMining.Size = new Size(1367, 629);
             tabPageMissionMining.TabIndex = 3;
             tabPageMissionMining.Text = "Mining";
             tabPageMissionMining.UseVisualStyleBackColor = true;
@@ -131,7 +131,7 @@ namespace EDMissionStackViewer.UserControls
             uiMissionMining.Dock = DockStyle.Fill;
             uiMissionMining.Location = new Point(0, 0);
             uiMissionMining.Name = "uiMissionMining";
-            uiMissionMining.Size = new Size(1431, 674);
+            uiMissionMining.Size = new Size(1367, 629);
             uiMissionMining.TabIndex = 0;
             // 
             // UCMissions
@@ -140,7 +140,7 @@ namespace EDMissionStackViewer.UserControls
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tabControlMissions);
             Name = "UCMissions";
-            Size = new Size(1439, 715);
+            Size = new Size(1375, 670);
             tabControlMissions.ResumeLayout(false);
             tabPageMissionCollect.ResumeLayout(false);
             tabPageMissionCourier.ResumeLayout(false);

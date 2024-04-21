@@ -1,6 +1,6 @@
 ﻿namespace EDMissionStackViewer.Forms
 {
-    partial class FormJournalFolders
+    partial class EditJournalFolders
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormJournalFolders));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditJournalFolders));
             layoutJournalFolders = new TableLayoutPanel();
             listViewJournalFolders = new ListView();
             panelActions = new Panel();
@@ -124,7 +124,7 @@
             // 
             dialogFolder.RootFolder = Environment.SpecialFolder.UserProfile;
             // 
-            // FormJournalFolders
+            // EditJournalFolders
             // 
             AcceptButton = buttonOK;
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -135,7 +135,7 @@
             Controls.Add(layoutJournalFolders);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "FormJournalFolders";
+            Name = "EditJournalFolders";
             Text = "Journal Folders";
             Load += FormJournalFolders_Load;
             layoutJournalFolders.ResumeLayout(false);
