@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Runtime.CompilerServices;
 
 namespace EDMissionStackViewer.Helpers
 {
@@ -16,5 +17,8 @@ namespace EDMissionStackViewer.Helpers
             return new DirectoryInfo(journalFolder);
         }
 
+        public static string ToDaysHoursMins(this TimeSpan timeSpan) {
+            return string.Format("{0:%d} days, {0:%h} hrs, {0:%m} mins", timeSpan);
+        }
     }
 }

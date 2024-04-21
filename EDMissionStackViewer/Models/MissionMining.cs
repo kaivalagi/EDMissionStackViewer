@@ -14,7 +14,7 @@ namespace EDMissionStackViewer.Models
         public int Remaining => Required - Delivered;
         public int Reward { get; set; }
         public bool Shared { get; set; }
-        public DateTime Expiry { get; set; }
+        public TimeSpan Expiry { get; set; }
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace EDMissionStackViewer.Models
             this.Delivered = mission.DeliveredCount;
             this.Reward = mission.Reward;
             this.Shared = mission.Wing;
-            this.Expiry = mission.Expiry;
+            this.Expiry = mission.Expiry - DateTime.UtcNow;
         }
 
         #endregion

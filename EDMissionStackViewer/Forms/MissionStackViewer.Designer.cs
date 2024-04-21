@@ -54,7 +54,7 @@ namespace EDMissionStackViewer
             tabControlCommanders.Location = new Point(0, 32);
             tabControlCommanders.Name = "tabControlCommanders";
             tabControlCommanders.SelectedIndex = 0;
-            tabControlCommanders.Size = new Size(1453, 596);
+            tabControlCommanders.Size = new Size(1476, 578);
             tabControlCommanders.TabIndex = 3;
             tabControlCommanders.Visible = false;
             // 
@@ -64,7 +64,7 @@ namespace EDMissionStackViewer
             tabPageCommander.Location = new Point(4, 37);
             tabPageCommander.Name = "tabPageCommander";
             tabPageCommander.Padding = new Padding(3);
-            tabPageCommander.Size = new Size(1445, 555);
+            tabPageCommander.Size = new Size(1468, 537);
             tabPageCommander.TabIndex = 0;
             tabPageCommander.Text = "Commander";
             tabPageCommander.UseVisualStyleBackColor = true;
@@ -74,7 +74,7 @@ namespace EDMissionStackViewer
             ucMissionsCommander.Dock = DockStyle.Fill;
             ucMissionsCommander.Location = new Point(3, 3);
             ucMissionsCommander.Name = "ucMissionsCommander";
-            ucMissionsCommander.Size = new Size(1439, 549);
+            ucMissionsCommander.Size = new Size(1462, 531);
             ucMissionsCommander.TabIndex = 0;
             // 
             // refreshTimer
@@ -100,7 +100,7 @@ namespace EDMissionStackViewer
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.RightToLeft = RightToLeft.Yes;
-            menuStrip.Size = new Size(1453, 32);
+            menuStrip.Size = new Size(1476, 32);
             menuStrip.TabIndex = 5;
             menuStrip.Text = "menuStrip";
             // 
@@ -114,7 +114,7 @@ namespace EDMissionStackViewer
             // menuSettingsJournalFolder
             // 
             menuSettingsJournalFolder.Name = "menuSettingsJournalFolder";
-            menuSettingsJournalFolder.Size = new Size(270, 34);
+            menuSettingsJournalFolder.Size = new Size(233, 34);
             menuSettingsJournalFolder.Text = "Journal Folders";
             menuSettingsJournalFolder.Click += menuSettingsJournalFolder_Click;
             // 
@@ -126,7 +126,7 @@ namespace EDMissionStackViewer
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1453, 628);
+            ClientSize = new Size(1476, 610);
             Controls.Add(tabControlCommanders);
             Controls.Add(lblNoCommander);
             Controls.Add(menuStrip);

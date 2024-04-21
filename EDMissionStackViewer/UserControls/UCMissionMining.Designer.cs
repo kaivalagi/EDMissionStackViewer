@@ -125,6 +125,7 @@
             dgMissions.RowHeadersWidth = 62;
             dgMissions.Size = new Size(1369, 418);
             dgMissions.TabIndex = 5;
+            dgMissions.CellFormatting += dgMissions_CellFormatting;
             // 
             // colMissionsLocation
             // 
@@ -241,6 +242,7 @@
             dgSummary.RowHeadersWidth = 62;
             dgSummary.Size = new Size(1369, 211);
             dgSummary.TabIndex = 6;
+            dgSummary.CellFormatting += dgSummary_CellFormatting;
             dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colSummaryCommodity

@@ -1,4 +1,5 @@
 ﻿using EDJournalQueue.Models;
+using EDMissionStackViewer.Helpers;
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
 
@@ -17,6 +18,18 @@ namespace EDMissionStackViewer.UserControls
         #endregion
 
         #region Events
+
+        private void dgMissions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null && dgMissions.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+                e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+        }
+
+        private void dgSummary_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null && dgSummary.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+                e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+        }
 
         private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {

@@ -1,5 +1,6 @@
 ﻿using EDJournalQueue.Models;
 using EDMissionStackViewer.Models;
+using EDMissionStackViewer.Helpers;
 using System.ComponentModel;
 
 namespace EDMissionStackViewer.UserControls
@@ -17,6 +18,18 @@ namespace EDMissionStackViewer.UserControls
 
         #region Events
 
+        private void dgMissions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null && dgMissions.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+                e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+        }
+
+        private void dgSummary_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null && dgSummary.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+                e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+        }
+
         private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
             foreach (DataGridViewCell cell in dgSummary.Rows[dgSummary.Rows.Count - 1].Cells)
@@ -24,7 +37,6 @@ namespace EDMissionStackViewer.UserControls
                 cell.Style.Font = new Font(cell.InheritedStyle.Font, FontStyle.Bold);
             }
         }
-
 
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using EDJournalQueue.Models;
+using System;
 
 namespace EDMissionStackViewer.Models
 {
@@ -15,8 +16,8 @@ namespace EDMissionStackViewer.Models
         public int TotalReward { get; set; }
         public int SharedReward { get; set; }
         public int RewardPerTon => TotalReward / Required;
-        public DateTime MinExpiry { get; set; }
-        public DateTime MaxExpiry { get; set; }
+        public TimeSpan MinExpiry { get; set; }
+        public TimeSpan MaxExpiry { get; set; }
 
         #endregion
 
@@ -40,8 +41,8 @@ namespace EDMissionStackViewer.Models
             this.Delivered = missions.Sum(m => m.DeliveredCount);
             this.TotalReward = missions.Sum(m => m.Reward);
             this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);
-            this.MinExpiry = missions.Min(m => m.Expiry);
-            this.MaxExpiry = missions.Max(m => m.Expiry);
+            this.MinExpiry = missions.Min(m => m.Expiry) - DateTime.UtcNow;
+            this.MaxExpiry = missions.Max(m => m.Expiry) - DateTime.UtcNow;
         }
 
         #endregion
