@@ -251,6 +251,7 @@
             dgSummary.Size = new Size(1369, 211);
             dgSummary.TabIndex = 7;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
+            dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colSummaryCommodity
             // 
@@ -368,6 +369,7 @@
         }
 
         #endregion
+
         private TableLayoutPanel tlcPanel;
         private SplitContainer splitContainer;
         private DataGridView dgMissions;

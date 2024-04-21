@@ -29,15 +29,17 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             splitContainer = new SplitContainer();
             dgMissions = new DataGridView();
             colMissionsLocation = new DataGridViewTextBoxColumn();
@@ -89,38 +91,40 @@
             // 
             // dgMissions
             // 
+            dataGridViewCellStyle1.BackColor = Color.Gainsboro;
+            dgMissions.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dgMissions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgMissions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgMissions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgMissions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgMissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgMissions.Columns.AddRange(new DataGridViewColumn[] { colMissionsLocation, colMissionsFaction, colMissionsRequired, colMissionsKilled, colMissionsRemaining, colMissionsReward, colMissionsShared, colMissionsExpiry });
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dgMissions.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgMissions.DefaultCellStyle = dataGridViewCellStyle4;
             dgMissions.Dock = DockStyle.Fill;
             dgMissions.Location = new Point(0, 0);
             dgMissions.Name = "dgMissions";
             dgMissions.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgMissions.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgMissions.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgMissions.RowHeadersVisible = false;
             dgMissions.RowHeadersWidth = 62;
             dgMissions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -176,9 +180,9 @@
             // colMissionsReward
             // 
             colMissionsReward.DataPropertyName = "Reward";
-            dataGridViewCellStyle2.Format = "C0";
-            dataGridViewCellStyle2.NullValue = null;
-            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Format = "C0";
+            dataGridViewCellStyle3.NullValue = null;
+            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
             colMissionsReward.HeaderText = "Reward";
             colMissionsReward.MinimumWidth = 8;
             colMissionsReward.Name = "colMissionsReward";
@@ -207,44 +211,47 @@
             // 
             // dgSummary
             // 
+            dataGridViewCellStyle6.BackColor = Color.Gainsboro;
+            dgSummary.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
             dgSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgSummary.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgSummary.Columns.AddRange(new DataGridViewColumn[] { colSummaryFaction, colSummaryTotalMissions, colSummaryRequired, colSummaryKilled, colSummaryRemaining, colSummaryTotalReward, colSummarySharedReward, colSummaryRewardPerTon, colSummaryMinExpiry, colSummaryMaxExpiry });
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = SystemColors.Window;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle9.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
-            dgSummary.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = SystemColors.Window;
+            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            dgSummary.DefaultCellStyle = dataGridViewCellStyle11;
             dgSummary.Dock = DockStyle.Fill;
             dgSummary.Location = new Point(0, 0);
             dgSummary.Name = "dgSummary";
             dgSummary.ReadOnly = true;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = SystemColors.Control;
-            dataGridViewCellStyle10.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = SystemColors.Control;
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
+            dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
             dgSummary.RowHeadersVisible = false;
             dgSummary.RowHeadersWidth = 62;
             dgSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgSummary.Size = new Size(1369, 211);
             dgSummary.TabIndex = 6;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
+            dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colSummaryFaction
             // 
@@ -294,9 +301,9 @@
             // colSummaryTotalReward
             // 
             colSummaryTotalReward.DataPropertyName = "TotalReward";
-            dataGridViewCellStyle6.Format = "C0";
-            dataGridViewCellStyle6.NullValue = null;
-            colSummaryTotalReward.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle8.Format = "C0";
+            dataGridViewCellStyle8.NullValue = null;
+            colSummaryTotalReward.DefaultCellStyle = dataGridViewCellStyle8;
             colSummaryTotalReward.HeaderText = "Total Reward";
             colSummaryTotalReward.MinimumWidth = 8;
             colSummaryTotalReward.Name = "colSummaryTotalReward";
@@ -306,9 +313,9 @@
             // colSummarySharedReward
             // 
             colSummarySharedReward.DataPropertyName = "SharedReward";
-            dataGridViewCellStyle7.Format = "C0";
-            dataGridViewCellStyle7.NullValue = null;
-            colSummarySharedReward.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle9.Format = "C0";
+            dataGridViewCellStyle9.NullValue = null;
+            colSummarySharedReward.DefaultCellStyle = dataGridViewCellStyle9;
             colSummarySharedReward.HeaderText = "Shared Reward";
             colSummarySharedReward.MinimumWidth = 8;
             colSummarySharedReward.Name = "colSummarySharedReward";
@@ -318,9 +325,9 @@
             // colSummaryRewardPerTon
             // 
             colSummaryRewardPerTon.DataPropertyName = "RewardPerTon";
-            dataGridViewCellStyle8.Format = "C0";
-            dataGridViewCellStyle8.NullValue = null;
-            colSummaryRewardPerTon.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle10.Format = "C0";
+            dataGridViewCellStyle10.NullValue = null;
+            colSummaryRewardPerTon.DefaultCellStyle = dataGridViewCellStyle10;
             colSummaryRewardPerTon.HeaderText = "Reward/Ton";
             colSummaryRewardPerTon.MinimumWidth = 8;
             colSummaryRewardPerTon.Name = "colSummaryRewardPerTon";

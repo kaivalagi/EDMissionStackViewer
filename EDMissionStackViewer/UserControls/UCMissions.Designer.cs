@@ -32,7 +32,7 @@ namespace EDMissionStackViewer.UserControls
         {
             tabControlMissions = new TabControl();
             tabPageMissionCollect = new TabPage();
-            uiMissionCollect = new UCMissionCollect();
+            uiMissionCollect = new UCMissionCollect2();
             tabPageMissionCourier = new TabPage();
             uiMissionCourier = new UCMissionCourier();
             tabPageMissionMassacre = new TabPage();
@@ -153,7 +153,7 @@ namespace EDMissionStackViewer.UserControls
 
         private TabControl tabControlMissions;
         private TabPage tabPageMissionCollect;
-        private UCMissionCollect uiMissionCollect;
+        private UCMissionCollect2 uiMissionCollect;
         private TabPage tabPageMissionCourier;
         private UCMissionCourier uiMissionCourier;
         private TabPage tabPageMissionMassacre;

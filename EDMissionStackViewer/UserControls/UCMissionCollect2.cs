@@ -5,12 +5,12 @@ using System.ComponentModel;
 
 namespace EDMissionStackViewer.UserControls
 {
-    public partial class UCMissionCollect : UserControl
+    public partial class UCMissionCollect2 : UserControl
     {
 
         #region Constructor
 
-        public UCMissionCollect()
+        public UCMissionCollect2()
         {
             InitializeComponent();
 
