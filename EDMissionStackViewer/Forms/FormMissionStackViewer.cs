@@ -3,7 +3,6 @@ using EDJournalQueue.Extensions;
 using EDJournalQueue.Models;
 using EDMissionStackViewer.Forms;
 using EDMissionStackViewer.UserControls;
-using EDMissionStackViewer;
 
 namespace EDMissionStackViewer
 {
@@ -42,7 +41,7 @@ namespace EDMissionStackViewer
 
             if (Properties.Settings.Default.JournalFolders == "")
             {
-                Properties.Settings.Default.JournalFolders = Helper.GetDefaultJournalFolder().FullName;
+                Properties.Settings.Default.JournalFolders = Helpers.Journal.GetDefaultJournalFolder().FullName;
                 Properties.Settings.Default.Save();
             }
             _journalFolders = Properties.Settings.Default.JournalFolders.Split(",").ToList();
@@ -111,14 +110,14 @@ namespace EDMissionStackViewer
                 _watcher.JournalEntryQueue[commanderName].TryDequeue(out var journalEntry);
                 if (journalEntry != null)
                 {
-                    await ProcessJournalEntry(commanderName, journalEntry, true);
+                    await ProcessJournalEntry(commanderName, journalEntry);
                 }
 
                 Application.DoEvents();
             }
         }        
 
-        private async Task ProcessJournalEntry(string commanderName, object journalEntry, bool focus = false)
+        private async Task ProcessJournalEntry(string commanderName, object journalEntry)
         {
 
             var journalEntryType = journalEntry.GetType().Name;
@@ -231,6 +230,7 @@ namespace EDMissionStackViewer
                 uiMissions.Name = $"uiMissions{commanderName}";
                 uiMissions.Size = new Size(1439, 715);
                 uiMissions.TabIndex = 0;
+                uiMissions.HideAllMissions();
                 tabPageCommander.Controls.Add(uiMissions);
             }
         }
@@ -242,6 +242,7 @@ namespace EDMissionStackViewer
             if (JournalEntryMissionCollectList[commanderName].Count > 0)
             {
                 uiMissions.ShowMissionCollect(JournalEntryMissionCollectList[commanderName]);
+                tabControlCommanders.SelectTab(tabPageCommander);
             }
             else
             {
@@ -251,6 +252,7 @@ namespace EDMissionStackViewer
             if (JournalEntryMissionCourierList[commanderName].Count > 0)
             {
                 uiMissions.ShowMissionCourier(JournalEntryMissionCourierList[commanderName]);
+                tabControlCommanders.SelectTab(tabPageCommander);
             }
             else
             {
@@ -260,6 +262,7 @@ namespace EDMissionStackViewer
             if (JournalEntryMissionMassacreList[commanderName].Count > 0)
             {
                 uiMissions.ShowMissionMassacre(JournalEntryMissionMassacreList[commanderName]);
+                tabControlCommanders.SelectTab(tabPageCommander);
             }
             else
             {
@@ -269,6 +272,7 @@ namespace EDMissionStackViewer
             if (JournalEntryMissionMiningList[commanderName].Count > 0)
             {
                 uiMissions.ShowMissionMining(JournalEntryMissionMiningList[commanderName]);
+                tabControlCommanders.SelectTab(tabPageCommander);
             }
             else
             {

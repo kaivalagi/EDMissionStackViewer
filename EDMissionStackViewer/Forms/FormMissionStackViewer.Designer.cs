@@ -34,13 +34,13 @@ namespace EDMissionStackViewer
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMissionStackViewer));
             tabControlCommanders = new TabControl();
             tabPageCommander = new TabPage();
-            uiMissionsCommander = new UCMissions();
             refreshTimer = new System.Windows.Forms.Timer(components);
             lblNoCommander = new Label();
             menuStrip1 = new MenuStrip();
             menuSettings = new ToolStripMenuItem();
             menuSettingsJournalFolder = new ToolStripMenuItem();
             dlgJournalFolder = new FolderBrowserDialog();
+            ucMissionsCommander = new UCMissions();
             tabControlCommanders.SuspendLayout();
             tabPageCommander.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -48,6 +48,7 @@ namespace EDMissionStackViewer
             // 
             // tabControlCommanders
             // 
+            tabControlCommanders.Appearance = TabAppearance.FlatButtons;
             tabControlCommanders.Controls.Add(tabPageCommander);
             tabControlCommanders.Dock = DockStyle.Fill;
             tabControlCommanders.Location = new Point(0, 33);
@@ -59,22 +60,14 @@ namespace EDMissionStackViewer
             // 
             // tabPageCommander
             // 
-            tabPageCommander.Controls.Add(uiMissionsCommander);
-            tabPageCommander.Location = new Point(4, 34);
+            tabPageCommander.Controls.Add(ucMissionsCommander);
+            tabPageCommander.Location = new Point(4, 37);
             tabPageCommander.Name = "tabPageCommander";
             tabPageCommander.Padding = new Padding(3);
-            tabPageCommander.Size = new Size(1445, 688);
+            tabPageCommander.Size = new Size(1445, 685);
             tabPageCommander.TabIndex = 0;
             tabPageCommander.Text = "Commander";
             tabPageCommander.UseVisualStyleBackColor = true;
-            // 
-            // uiMissionsCommander
-            // 
-            uiMissionsCommander.Dock = DockStyle.Fill;
-            uiMissionsCommander.Location = new Point(3, 3);
-            uiMissionsCommander.Name = "uiMissionsCommander";
-            uiMissionsCommander.Size = new Size(1439, 682);
-            uiMissionsCommander.TabIndex = 0;
             // 
             // refreshTimer
             // 
@@ -120,6 +113,14 @@ namespace EDMissionStackViewer
             // 
             dlgJournalFolder.RootFolder = Environment.SpecialFolder.UserProfile;
             // 
+            // ucMissionsCommander
+            // 
+            ucMissionsCommander.Dock = DockStyle.Fill;
+            ucMissionsCommander.Location = new Point(3, 3);
+            ucMissionsCommander.Name = "ucMissionsCommander";
+            ucMissionsCommander.Size = new Size(1439, 679);
+            ucMissionsCommander.TabIndex = 0;
+            // 
             // FormMissionStackViewer
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -146,10 +147,10 @@ namespace EDMissionStackViewer
         private System.Windows.Forms.Timer refreshTimer;
         private Label lblNoCommander;
         private TabPage tabPageCommander;
-        private UCMissions uiMissionsCommander;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem menuSettings;
         private ToolStripMenuItem menuSettingsJournalFolder;
         private FolderBrowserDialog dlgJournalFolder;
+        private UCMissions ucMissionsCommander;
     }
 }

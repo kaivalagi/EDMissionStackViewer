@@ -5,16 +5,11 @@ namespace EDMissionStackViewer.UserControls
     public partial class UCMissions : UserControl
     {
         public bool ActiveMissions => (tabPageMissionCollect.Parent != null || tabPageMissionCourier.Parent != null || tabPageMissionMassacre.Parent != null || tabPageMissionMining.Parent != null);
+        public bool ShowEmptyTabs = true;
 
         public UCMissions()
         {
             InitializeComponent();
-
-            // remove parent link to hide until loaded
-            foreach (TabPage tabPage in tabControlMissions.TabPages)
-            {
-                tabPage.Parent = null;
-            }
         }
 
         public void ShowMissionCollect(List<JournalEntryMissionCollect> missions)
@@ -41,6 +36,14 @@ namespace EDMissionStackViewer.UserControls
             uiMissionMining.LoadData(missions);
             tabPageMissionMining.Parent = tabControlMissions;
             tabControlMissions.SelectTab(tabPageMissionMining);
+        }
+
+        public void HideAllMissions()
+        {
+            foreach (TabPage tabPage in tabControlMissions.TabPages)
+            {
+                tabPage.Parent = null;
+            }
         }
 
         public void HideMissionCollect()

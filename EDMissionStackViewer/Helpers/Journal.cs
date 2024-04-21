@@ -1,9 +1,10 @@
 ﻿using Microsoft.Win32;
 
-namespace EDMissionStackViewer
+namespace EDMissionStackViewer.Helpers
 {
-    public static class Helper
+    public static class Journal
     {
+
         public static DirectoryInfo GetDefaultJournalFolder()
         {
             var defaultPath = Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Saved Games");
