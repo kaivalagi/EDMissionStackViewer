@@ -12,7 +12,7 @@ namespace EDMissionStackViewer.Models
         public int Required { get; set; }
         public int Killed { get; set; }
         public int Remaining => Required - Killed;
-        public int Reward { get; set; }
+        public decimal Reward { get; set; }
         public bool Shared { get; set; }
         public string Influence { get; set; }
         public string Reputation { get; set; }

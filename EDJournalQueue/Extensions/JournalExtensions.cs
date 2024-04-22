@@ -46,8 +46,8 @@ namespace EDJournalQueue.Extensions
                     entry = new JournalEntryCargoDepot(journalEntry);
                     break;
                 case "Bounty":
-                    break;
                     entry = new JournalEntryBounty(journalEntry);
+                    break;
                 default:
                     entry = new JournalEntryBase(journalEntry);
                     break;
@@ -56,7 +56,7 @@ namespace EDJournalQueue.Extensions
             return entry;
         }
 
-        public static void PopulateMissionsBounty(this List<object> journalEvents, JournalEntryBounty bounty)
+        public static void PopulateMissionFromBounty(this List<object> journalEvents, JournalEntryBounty bounty)
         {
             var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
             var factions = new List<string>();
@@ -78,7 +78,7 @@ namespace EDJournalQueue.Extensions
             }
         }
 
-        public static void PopulateMissionsBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
+        public static void PopulateMissionFromBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
         {
             var associatedMissions = journalEvents.Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
             var factions = new List<string>();
@@ -100,7 +100,7 @@ namespace EDJournalQueue.Extensions
             }
         }
 
-        public static void PopulateMissionsCargoDepot(this List<object> journalEvents, JournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionFromCargoDepot(this List<object> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
             var mission = journalEvents.OfType<JournalEntryMissionBase>().Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)
@@ -115,13 +115,13 @@ namespace EDJournalQueue.Extensions
                     case "JournalEntryMissionCollect":
                         ((JournalEntryMissionCollect)mission).DeliveredCount += cargoDepot.Count;
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException($"Unsupported mission type of '{missionType}'");
+                    //default:
+                    //    throw new ArgumentOutOfRangeException($"Unsupported mission type of '{missionType}'");
                 }
             }
         }
 
-        public static void PopulateMissionsCargoDepot(this List<JournalEntryMissionMining> journalEvents, JournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionFromCargoDepot(this List<JournalEntryMissionMining> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
             var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)
@@ -130,7 +130,7 @@ namespace EDJournalQueue.Extensions
             }
         }
 
-        public static void PopulateMissionsCargoDepot(this List<JournalEntryMissionCollect> journalEvents, JournalEntryCargoDepot cargoDepot)
+        public static void PopulateMissionFromCargoDepot(this List<JournalEntryMissionCollect> journalEvents, JournalEntryCargoDepot cargoDepot)
         {
             var mission = journalEvents.Where(j => j.MissionId == cargoDepot.MissionId).FirstOrDefault();
             if (mission != null)

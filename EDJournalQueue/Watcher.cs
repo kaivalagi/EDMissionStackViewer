@@ -116,18 +116,21 @@ namespace EDJournalQueue
             _activeJournalFilePaths = new List<string>();
             foreach (var commanderName in ActiveMissions.Keys)
             {
-                var activeMissions = JournalEntryPreload[commanderName].OfType<JournalEntryMissionBase>().Where(j => ActiveMissions[commanderName].ContainsKey(j.MissionId));
+                if (JournalEntryPreload.ContainsKey(commanderName))
+                {
+                    var activeMissions = JournalEntryPreload[commanderName].OfType<JournalEntryMissionBase>().Where(j => ActiveMissions[commanderName].ContainsKey(j.MissionId));
 
-                foreach (var activeMission in activeMissions)
-                {
-                    await EnqueueJournalEntry(commanderName, activeMission);
-                }
-                
-                foreach (var journalFileInfo in JournalFileInfoList.Values)
-                {
-                    if (journalFileInfo.MissionIds.Any(ActiveMissions[commanderName].Keys.Contains))
+                    foreach (var activeMission in activeMissions)
                     {
-                        _activeJournalFilePaths.Add(journalFileInfo.FilePath);
+                        await EnqueueJournalEntry(commanderName, activeMission);
+                    }
+
+                    foreach (var journalFileInfo in JournalFileInfoList.Values)
+                    {
+                        if (journalFileInfo.MissionIds.Any(ActiveMissions[commanderName].Keys.Contains))
+                        {
+                            _activeJournalFilePaths.Add(journalFileInfo.FilePath);
+                        }
                     }
                 }
             }
@@ -171,11 +174,47 @@ namespace EDJournalQueue
 
         private async Task PreloadJournalEntry(string commanderName, object journalEntry)
         {
-            if (!JournalEntryPreload.ContainsKey(commanderName))
+            try
             {
-                JournalEntryPreload[commanderName] = new List<object>();
+                if (!JournalEntryPreload.ContainsKey(commanderName))
+                {
+                    JournalEntryPreload[commanderName] = new List<object>();
+                }
+                JournalEntryPreload[commanderName].Add(journalEntry);
             }
-            JournalEntryPreload[commanderName].Add(journalEntry);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
+
+        private async Task PreloadJournalEntryFromBounty(string commanderName, JournalEntryBounty bounty)
+        {
+            try { 
+                if (JournalEntryPreload.ContainsKey(commanderName))
+                {
+                    JournalEntryPreload[commanderName].PopulateMissionFromBounty(bounty);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
+
+private async Task PreloadJournalEntryFromCargoDepot(string commanderName, JournalEntryCargoDepot cargoDepot)
+        {
+            try
+            {
+                if (JournalEntryPreload.ContainsKey(commanderName))
+                {
+                    JournalEntryPreload[commanderName].PopulateMissionFromCargoDepot(cargoDepot);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
 
         private async Task EnqueueJournalEntry(string commanderName, object journalEntry)
@@ -288,12 +327,11 @@ namespace EDJournalQueue
                                 case "CargoDepot":
                                     // { "timestamp":"2024-02-05T11:47:22Z", "event":"CargoDepot", "MissionID":953167866, "UpdateType":"Deliver", "CargoType":"DomesticAppliances", "CargoType_Localised":"Domestic Appliances", "Count":643, "StartMarketID":0, "EndMarketID":3230588160, "ItemsCollected":0, "ItemsDelivered":643, "TotalItemsToDeliver":1090, "Progress":0.000000 }
                                     var cargoDepot = (JournalEntryCargoDepot)journalEntry.Populate();
-                                    //962031653
                                     if (cargoDepot.UpdateType == "Deliver")
                                     {
                                         if (preload)
                                         {
-                                            JournalEntryPreload[commanderName].PopulateMissionsCargoDepot(cargoDepot);
+                                            await PreloadJournalEntryFromCargoDepot(commanderName, cargoDepot);
                                         }
                                         else
                                         {
@@ -306,8 +344,8 @@ namespace EDJournalQueue
                                     // { "timestamp":"2023-08-26T10:04:19Z", "event":"Bounty", "Rewards":[ { "Faction":"Arbor Caelum Internal Defense", "Reward":527187 } ], "Target":"python", "TotalReward":527187, "VictimFaction":"Zeta Trianguli Australis Corporation" }                                    
                                     var bounty = (JournalEntryBounty)journalEntry.Populate();
                                     if (preload)
-                                    {
-                                        JournalEntryPreload[commanderName].PopulateMissionsBounty(bounty);
+                                    {                                                                                
+                                        await PreloadJournalEntryFromBounty(commanderName, bounty);
                                     }
                                     else
                                     {

@@ -14,7 +14,7 @@ namespace EDJournalQueue.Models
         public int Required { get; set; }
         public int Delivered { get; set; }
         public int Remaining => Required - Delivered;
-        public int Reward { get; set; }
+        public decimal Reward { get; set; }
         public bool Wing { get; set; } = false;
         public DateTime Expiry { get; set; }
         public string TargetFaction { get; set; }

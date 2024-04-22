@@ -11,7 +11,7 @@ namespace EDJournalQueue.Models
         public string DestinationSystem { get; set; }
         public string DestinationStation { get; set; }
         public string Faction { get; set; }
-        public int Reward { get; set; }
+        public decimal Reward { get; set; }
         public bool Wing { get; set; } = false;
         public DateTime Expiry { get; set; }
         public string Commodity { get; set; }

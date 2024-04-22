@@ -113,6 +113,7 @@
             checkBoxArchiveInactiveJournals.TabIndex = 2;
             checkBoxArchiveInactiveJournals.Text = "Archive Inactive Journals";
             checkBoxArchiveInactiveJournals.UseVisualStyleBackColor = true;
+            checkBoxArchiveInactiveJournals.CheckedChanged += checkBoxArchiveInactiveJournals_CheckedChanged;
             // 
             // numericUpDownMaxAgeDays
             // 
@@ -120,6 +121,7 @@
             numericUpDownMaxAgeDays.Name = "numericUpDownMaxAgeDays";
             numericUpDownMaxAgeDays.Size = new Size(180, 31);
             numericUpDownMaxAgeDays.TabIndex = 4;
+            numericUpDownMaxAgeDays.ValueChanged += numericUpDownMaxAgeDays_ValueChanged;
             // 
             // labelMaxAgeDays
             // 
@@ -139,6 +141,7 @@
             buttonCancel.TabIndex = 11;
             buttonCancel.Text = "&Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
+            buttonCancel.Click += buttonCancel_Click;
             // 
             // buttonOK
             // 
@@ -149,6 +152,7 @@
             buttonOK.TabIndex = 12;
             buttonOK.Text = "&OK";
             buttonOK.UseVisualStyleBackColor = true;
+            buttonOK.Click += buttonOK_Click;
             // 
             // SettingsDialog
             // 

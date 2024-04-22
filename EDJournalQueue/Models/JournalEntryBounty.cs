@@ -8,7 +8,7 @@ namespace EDJournalQueue.Models
         #region Properties
 
         public string VictimFaction { get; set; }
-        public int TotalReward { get; set; }
+        public decimal TotalReward { get; set; }
         public string PilotName { get; set; }
 
         #endregion

@@ -12,9 +12,9 @@ namespace EDMissionStackViewer.Models
         public int Required { get; set; }
         public int Killed { get; set; }
         public int Remaining => Required - Killed;
-        public int TotalReward { get; set; }
-        public int SharedReward { get; set; }
-        public int RewardPerTon => TotalReward / Required;
+        public decimal TotalReward { get; set; }
+        public decimal SharedReward { get; set; }
+        public decimal RewardPerTon => TotalReward / Required;
         public DateTime MinExpiry { get; set; }
         public DateTime MaxExpiry { get; set; }
 

@@ -100,6 +100,13 @@ namespace EDMissionStackViewer
                 if (settingsDialog.JournalFolders != _journalFolderPaths)
                 {
                     _journalFolderPaths = settingsDialog.JournalFolders;
+                    Missions = new Dictionary<string, Dictionary<long, Mission>>();
+                    JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
+                    JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
+                    JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
+                    JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
+                    lblNoCommander.Visible = true;
+                    tabPageCommander.Parent = null;
                     await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
                 }
             }
@@ -140,11 +147,11 @@ namespace EDMissionStackViewer
             switch (journalEntryType)
             {
                 case "JournalEntryCargoDepot":
-                    JournalEntryMissionMiningList[commanderName].PopulateMissionsCargoDepot((JournalEntryCargoDepot)journalEntry);
-                    JournalEntryMissionCollectList[commanderName].PopulateMissionsCargoDepot((JournalEntryCargoDepot)journalEntry);
+                    JournalEntryMissionMiningList[commanderName].PopulateMissionFromCargoDepot((JournalEntryCargoDepot)journalEntry);
+                    JournalEntryMissionCollectList[commanderName].PopulateMissionFromCargoDepot((JournalEntryCargoDepot)journalEntry);
                     break;
                 case "JournalEntryBounty":
-                    JournalEntryMissionMassacreList[commanderName].PopulateMissionsBounty((JournalEntryBounty)journalEntry);
+                    JournalEntryMissionMassacreList[commanderName].PopulateMissionFromBounty((JournalEntryBounty)journalEntry);
                     break;
                 case "JournalEntryMissionMassacre":
                     JournalEntryMissionMassacreList[commanderName].Add((JournalEntryMissionMassacre)journalEntry);
