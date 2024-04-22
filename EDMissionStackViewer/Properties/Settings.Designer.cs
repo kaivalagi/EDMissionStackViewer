@@ -34,5 +34,29 @@ namespace EDMissionStackViewer.Properties {
                 this["JournalFolders"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("28")]
+        public int JournalMaxAgeDays {
+            get {
+                return ((int)(this["JournalMaxAgeDays"]));
+            }
+            set {
+                this["JournalMaxAgeDays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ArchiveInactiveJournals {
+            get {
+                return ((bool)(this["ArchiveInactiveJournals"]));
+            }
+            set {
+                this["ArchiveInactiveJournals"] = value;
+            }
+        }
     }
 }

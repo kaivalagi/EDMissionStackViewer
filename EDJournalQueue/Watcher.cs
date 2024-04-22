@@ -2,6 +2,8 @@
 using EDJournalQueue.Models;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
+using System.Linq;
+using System.Runtime.Intrinsics;
 using System.Text;
 
 namespace EDJournalQueue
@@ -10,31 +12,37 @@ namespace EDJournalQueue
     {
         #region Class Data
 
+        public Dictionary<string, JournalFileInfo> JournalFileInfoList = new Dictionary<string, JournalFileInfo>();
         public Dictionary<string, ConcurrentQueue<object>> JournalEntryQueue = new Dictionary<string, ConcurrentQueue<object>>();
         public Dictionary<string, List<object>> JournalEntryPreload = new Dictionary<string, List<object>>();
         public Dictionary<string, Dictionary<long, Mission>> ActiveMissions = new Dictionary<string, Dictionary<long, Mission>>();
+       
+        private List<string> _journalFolderPaths = new List<string>();
+        private int _journalMaxAgeDays = 28;
+        private bool _archiveInactiveJournals = false;
 
-        private List<DirectoryInfo> _journalFolders = new List<DirectoryInfo>();
+        private List<string> _activeJournalFilePaths = new List<string>();
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
-        private Dictionary<string, JournalFileInfo> _journalFileInfo = new Dictionary<string, JournalFileInfo>();
+        
 
         #endregion
 
         #region Constructor
 
-        public Watcher(List<string> journalFolders)
+        public Watcher(List<string> journalFolderPaths, int journalMaxAgeDays = 28, bool archiveInactiveJournals = false)
         {
-            foreach (var journalFolder in journalFolders)
-            {
-                var directoryInfo = new DirectoryInfo(journalFolder);
+            _journalMaxAgeDays = journalMaxAgeDays;
+            _archiveInactiveJournals = archiveInactiveJournals;
 
-                if (directoryInfo.Exists)
+            foreach (var journalFolderPath in journalFolderPaths)
+            {
+                if (Path.Exists(journalFolderPath))
                 {
-                    _journalFolders.Add(directoryInfo);
+                    _journalFolderPaths.Add(journalFolderPath);
                 }
                 else
                 {
-                    throw new IndexOutOfRangeException($"Journal folder '{journalFolder}' doesn't exist!");
+                    throw new IndexOutOfRangeException($"Journal folder '{journalFolderPath}' doesn't exist!");
                 }
             }
         }
@@ -76,22 +84,23 @@ namespace EDJournalQueue
             await WatchJournalFilesAsync();
         }
 
-        private async Task PreloadJournalFilesAsync(int maxAgeDays = 28)
+        private async Task PreloadJournalFilesAsync()
         {
-            var journalFiles = new List<FileInfo>();
-            foreach (var journalFolder in _journalFolders)
+            var journalFileInfos = new List<FileInfo>();
+            foreach (var journalFolder in _journalFolderPaths)
             {
-                journalFiles.AddRange(journalFolder.GetFiles("*.log").ToList());
+                journalFileInfos.AddRange(new DirectoryInfo(journalFolder).GetFiles("*.log").ToList());
             }
 
-            var journalFilesFiltered = journalFiles.Where(f => (DateTime.UtcNow - f.LastWriteTimeUtc).TotalDays < maxAgeDays).OrderBy(f => f.LastWriteTimeUtc);
+            var journalFilePathsFiltered = journalFileInfos.Where(f => (DateTime.UtcNow - f.LastWriteTimeUtc).TotalDays < _journalMaxAgeDays).OrderBy(f => f.LastWriteTimeUtc).Select(f => f.FullName);
 
-            foreach (var journalFile in journalFilesFiltered)
+            foreach (var journalFilePath in journalFilePathsFiltered)
             {
-                await ReadJournal(journalFile.FullName, true);
+                await ReadJournal(journalFilePath, true);
             }
 
-            // now add only active missions to the queue from CmdrJournalEventPreload
+            // Now we establish what is active for queueing and file retention
+            _activeJournalFilePaths = new List<string>();
             foreach (var commanderName in ActiveMissions.Keys)
             {
                 var activeMissions = JournalEntryPreload[commanderName].OfType<JournalEntryMissionBase>().Where(j => ActiveMissions[commanderName].ContainsKey(j.MissionId));
@@ -99,6 +108,31 @@ namespace EDJournalQueue
                 foreach (var activeMission in activeMissions)
                 {
                     await EnqueueJournalEntry(commanderName, activeMission);
+                }
+                
+                foreach (var journalFileInfo in JournalFileInfoList.Values)
+                {
+                    if (journalFileInfo.MissionIds.Any(ActiveMissions[commanderName].Keys.Contains))
+                    {
+                        _activeJournalFilePaths.Add(journalFileInfo.FilePath);
+                    }
+                }
+            }
+
+            if (_archiveInactiveJournals)
+            {
+                var inactiveJournalFiles = journalFileInfos.Select(j => j.FullName).Except(_activeJournalFilePaths).ToList();
+
+                foreach (var journalFilePath in inactiveJournalFiles)
+                {
+                    var journalFileInfo = new FileInfo(journalFilePath);
+
+                    var archiveFolder = new DirectoryInfo(Path.Combine(journalFileInfo.DirectoryName, "JournalArchive"));
+                    if (!archiveFolder.Exists) {
+                        archiveFolder.Create();
+                    }
+
+                    journalFileInfo.MoveTo(Path.Combine(archiveFolder.FullName, journalFileInfo.Name));                    
                 }
             }
         }
@@ -124,9 +158,9 @@ namespace EDJournalQueue
 
         private async Task WatchJournalFilesAsync()
         {
-            foreach (var journalFolder in _journalFolders)
+            foreach (var journalFolder in _journalFolderPaths)
             {
-                var watcher = new FileSystemWatcher(journalFolder.FullName, "*.log");
+                var watcher = new FileSystemWatcher(journalFolder, "*.log");
                 watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite;
                 watcher.Created += OnCreated;
                 watcher.Changed += OnChanged;
@@ -138,19 +172,18 @@ namespace EDJournalQueue
 
         private async Task ReadJournal(string journalFilePath, bool preload = false)
         {
-
             string commanderName = string.Empty;
-            if (_journalFileInfo.ContainsKey(journalFilePath))
+            if (JournalFileInfoList.ContainsKey(journalFilePath))
             {
-                commanderName = _journalFileInfo[journalFilePath].CmdrName;
+                commanderName = JournalFileInfoList[journalFilePath].CmdrName;
             }
 
             using (var fs = new FileStream(journalFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var sr = new StreamReader(fs, Encoding.Default))
             {
-                if (_journalFileInfo.ContainsKey(journalFilePath))
+                if (JournalFileInfoList.ContainsKey(journalFilePath))
                 {
-                    fs.Position = _journalFileInfo[journalFilePath].FilePosition;
+                    fs.Position = JournalFileInfoList[journalFilePath].FilePosition;
                 }
                 while (!sr.EndOfStream)
                 {
@@ -170,7 +203,7 @@ namespace EDJournalQueue
                                 case "Commander":
                                     // { "timestamp":"2024-02-27T17:07:05Z", "event":"Commander", "FID":"F184262", "Name":"Kaivalagi" }
                                     commanderName = (string)journalEntry["Name"];
-                                    _journalFileInfo[journalFilePath] = new JournalFileInfo(journalFilePath, commanderName);
+                                    JournalFileInfoList[journalFilePath] = new JournalFileInfo(journalFilePath, commanderName);
                                     break;
 
                                 case "Missions":
@@ -205,6 +238,8 @@ namespace EDJournalQueue
                                         }
 
                                         ActiveMissions[commanderName].Add(((JournalEntryMissionBase)missionAccepted).MissionId, new Mission((JournalEntryMissionBase)missionAccepted));
+
+                                        JournalFileInfoList[journalFilePath].MissionIds.Add(((JournalEntryMissionBase)missionAccepted).MissionId);
                                     }
 
                                     break;
@@ -263,17 +298,15 @@ namespace EDJournalQueue
                                     }
 
                                     break;
-
                             }
                         }
                     }
                 }
 
-                if (_journalFileInfo.ContainsKey(journalFilePath))
+                if (JournalFileInfoList.ContainsKey(journalFilePath))
                 {
-                    _journalFileInfo[journalFilePath].FilePosition = fs.Position;
+                    JournalFileInfoList[journalFilePath].FilePosition = fs.Position;
                 }
-
             }
         }
 

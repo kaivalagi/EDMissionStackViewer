@@ -19,7 +19,9 @@ namespace EDMissionStackViewer
         public Dictionary<string, List<JournalEntryMissionCollect>> JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
         public Dictionary<string, List<JournalEntryMissionCourier>> JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
 
-        public List<string> _journalFolders;
+        public List<string> _journalFolderPaths;
+        private int _journalMaxAgeDays = 28;
+        private bool _archiveInactiveJournals = false;
 
         #endregion
 
@@ -43,17 +45,19 @@ namespace EDMissionStackViewer
                 Properties.Settings.Default.JournalFolders = Helpers.Journal.GetDefaultJournalFolder().FullName;
                 Properties.Settings.Default.Save();
             }
-            _journalFolders = Properties.Settings.Default.JournalFolders.Split(",").ToList();
+            _journalFolderPaths = Properties.Settings.Default.JournalFolders.Split(",").ToList();
+
+            _journalMaxAgeDays = Properties.Settings.Default.JournalMaxAgeDays;
+            _archiveInactiveJournals = Properties.Settings.Default.ArchiveInactiveJournals;
 
             await InitialiseWatcher();
         }
 
         public async Task InitialiseWatcher()
         {
-            _watcher = new Watcher(_journalFolders);
+            _watcher = new Watcher(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
             await _watcher.InitializeAsync();
         }
-
 
         private async void refreshTimer_Tick(object sender, EventArgs e)
         {
@@ -75,15 +79,15 @@ namespace EDMissionStackViewer
 
         }
 
-        private async void menuSettingsJournalFolder_Click(object sender, EventArgs e)
+        private async void menuSettings_Click(object sender, EventArgs e)
         {
-            var formJournalFolders = new EditJournalFolders();
-            var result = formJournalFolders.ShowDialog();
+            var settingsDialog = new SettingsDialog();
+            var result = settingsDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                if (formJournalFolders.JournalFolders != _journalFolders)
+                if (settingsDialog.JournalFolders != _journalFolderPaths)
                 {
-                    _journalFolders = formJournalFolders.JournalFolders;
+                    _journalFolderPaths = settingsDialog.JournalFolders;
                     await InitialiseWatcher();
                 }
             }
@@ -290,6 +294,7 @@ namespace EDMissionStackViewer
         }
 
         #endregion
+
 
     }
 }

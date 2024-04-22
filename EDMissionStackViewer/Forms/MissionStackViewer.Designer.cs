@@ -110,13 +110,7 @@ namespace EDMissionStackViewer
             menuSettings.Image = Properties.Resources.settings;
             menuSettings.Name = "menuSettings";
             menuSettings.Size = new Size(40, 28);
-            // 
-            // menuSettingsJournalFolder
-            // 
-            menuSettingsJournalFolder.Name = "menuSettingsJournalFolder";
-            menuSettingsJournalFolder.Size = new Size(233, 34);
-            menuSettingsJournalFolder.Text = "Journal Folders";
-            menuSettingsJournalFolder.Click += menuSettingsJournalFolder_Click;
+            menuSettings.Click += menuSettings_Click;
             // 
             // dlgJournalFolder
             // 
