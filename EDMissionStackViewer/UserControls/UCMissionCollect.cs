@@ -49,14 +49,20 @@ namespace EDMissionStackViewer.UserControls
         #endregion
 
         #region Methods
-
+        
         public void LoadData(List<JournalEntryMissionCollect> missions)
         {
+            dgMissions.SuspendLayout();
+            dgSummary.SuspendLayout();
+
             var missionsBindingList = new SortableBindingList<Models.MissionCollect>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionCollectByCommodity>(GetSummaryData(missions));
             dgSummary.DataSource = new BindingSource(summaryBindingList, null);
+
+            dgMissions.ResumeLayout(false);
+            dgSummary.ResumeLayout(false);
         }
 
         private List<Models.MissionCollect> GetMissionsData(List<JournalEntryMissionCollect> missions)

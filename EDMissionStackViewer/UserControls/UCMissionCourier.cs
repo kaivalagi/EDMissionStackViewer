@@ -52,11 +52,17 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionCourier> missions)
         {
+            dgMissions.SuspendLayout();
+            dgSummary.SuspendLayout();
+
             var missionsBindingList = new SortableBindingList<MissionCourier>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
             var summaryBindingList = new BindingList<MissionCourierByLocation>(GetSummaryData(missions));
             dgSummary.DataSource = new BindingSource(summaryBindingList, null);
+
+            dgMissions.ResumeLayout(false);
+            dgSummary.ResumeLayout(false);
         }
 
         private List<MissionCourier> GetMissionsData(List<JournalEntryMissionCourier> missions)

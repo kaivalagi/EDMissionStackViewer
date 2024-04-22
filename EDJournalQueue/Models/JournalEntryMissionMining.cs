@@ -17,6 +17,8 @@ namespace EDJournalQueue.Models
         public string Commodity { get; set; }
         public int Count { get; set; }
         public int DeliveredCount { get; set; } = 0;
+        public string Influence { get; set; }
+        public string Reputation { get; set; }
 
         #endregion
 
@@ -37,6 +39,8 @@ namespace EDJournalQueue.Models
             Type = JournalEntryType.Mining;
             Commodity = (string)entry["Commodity_Localised"];
             Count = (int)entry["Count"];
+            Influence = (string)entry["Influence"];
+            Reputation  = (string)entry["Reputation"];
         }
 
         #endregion

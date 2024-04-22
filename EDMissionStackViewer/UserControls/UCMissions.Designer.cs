@@ -48,7 +48,6 @@ namespace EDMissionStackViewer.UserControls
             // 
             // tabControlMissions
             // 
-            tabControlMissions.Appearance = TabAppearance.FlatButtons;
             tabControlMissions.Controls.Add(tabPageMissionCollect);
             tabControlMissions.Controls.Add(tabPageMissionCourier);
             tabControlMissions.Controls.Add(tabPageMissionMassacre);
@@ -63,10 +62,10 @@ namespace EDMissionStackViewer.UserControls
             // tabPageMissionCollect
             // 
             tabPageMissionCollect.Controls.Add(uiMissionCollect);
-            tabPageMissionCollect.Location = new Point(4, 37);
+            tabPageMissionCollect.Location = new Point(4, 34);
             tabPageMissionCollect.Name = "tabPageMissionCollect";
             tabPageMissionCollect.Padding = new Padding(3);
-            tabPageMissionCollect.Size = new Size(1431, 674);
+            tabPageMissionCollect.Size = new Size(1367, 632);
             tabPageMissionCollect.TabIndex = 0;
             tabPageMissionCollect.Text = "Collect";
             tabPageMissionCollect.UseVisualStyleBackColor = true;
@@ -76,16 +75,16 @@ namespace EDMissionStackViewer.UserControls
             uiMissionCollect.Dock = DockStyle.Fill;
             uiMissionCollect.Location = new Point(3, 3);
             uiMissionCollect.Name = "uiMissionCollect";
-            uiMissionCollect.Size = new Size(1425, 668);
+            uiMissionCollect.Size = new Size(1361, 626);
             uiMissionCollect.TabIndex = 0;
             // 
             // tabPageMissionCourier
             // 
             tabPageMissionCourier.Controls.Add(uiMissionCourier);
-            tabPageMissionCourier.Location = new Point(4, 37);
+            tabPageMissionCourier.Location = new Point(4, 34);
             tabPageMissionCourier.Name = "tabPageMissionCourier";
             tabPageMissionCourier.Padding = new Padding(3);
-            tabPageMissionCourier.Size = new Size(1431, 674);
+            tabPageMissionCourier.Size = new Size(1367, 632);
             tabPageMissionCourier.TabIndex = 1;
             tabPageMissionCourier.Text = "Courier";
             tabPageMissionCourier.UseVisualStyleBackColor = true;
@@ -95,15 +94,15 @@ namespace EDMissionStackViewer.UserControls
             uiMissionCourier.Dock = DockStyle.Fill;
             uiMissionCourier.Location = new Point(3, 3);
             uiMissionCourier.Name = "uiMissionCourier";
-            uiMissionCourier.Size = new Size(1425, 668);
+            uiMissionCourier.Size = new Size(1361, 626);
             uiMissionCourier.TabIndex = 0;
             // 
             // tabPageMissionMassacre
             // 
             tabPageMissionMassacre.Controls.Add(uiMissionMassacre);
-            tabPageMissionMassacre.Location = new Point(4, 37);
+            tabPageMissionMassacre.Location = new Point(4, 34);
             tabPageMissionMassacre.Name = "tabPageMissionMassacre";
-            tabPageMissionMassacre.Size = new Size(1431, 674);
+            tabPageMissionMassacre.Size = new Size(1367, 632);
             tabPageMissionMassacre.TabIndex = 2;
             tabPageMissionMassacre.Text = "Massacre";
             tabPageMissionMassacre.UseVisualStyleBackColor = true;
@@ -113,15 +112,15 @@ namespace EDMissionStackViewer.UserControls
             uiMissionMassacre.Dock = DockStyle.Fill;
             uiMissionMassacre.Location = new Point(0, 0);
             uiMissionMassacre.Name = "uiMissionMassacre";
-            uiMissionMassacre.Size = new Size(1431, 674);
+            uiMissionMassacre.Size = new Size(1367, 632);
             uiMissionMassacre.TabIndex = 0;
             // 
             // tabPageMissionMining
             // 
             tabPageMissionMining.Controls.Add(uiMissionMining);
-            tabPageMissionMining.Location = new Point(4, 37);
+            tabPageMissionMining.Location = new Point(4, 34);
             tabPageMissionMining.Name = "tabPageMissionMining";
-            tabPageMissionMining.Size = new Size(1367, 629);
+            tabPageMissionMining.Size = new Size(1367, 632);
             tabPageMissionMining.TabIndex = 3;
             tabPageMissionMining.Text = "Mining";
             tabPageMissionMining.UseVisualStyleBackColor = true;
@@ -131,7 +130,7 @@ namespace EDMissionStackViewer.UserControls
             uiMissionMining.Dock = DockStyle.Fill;
             uiMissionMining.Location = new Point(0, 0);
             uiMissionMining.Name = "uiMissionMining";
-            uiMissionMining.Size = new Size(1367, 629);
+            uiMissionMining.Size = new Size(1367, 632);
             uiMissionMining.TabIndex = 0;
             // 
             // UCMissions

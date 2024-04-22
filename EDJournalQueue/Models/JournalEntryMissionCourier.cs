@@ -18,6 +18,8 @@ namespace EDJournalQueue.Models
         public bool Wing { get; set; } = false;
         public DateTime Expiry { get; set; }
         public string TargetFaction { get; set; }
+        public string Influence { get; set; }
+        public string Reputation { get; set; }
 
         #endregion
 
@@ -39,6 +41,8 @@ namespace EDJournalQueue.Models
             }
             Expiry = (DateTime)entry["Expiry"];
             TargetFaction = (string)entry["TargetFaction"];
+            Influence = (string)entry["Influence"];
+            Reputation = (string)entry["Reputation"];
         }
 
         #endregion

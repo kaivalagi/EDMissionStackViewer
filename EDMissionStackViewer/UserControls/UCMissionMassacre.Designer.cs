@@ -32,7 +32,6 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
@@ -40,16 +39,9 @@
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             splitContainer = new SplitContainer();
             dgMissions = new DataGridView();
-            colMissionsLocation = new DataGridViewTextBoxColumn();
-            colMissionsFaction = new DataGridViewTextBoxColumn();
-            colMissionsRequired = new DataGridViewTextBoxColumn();
-            colMissionsKilled = new DataGridViewTextBoxColumn();
-            colMissionsRemaining = new DataGridViewTextBoxColumn();
-            colMissionsReward = new DataGridViewTextBoxColumn();
-            colMissionsShared = new DataGridViewCheckBoxColumn();
-            colMissionsExpiry = new DataGridViewTextBoxColumn();
             dgSummary = new DataGridView();
             colSummaryFaction = new DataGridViewTextBoxColumn();
             colSummaryTotalMissions = new DataGridViewTextBoxColumn();
@@ -61,6 +53,16 @@
             colSummaryRewardPerTon = new DataGridViewTextBoxColumn();
             colSummaryMinExpiry = new DataGridViewTextBoxColumn();
             colSummaryMaxExpiry = new DataGridViewTextBoxColumn();
+            colMissionsLocation = new DataGridViewTextBoxColumn();
+            colMissionsFaction = new DataGridViewTextBoxColumn();
+            colMissionsRequired = new DataGridViewTextBoxColumn();
+            colMissionsKilled = new DataGridViewTextBoxColumn();
+            colMissionsRemaining = new DataGridViewTextBoxColumn();
+            colMissionsReward = new DataGridViewTextBoxColumn();
+            colMissionsShared = new DataGridViewCheckBoxColumn();
+            colMissionsInfluence = new DataGridViewTextBoxColumn();
+            colMissionsReputation = new DataGridViewTextBoxColumn();
+            colMissionsExpiry = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
             splitContainer.Panel2.SuspendLayout();
@@ -91,10 +93,11 @@
             // 
             // dgMissions
             // 
+            dgMissions.AllowUserToAddRows = false;
+            dgMissions.AllowUserToDeleteRows = false;
             dataGridViewCellStyle1.BackColor = Color.Gainsboro;
             dgMissions.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgMissions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgMissions.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgMissions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -104,7 +107,7 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgMissions.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgMissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgMissions.Columns.AddRange(new DataGridViewColumn[] { colMissionsLocation, colMissionsFaction, colMissionsRequired, colMissionsKilled, colMissionsRemaining, colMissionsReward, colMissionsShared, colMissionsExpiry });
+            dgMissions.Columns.AddRange(new DataGridViewColumn[] { colMissionsLocation, colMissionsFaction, colMissionsRequired, colMissionsKilled, colMissionsRemaining, colMissionsReward, colMissionsShared, colMissionsInfluence, colMissionsReputation, colMissionsExpiry });
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = SystemColors.Window;
             dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -128,93 +131,21 @@
             dgMissions.RowHeadersVisible = false;
             dgMissions.RowHeadersWidth = 62;
             dgMissions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgMissions.ShowCellErrors = false;
+            dgMissions.ShowCellToolTips = false;
+            dgMissions.ShowEditingIcon = false;
+            dgMissions.ShowRowErrors = false;
             dgMissions.Size = new Size(1369, 418);
             dgMissions.TabIndex = 5;
             dgMissions.CellFormatting += dgMissions_CellFormatting;
             // 
-            // colMissionsLocation
-            // 
-            colMissionsLocation.DataPropertyName = "Location";
-            colMissionsLocation.HeaderText = "Location";
-            colMissionsLocation.MinimumWidth = 8;
-            colMissionsLocation.Name = "colMissionsLocation";
-            colMissionsLocation.ReadOnly = true;
-            colMissionsLocation.Width = 112;
-            // 
-            // colMissionsFaction
-            // 
-            colMissionsFaction.DataPropertyName = "Faction";
-            colMissionsFaction.HeaderText = "Faction";
-            colMissionsFaction.MinimumWidth = 8;
-            colMissionsFaction.Name = "colMissionsFaction";
-            colMissionsFaction.ReadOnly = true;
-            colMissionsFaction.Width = 102;
-            // 
-            // colMissionsRequired
-            // 
-            colMissionsRequired.DataPropertyName = "Required";
-            colMissionsRequired.HeaderText = "Required";
-            colMissionsRequired.MinimumWidth = 8;
-            colMissionsRequired.Name = "colMissionsRequired";
-            colMissionsRequired.ReadOnly = true;
-            colMissionsRequired.Width = 115;
-            // 
-            // colMissionsKilled
-            // 
-            colMissionsKilled.DataPropertyName = "Killed";
-            colMissionsKilled.HeaderText = "Killed";
-            colMissionsKilled.MinimumWidth = 8;
-            colMissionsKilled.Name = "colMissionsKilled";
-            colMissionsKilled.ReadOnly = true;
-            colMissionsKilled.Width = 90;
-            // 
-            // colMissionsRemaining
-            // 
-            colMissionsRemaining.DataPropertyName = "Remaining";
-            colMissionsRemaining.HeaderText = "Remaining";
-            colMissionsRemaining.MinimumWidth = 8;
-            colMissionsRemaining.Name = "colMissionsRemaining";
-            colMissionsRemaining.ReadOnly = true;
-            colMissionsRemaining.Width = 129;
-            // 
-            // colMissionsReward
-            // 
-            colMissionsReward.DataPropertyName = "Reward";
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
-            colMissionsReward.HeaderText = "Reward";
-            colMissionsReward.MinimumWidth = 8;
-            colMissionsReward.Name = "colMissionsReward";
-            colMissionsReward.ReadOnly = true;
-            colMissionsReward.Width = 103;
-            // 
-            // colMissionsShared
-            // 
-            colMissionsShared.DataPropertyName = "Shared";
-            colMissionsShared.HeaderText = "Shared";
-            colMissionsShared.MinimumWidth = 8;
-            colMissionsShared.Name = "colMissionsShared";
-            colMissionsShared.ReadOnly = true;
-            colMissionsShared.Resizable = DataGridViewTriState.True;
-            colMissionsShared.SortMode = DataGridViewColumnSortMode.Automatic;
-            colMissionsShared.Width = 99;
-            // 
-            // colMissionsExpiry
-            // 
-            colMissionsExpiry.DataPropertyName = "Expiry";
-            colMissionsExpiry.HeaderText = "Expiry";
-            colMissionsExpiry.MinimumWidth = 8;
-            colMissionsExpiry.Name = "colMissionsExpiry";
-            colMissionsExpiry.ReadOnly = true;
-            colMissionsExpiry.Width = 95;
-            // 
             // dgSummary
             // 
+            dgSummary.AllowUserToAddRows = false;
+            dgSummary.AllowUserToDeleteRows = false;
             dataGridViewCellStyle6.BackColor = Color.Gainsboro;
             dgSummary.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
-            dgSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgSummary.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle7.BackColor = SystemColors.Control;
             dataGridViewCellStyle7.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -248,6 +179,10 @@
             dgSummary.RowHeadersVisible = false;
             dgSummary.RowHeadersWidth = 62;
             dgSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgSummary.ShowCellErrors = false;
+            dgSummary.ShowCellToolTips = false;
+            dgSummary.ShowEditingIcon = false;
+            dgSummary.ShowRowErrors = false;
             dgSummary.Size = new Size(1369, 211);
             dgSummary.TabIndex = 6;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
@@ -260,7 +195,6 @@
             colSummaryFaction.MinimumWidth = 8;
             colSummaryFaction.Name = "colSummaryFaction";
             colSummaryFaction.ReadOnly = true;
-            colSummaryFaction.Width = 102;
             // 
             // colSummaryTotalMissions
             // 
@@ -269,7 +203,6 @@
             colSummaryTotalMissions.MinimumWidth = 8;
             colSummaryTotalMissions.Name = "colSummaryTotalMissions";
             colSummaryTotalMissions.ReadOnly = true;
-            colSummaryTotalMissions.Width = 154;
             // 
             // colSummaryRequired
             // 
@@ -278,7 +211,6 @@
             colSummaryRequired.MinimumWidth = 8;
             colSummaryRequired.Name = "colSummaryRequired";
             colSummaryRequired.ReadOnly = true;
-            colSummaryRequired.Width = 115;
             // 
             // colSummaryKilled
             // 
@@ -287,7 +219,6 @@
             colSummaryKilled.MinimumWidth = 8;
             colSummaryKilled.Name = "colSummaryKilled";
             colSummaryKilled.ReadOnly = true;
-            colSummaryKilled.Width = 90;
             // 
             // colSummaryRemaining
             // 
@@ -296,7 +227,6 @@
             colSummaryRemaining.MinimumWidth = 8;
             colSummaryRemaining.Name = "colSummaryRemaining";
             colSummaryRemaining.ReadOnly = true;
-            colSummaryRemaining.Width = 129;
             // 
             // colSummaryTotalReward
             // 
@@ -308,7 +238,6 @@
             colSummaryTotalReward.MinimumWidth = 8;
             colSummaryTotalReward.Name = "colSummaryTotalReward";
             colSummaryTotalReward.ReadOnly = true;
-            colSummaryTotalReward.Width = 145;
             // 
             // colSummarySharedReward
             // 
@@ -320,7 +249,6 @@
             colSummarySharedReward.MinimumWidth = 8;
             colSummarySharedReward.Name = "colSummarySharedReward";
             colSummarySharedReward.ReadOnly = true;
-            colSummarySharedReward.Width = 160;
             // 
             // colSummaryRewardPerTon
             // 
@@ -332,7 +260,6 @@
             colSummaryRewardPerTon.MinimumWidth = 8;
             colSummaryRewardPerTon.Name = "colSummaryRewardPerTon";
             colSummaryRewardPerTon.ReadOnly = true;
-            colSummaryRewardPerTon.Width = 138;
             // 
             // colSummaryMinExpiry
             // 
@@ -341,7 +268,6 @@
             colSummaryMinExpiry.MinimumWidth = 8;
             colSummaryMinExpiry.Name = "colSummaryMinExpiry";
             colSummaryMinExpiry.ReadOnly = true;
-            colSummaryMinExpiry.Width = 129;
             // 
             // colSummaryMaxExpiry
             // 
@@ -350,7 +276,91 @@
             colSummaryMaxExpiry.MinimumWidth = 8;
             colSummaryMaxExpiry.Name = "colSummaryMaxExpiry";
             colSummaryMaxExpiry.ReadOnly = true;
-            colSummaryMaxExpiry.Width = 132;
+            // 
+            // colMissionsLocation
+            // 
+            colMissionsLocation.DataPropertyName = "Location";
+            colMissionsLocation.HeaderText = "Location";
+            colMissionsLocation.MinimumWidth = 8;
+            colMissionsLocation.Name = "colMissionsLocation";
+            colMissionsLocation.ReadOnly = true;
+            // 
+            // colMissionsFaction
+            // 
+            colMissionsFaction.DataPropertyName = "Faction";
+            colMissionsFaction.HeaderText = "Faction";
+            colMissionsFaction.MinimumWidth = 8;
+            colMissionsFaction.Name = "colMissionsFaction";
+            colMissionsFaction.ReadOnly = true;
+            // 
+            // colMissionsRequired
+            // 
+            colMissionsRequired.DataPropertyName = "Required";
+            colMissionsRequired.HeaderText = "Required";
+            colMissionsRequired.MinimumWidth = 8;
+            colMissionsRequired.Name = "colMissionsRequired";
+            colMissionsRequired.ReadOnly = true;
+            // 
+            // colMissionsKilled
+            // 
+            colMissionsKilled.DataPropertyName = "Killed";
+            colMissionsKilled.HeaderText = "Killed";
+            colMissionsKilled.MinimumWidth = 8;
+            colMissionsKilled.Name = "colMissionsKilled";
+            colMissionsKilled.ReadOnly = true;
+            // 
+            // colMissionsRemaining
+            // 
+            colMissionsRemaining.DataPropertyName = "Remaining";
+            colMissionsRemaining.HeaderText = "Remaining";
+            colMissionsRemaining.MinimumWidth = 8;
+            colMissionsRemaining.Name = "colMissionsRemaining";
+            colMissionsRemaining.ReadOnly = true;
+            // 
+            // colMissionsReward
+            // 
+            colMissionsReward.DataPropertyName = "Reward";
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
+            colMissionsReward.HeaderText = "Reward";
+            colMissionsReward.MinimumWidth = 8;
+            colMissionsReward.Name = "colMissionsReward";
+            colMissionsReward.ReadOnly = true;
+            // 
+            // colMissionsShared
+            // 
+            colMissionsShared.DataPropertyName = "Shared";
+            colMissionsShared.HeaderText = "Shared";
+            colMissionsShared.MinimumWidth = 8;
+            colMissionsShared.Name = "colMissionsShared";
+            colMissionsShared.ReadOnly = true;
+            colMissionsShared.Resizable = DataGridViewTriState.True;
+            colMissionsShared.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // colMissionsInfluence
+            // 
+            colMissionsInfluence.DataPropertyName = "Influence";
+            colMissionsInfluence.HeaderText = "Influence";
+            colMissionsInfluence.MinimumWidth = 8;
+            colMissionsInfluence.Name = "colMissionsInfluence";
+            colMissionsInfluence.ReadOnly = true;
+            // 
+            // colMissionsReputation
+            // 
+            colMissionsReputation.DataPropertyName = "Reputation";
+            colMissionsReputation.HeaderText = "Reputation";
+            colMissionsReputation.MinimumWidth = 8;
+            colMissionsReputation.Name = "colMissionsReputation";
+            colMissionsReputation.ReadOnly = true;
+            // 
+            // colMissionsExpiry
+            // 
+            colMissionsExpiry.DataPropertyName = "Expiry";
+            colMissionsExpiry.HeaderText = "Expiry";
+            colMissionsExpiry.MinimumWidth = 8;
+            colMissionsExpiry.Name = "colMissionsExpiry";
+            colMissionsExpiry.ReadOnly = true;
             // 
             // UCMissionMassacre
             // 
@@ -373,14 +383,6 @@
         private TableLayoutPanel tlcPanel;
         private SplitContainer splitContainer;
         private DataGridView dgMissions;
-        private DataGridViewTextBoxColumn colMissionsLocation;
-        private DataGridViewTextBoxColumn colMissionsFaction;
-        private DataGridViewTextBoxColumn colMissionsRequired;
-        private DataGridViewTextBoxColumn colMissionsKilled;
-        private DataGridViewTextBoxColumn colMissionsRemaining;
-        private DataGridViewTextBoxColumn colMissionsReward;
-        private DataGridViewCheckBoxColumn colMissionsShared;
-        private DataGridViewTextBoxColumn colMissionsExpiry;
         private DataGridView dgSummary;
         private DataGridViewTextBoxColumn colSummaryFaction;
         private DataGridViewTextBoxColumn colSummaryTotalMissions;
@@ -392,5 +394,15 @@
         private DataGridViewTextBoxColumn colSummaryRewardPerTon;
         private DataGridViewTextBoxColumn colSummaryMinExpiry;
         private DataGridViewTextBoxColumn colSummaryMaxExpiry;
+        private DataGridViewTextBoxColumn colMissionsLocation;
+        private DataGridViewTextBoxColumn colMissionsFaction;
+        private DataGridViewTextBoxColumn colMissionsRequired;
+        private DataGridViewTextBoxColumn colMissionsKilled;
+        private DataGridViewTextBoxColumn colMissionsRemaining;
+        private DataGridViewTextBoxColumn colMissionsReward;
+        private DataGridViewCheckBoxColumn colMissionsShared;
+        private DataGridViewTextBoxColumn colMissionsInfluence;
+        private DataGridViewTextBoxColumn colMissionsReputation;
+        private DataGridViewTextBoxColumn colMissionsExpiry;
     }
 }

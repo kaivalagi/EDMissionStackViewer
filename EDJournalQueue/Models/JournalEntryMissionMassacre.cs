@@ -18,6 +18,8 @@ namespace EDJournalQueue.Models
         public string TargetFaction { get; set; }
         public int KillCount { get; set; }
         public int VictimCount { get; set; } = 0;
+        public string Influence { get; set; }
+        public string Reputation { get; set; }
 
         #endregion
 
@@ -39,6 +41,8 @@ namespace EDJournalQueue.Models
             TargetType = (string)entry["TargetType"];
             TargetFaction = (string)entry["TargetFaction"];
             KillCount = (int)entry["KillCount"];
+            Influence = (string)entry["Influence"];
+            Reputation = (string)entry["Reputation"];
         }
 
         #endregion

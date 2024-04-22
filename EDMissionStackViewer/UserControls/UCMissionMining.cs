@@ -2,6 +2,7 @@
 using EDMissionStackViewer.Helpers;
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace EDMissionStackViewer.UserControls
 {
@@ -13,12 +14,14 @@ namespace EDMissionStackViewer.UserControls
         {
             InitializeComponent();
 
-            dgMissions.EnableHeadersVisualStyles = false;
-            dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+            //dgMissions.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+            //dgMissions.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgMissions.ColumnHeadersDefaultCellStyle.ForeColor;
 
-            dgSummary.EnableHeadersVisualStyles = false;
-            dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+            //dgSummary.ColumnHeadersDefaultCellStyle.SelectionBackColor = dgMissions.ColumnHeadersDefaultCellStyle.BackColor;
+            //dgSummary.ColumnHeadersDefaultCellStyle.SelectionForeColor = dgMissions.ColumnHeadersDefaultCellStyle.ForeColor;
 
+            //dgMissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            //dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         }
 
         #endregion
@@ -55,11 +58,23 @@ namespace EDMissionStackViewer.UserControls
 
         public void LoadData(List<JournalEntryMissionMining> missions)
         {
+            this.SuspendLayout();
+            splitContainer.SuspendLayout();
+            dgMissions.SuspendLayout();
+            dgSummary.SuspendLayout();
+
             var missionsBindingList = new SortableBindingList<MissionMining>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
-
+            dgMissions.Refresh();            
+            
             var summaryBindingList = new BindingList<MissionMiningByCommodity>(GetSummaryData(missions));
             dgSummary.DataSource = new BindingSource(summaryBindingList, null);
+            dgSummary.Refresh();
+
+            dgMissions.ResumeLayout(false);
+            dgSummary.ResumeLayout(false);
+            splitContainer.ResumeLayout(false);
+            this.ResumeLayout(false);
         }
 
         private List<MissionMining> GetMissionsData(List<JournalEntryMissionMining> missions)

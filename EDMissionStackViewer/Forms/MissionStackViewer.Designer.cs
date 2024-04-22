@@ -48,7 +48,6 @@ namespace EDMissionStackViewer
             // 
             // tabControlCommanders
             // 
-            tabControlCommanders.Appearance = TabAppearance.FlatButtons;
             tabControlCommanders.Controls.Add(tabPageCommander);
             tabControlCommanders.Dock = DockStyle.Fill;
             tabControlCommanders.Location = new Point(0, 32);
@@ -61,10 +60,10 @@ namespace EDMissionStackViewer
             // tabPageCommander
             // 
             tabPageCommander.Controls.Add(ucMissionsCommander);
-            tabPageCommander.Location = new Point(4, 37);
+            tabPageCommander.Location = new Point(4, 34);
             tabPageCommander.Name = "tabPageCommander";
             tabPageCommander.Padding = new Padding(3);
-            tabPageCommander.Size = new Size(1468, 537);
+            tabPageCommander.Size = new Size(1468, 540);
             tabPageCommander.TabIndex = 0;
             tabPageCommander.Text = "Commander";
             tabPageCommander.UseVisualStyleBackColor = true;
@@ -74,7 +73,7 @@ namespace EDMissionStackViewer
             ucMissionsCommander.Dock = DockStyle.Fill;
             ucMissionsCommander.Location = new Point(3, 3);
             ucMissionsCommander.Name = "ucMissionsCommander";
-            ucMissionsCommander.Size = new Size(1462, 531);
+            ucMissionsCommander.Size = new Size(1462, 534);
             ucMissionsCommander.TabIndex = 0;
             // 
             // refreshTimer

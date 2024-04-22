@@ -72,6 +72,7 @@ namespace EDMissionStackViewer
         private async void refreshTimer_Tick(object sender, EventArgs e)
         {
             refreshTimer.Enabled = false;
+            this.SuspendLayout();
 
             foreach (var commanderName in _watcher.JournalEntryQueue.Keys)
             {
@@ -85,6 +86,7 @@ namespace EDMissionStackViewer
                 }
             }
 
+            this.ResumeLayout(false);
             refreshTimer.Enabled = true;
 
         }
@@ -228,6 +230,7 @@ namespace EDMissionStackViewer
 
             if (!tabControlCommanders.TabPages.ContainsKey($"tabPageCommander{commanderName}"))
             {
+                this.SuspendLayout();
                 var tabPageCommander = new TabPage();
                 tabPageCommander.Location = new Point(4, 34);
                 tabPageCommander.Name = $"tabPageCommander{commanderName}";
@@ -245,6 +248,7 @@ namespace EDMissionStackViewer
                 uiMissions.TabIndex = 0;
                 uiMissions.HideAllMissions();
                 tabPageCommander.Controls.Add(uiMissions);
+                this.ResumeLayout(false);
             }
         }
         private async Task RefreshMissions(string commanderName)
@@ -302,7 +306,6 @@ namespace EDMissionStackViewer
                 lblNoCommander.Visible = true;
                 tabPageCommander.Parent = null;
             }
-
         }
 
         #endregion
