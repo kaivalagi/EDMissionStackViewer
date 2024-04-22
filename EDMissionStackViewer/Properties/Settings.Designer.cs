@@ -49,7 +49,7 @@ namespace EDMissionStackViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ArchiveInactiveJournals {
             get {
                 return ((bool)(this["ArchiveInactiveJournals"]));

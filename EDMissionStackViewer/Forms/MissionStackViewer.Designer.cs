@@ -92,6 +92,7 @@ namespace EDMissionStackViewer
             lblNoCommander.Size = new Size(572, 38);
             lblNoCommander.TabIndex = 4;
             lblNoCommander.Text = "No commander(s) with active missions found";
+            lblNoCommander.Visible = false;
             // 
             // menuStrip
             // 
@@ -111,6 +112,11 @@ namespace EDMissionStackViewer
             menuSettings.Name = "menuSettings";
             menuSettings.Size = new Size(40, 28);
             menuSettings.Click += menuSettings_Click;
+            // 
+            // menuSettingsJournalFolder
+            // 
+            menuSettingsJournalFolder.Name = "menuSettingsJournalFolder";
+            menuSettingsJournalFolder.Size = new Size(102, 34);
             // 
             // dlgJournalFolder
             // 

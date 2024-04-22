@@ -3,6 +3,7 @@ using EDJournalQueue.Extensions;
 using EDJournalQueue.Models;
 using EDMissionStackViewer.Forms;
 using EDMissionStackViewer.UserControls;
+using Microsoft.Extensions.Logging;
 
 namespace EDMissionStackViewer
 {
@@ -10,6 +11,8 @@ namespace EDMissionStackViewer
     {
 
         #region Class Data
+
+        private readonly ILogger _logger;
 
         private Watcher _watcher;
 
@@ -27,8 +30,10 @@ namespace EDMissionStackViewer
 
         #region Constructor
 
-        public MissionStackViewer()
+        public MissionStackViewer(ILogger<MissionStackViewer> logger, Watcher watcher)
         {
+            _logger = logger;
+            _watcher = watcher;
             InitializeComponent();
         }
 
@@ -38,25 +43,30 @@ namespace EDMissionStackViewer
 
         private async void MissionStackViewer_Load(object sender, EventArgs e)
         {
-            tabControlCommanders.TabPages.Clear(); // Shouldn't need this but we have dummy controls there for now to help with dev            
 
-            if (Properties.Settings.Default.JournalFolders == "")
+            try
             {
-                Properties.Settings.Default.JournalFolders = Helpers.Journal.GetDefaultJournalFolder().FullName;
-                Properties.Settings.Default.Save();
+                _logger.LogInformation("Loading Mission Stack Viewer");
+
+                tabControlCommanders.TabPages.Clear(); // Shouldn't need this but we have dummy controls there for now to help with dev            
+
+                if (Properties.Settings.Default.JournalFolders == "")
+                {
+                    Properties.Settings.Default.JournalFolders = Helpers.Journal.GetDefaultJournalFolder().FullName;
+                    Properties.Settings.Default.Save();
+                }
+                _journalFolderPaths = Properties.Settings.Default.JournalFolders.Split(",").ToList();
+
+                _journalMaxAgeDays = Properties.Settings.Default.JournalMaxAgeDays;
+                _archiveInactiveJournals = Properties.Settings.Default.ArchiveInactiveJournals;
+
+                await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error Loading Mission Stack Viewer");
             }
-            _journalFolderPaths = Properties.Settings.Default.JournalFolders.Split(",").ToList();
 
-            _journalMaxAgeDays = Properties.Settings.Default.JournalMaxAgeDays;
-            _archiveInactiveJournals = Properties.Settings.Default.ArchiveInactiveJournals;
-
-            await InitialiseWatcher();
-        }
-
-        public async Task InitialiseWatcher()
-        {
-            _watcher = new Watcher(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
-            await _watcher.InitializeAsync();
         }
 
         private async void refreshTimer_Tick(object sender, EventArgs e)
@@ -88,7 +98,7 @@ namespace EDMissionStackViewer
                 if (settingsDialog.JournalFolders != _journalFolderPaths)
                 {
                     _journalFolderPaths = settingsDialog.JournalFolders;
-                    await InitialiseWatcher();
+                    await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
                 }
             }
         }
@@ -284,10 +294,12 @@ namespace EDMissionStackViewer
 
             if (uiMissions.ActiveMissions)
             {
+                lblNoCommander.Visible = false;
                 tabPageCommander.Parent = tabControlCommanders;
             }
             else
             {
+                lblNoCommander.Visible = true;
                 tabPageCommander.Parent = null;
             }
 

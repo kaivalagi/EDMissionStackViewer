@@ -1,5 +1,6 @@
 ﻿using EDJournalQueue.Extensions;
 using EDJournalQueue.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace EDJournalQueue
     {
         #region Class Data
 
+        private readonly ILogger _logger;
+
         public Dictionary<string, JournalFileInfo> JournalFileInfoList = new Dictionary<string, JournalFileInfo>();
         public Dictionary<string, ConcurrentQueue<object>> JournalEntryQueue = new Dictionary<string, ConcurrentQueue<object>>();
         public Dictionary<string, List<object>> JournalEntryPreload = new Dictionary<string, List<object>>();
@@ -23,28 +26,15 @@ namespace EDJournalQueue
 
         private List<string> _activeJournalFilePaths = new List<string>();
         private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
-        
+
 
         #endregion
 
         #region Constructor
 
-        public Watcher(List<string> journalFolderPaths, int journalMaxAgeDays = 28, bool archiveInactiveJournals = false)
+        public Watcher(ILogger<Watcher> logger)
         {
-            _journalMaxAgeDays = journalMaxAgeDays;
-            _archiveInactiveJournals = archiveInactiveJournals;
-
-            foreach (var journalFolderPath in journalFolderPaths)
-            {
-                if (Path.Exists(journalFolderPath))
-                {
-                    _journalFolderPaths.Add(journalFolderPath);
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException($"Journal folder '{journalFolderPath}' doesn't exist!");
-                }
-            }
+            _logger = logger;
         }
 
         #endregion
@@ -75,17 +65,37 @@ namespace EDJournalQueue
 
         #region Methods
 
-        public async Task InitializeAsync(bool loadExistingJournalFiles = true)
+        public async Task InitializeAsync(List<string> journalFolderPaths, int journalMaxAgeDays = 28, bool archiveInactiveJournals = false)
         {
-            if (loadExistingJournalFiles)
+            _logger.LogInformation("Initialising Watcher");
+
+            _journalMaxAgeDays = journalMaxAgeDays;
+            _archiveInactiveJournals = archiveInactiveJournals;
+
+            foreach (var journalFolderPath in journalFolderPaths)
+            {
+                if (Path.Exists(journalFolderPath))
+                {
+                    _journalFolderPaths.Add(journalFolderPath);
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException($"Journal folder '{journalFolderPath}' doesn't exist!");
+                }
+            }
+
+            if (_journalFolderPaths.Count > 0)
             {
                 await PreloadJournalFilesAsync();
+                await WatchJournalFilesAsync();
             }
-            await WatchJournalFilesAsync();
         }
 
         private async Task PreloadJournalFilesAsync()
         {
+
+            _logger.LogInformation("Preloading Journal Files");
+
             var journalFileInfos = new List<FileInfo>();
             foreach (var journalFolder in _journalFolderPaths)
             {
@@ -100,6 +110,9 @@ namespace EDJournalQueue
             }
 
             // Now we establish what is active for queueing and file retention
+
+            _logger.LogInformation("Queuing Preloaded Events");
+
             _activeJournalFilePaths = new List<string>();
             foreach (var commanderName in ActiveMissions.Keys)
             {
@@ -121,6 +134,8 @@ namespace EDJournalQueue
 
             if (_archiveInactiveJournals)
             {
+                _logger.LogInformation("Archiving Inactive Journal Files");
+
                 var inactiveJournalFiles = journalFileInfos.Select(j => j.FullName).Except(_activeJournalFilePaths).ToList();
 
                 foreach (var journalFilePath in inactiveJournalFiles)
@@ -134,6 +149,23 @@ namespace EDJournalQueue
 
                     journalFileInfo.MoveTo(Path.Combine(archiveFolder.FullName, journalFileInfo.Name));                    
                 }
+            }
+        }
+
+        private async Task WatchJournalFilesAsync()
+        {
+
+            _logger.LogInformation("Setting Up Watchers For Journal Files");
+
+            foreach (var journalFolder in _journalFolderPaths)
+            {
+                var watcher = new FileSystemWatcher(journalFolder, "*.log");
+                watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite;
+                watcher.Created += OnCreated;
+                watcher.Changed += OnChanged;
+                watcher.IncludeSubdirectories = false;
+                watcher.EnableRaisingEvents = true;
+                _watchers.Add(watcher);
             }
         }
 
@@ -153,21 +185,6 @@ namespace EDJournalQueue
                 JournalEntryQueue[commanderName] = new ConcurrentQueue<object>();
             }
             JournalEntryQueue[commanderName].Enqueue(journalEntry);
-        }
-
-
-        private async Task WatchJournalFilesAsync()
-        {
-            foreach (var journalFolder in _journalFolderPaths)
-            {
-                var watcher = new FileSystemWatcher(journalFolder, "*.log");
-                watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite;
-                watcher.Created += OnCreated;
-                watcher.Changed += OnChanged;
-                watcher.IncludeSubdirectories = false;
-                watcher.EnableRaisingEvents = true;
-                _watchers.Add(watcher);
-            }
         }
 
         private async Task ReadJournal(string journalFilePath, bool preload = false)
