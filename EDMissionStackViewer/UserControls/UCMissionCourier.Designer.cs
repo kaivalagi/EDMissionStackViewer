@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
@@ -39,9 +40,18 @@
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             splitContainer = new SplitContainer();
             dgMissions = new DataGridView();
+            colMissionsLocation = new DataGridViewTextBoxColumn();
+            colMissionsFaction = new DataGridViewTextBoxColumn();
+            colMissionsRequired = new DataGridViewTextBoxColumn();
+            colMissionsDelivered = new DataGridViewTextBoxColumn();
+            colMissionsRemaining = new DataGridViewTextBoxColumn();
+            colMissionsReward = new DataGridViewTextBoxColumn();
+            colMissionsShared = new DataGridViewCheckBoxColumn();
+            colMissionsInfluence = new DataGridViewTextBoxColumn();
+            colMissionsReputation = new DataGridViewTextBoxColumn();
+            colMissionsExpiry = new DataGridViewTextBoxColumn();
             dgSummary = new DataGridView();
             colSummaryLocation = new DataGridViewTextBoxColumn();
             colSummaryTotalMissions = new DataGridViewTextBoxColumn();
@@ -53,16 +63,6 @@
             colSummaryRewardPerTon = new DataGridViewTextBoxColumn();
             colSummaryMinExpiry = new DataGridViewTextBoxColumn();
             colSummaryMaxExpiry = new DataGridViewTextBoxColumn();
-            colMissionsLocation = new DataGridViewTextBoxColumn();
-            colMissionsFaction = new DataGridViewTextBoxColumn();
-            colMissionsRequired = new DataGridViewTextBoxColumn();
-            colMissionsDelivered = new DataGridViewTextBoxColumn();
-            colMissionsRemaining = new DataGridViewTextBoxColumn();
-            colMissionsReward = new DataGridViewTextBoxColumn();
-            colMissionsShared = new DataGridViewCheckBoxColumn();
-            colMissionsInfluence = new DataGridViewTextBoxColumn();
-            colMissionsReputation = new DataGridViewTextBoxColumn();
-            colMissionsExpiry = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
             splitContainer.Panel2.SuspendLayout();
@@ -88,7 +88,7 @@
             splitContainer.Panel2.Controls.Add(dgSummary);
             splitContainer.Panel2MinSize = 125;
             splitContainer.Size = new Size(1369, 633);
-            splitContainer.SplitterDistance = 418;
+            splitContainer.SplitterDistance = 350;
             splitContainer.TabIndex = 0;
             // 
             // dgMissions
@@ -135,9 +135,94 @@
             dgMissions.ShowCellToolTips = false;
             dgMissions.ShowEditingIcon = false;
             dgMissions.ShowRowErrors = false;
-            dgMissions.Size = new Size(1369, 418);
+            dgMissions.Size = new Size(1369, 350);
             dgMissions.TabIndex = 5;
             dgMissions.CellFormatting += dgMissions_CellFormatting;
+            // 
+            // colMissionsLocation
+            // 
+            colMissionsLocation.DataPropertyName = "Location";
+            colMissionsLocation.HeaderText = "Location";
+            colMissionsLocation.MinimumWidth = 8;
+            colMissionsLocation.Name = "colMissionsLocation";
+            colMissionsLocation.ReadOnly = true;
+            // 
+            // colMissionsFaction
+            // 
+            colMissionsFaction.DataPropertyName = "Faction";
+            colMissionsFaction.HeaderText = "Faction";
+            colMissionsFaction.MinimumWidth = 8;
+            colMissionsFaction.Name = "colMissionsFaction";
+            colMissionsFaction.ReadOnly = true;
+            // 
+            // colMissionsRequired
+            // 
+            colMissionsRequired.DataPropertyName = "Required";
+            colMissionsRequired.HeaderText = "Required";
+            colMissionsRequired.MinimumWidth = 8;
+            colMissionsRequired.Name = "colMissionsRequired";
+            colMissionsRequired.ReadOnly = true;
+            // 
+            // colMissionsDelivered
+            // 
+            colMissionsDelivered.DataPropertyName = "Delivered";
+            colMissionsDelivered.HeaderText = "Delivered";
+            colMissionsDelivered.MinimumWidth = 8;
+            colMissionsDelivered.Name = "colMissionsDelivered";
+            colMissionsDelivered.ReadOnly = true;
+            // 
+            // colMissionsRemaining
+            // 
+            colMissionsRemaining.DataPropertyName = "Remaining";
+            colMissionsRemaining.HeaderText = "Remaining";
+            colMissionsRemaining.MinimumWidth = 8;
+            colMissionsRemaining.Name = "colMissionsRemaining";
+            colMissionsRemaining.ReadOnly = true;
+            // 
+            // colMissionsReward
+            // 
+            colMissionsReward.DataPropertyName = "Reward";
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
+            colMissionsReward.HeaderText = "Reward";
+            colMissionsReward.MinimumWidth = 8;
+            colMissionsReward.Name = "colMissionsReward";
+            colMissionsReward.ReadOnly = true;
+            // 
+            // colMissionsShared
+            // 
+            colMissionsShared.DataPropertyName = "Shared";
+            colMissionsShared.HeaderText = "Shared";
+            colMissionsShared.MinimumWidth = 8;
+            colMissionsShared.Name = "colMissionsShared";
+            colMissionsShared.ReadOnly = true;
+            colMissionsShared.Resizable = DataGridViewTriState.True;
+            colMissionsShared.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // colMissionsInfluence
+            // 
+            colMissionsInfluence.DataPropertyName = "Influence";
+            colMissionsInfluence.HeaderText = "Influence";
+            colMissionsInfluence.MinimumWidth = 8;
+            colMissionsInfluence.Name = "colMissionsInfluence";
+            colMissionsInfluence.ReadOnly = true;
+            // 
+            // colMissionsReputation
+            // 
+            colMissionsReputation.DataPropertyName = "Reputation";
+            colMissionsReputation.HeaderText = "Reputation";
+            colMissionsReputation.MinimumWidth = 8;
+            colMissionsReputation.Name = "colMissionsReputation";
+            colMissionsReputation.ReadOnly = true;
+            // 
+            // colMissionsExpiry
+            // 
+            colMissionsExpiry.DataPropertyName = "Expiry";
+            colMissionsExpiry.HeaderText = "Expiry";
+            colMissionsExpiry.MinimumWidth = 8;
+            colMissionsExpiry.Name = "colMissionsExpiry";
+            colMissionsExpiry.ReadOnly = true;
             // 
             // dgSummary
             // 
@@ -183,7 +268,7 @@
             dgSummary.ShowCellToolTips = false;
             dgSummary.ShowEditingIcon = false;
             dgSummary.ShowRowErrors = false;
-            dgSummary.Size = new Size(1369, 211);
+            dgSummary.Size = new Size(1369, 279);
             dgSummary.TabIndex = 6;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
             dgSummary.RowPrePaint += dgSummary_RowPrePaint;
@@ -276,91 +361,6 @@
             colSummaryMaxExpiry.MinimumWidth = 8;
             colSummaryMaxExpiry.Name = "colSummaryMaxExpiry";
             colSummaryMaxExpiry.ReadOnly = true;
-            // 
-            // colMissionsLocation
-            // 
-            colMissionsLocation.DataPropertyName = "Location";
-            colMissionsLocation.HeaderText = "Location";
-            colMissionsLocation.MinimumWidth = 8;
-            colMissionsLocation.Name = "colMissionsLocation";
-            colMissionsLocation.ReadOnly = true;
-            // 
-            // colMissionsFaction
-            // 
-            colMissionsFaction.DataPropertyName = "Faction";
-            colMissionsFaction.HeaderText = "Faction";
-            colMissionsFaction.MinimumWidth = 8;
-            colMissionsFaction.Name = "colMissionsFaction";
-            colMissionsFaction.ReadOnly = true;
-            // 
-            // colMissionsRequired
-            // 
-            colMissionsRequired.DataPropertyName = "Required";
-            colMissionsRequired.HeaderText = "Required";
-            colMissionsRequired.MinimumWidth = 8;
-            colMissionsRequired.Name = "colMissionsRequired";
-            colMissionsRequired.ReadOnly = true;
-            // 
-            // colMissionsDelivered
-            // 
-            colMissionsDelivered.DataPropertyName = "Delivered";
-            colMissionsDelivered.HeaderText = "Delivered";
-            colMissionsDelivered.MinimumWidth = 8;
-            colMissionsDelivered.Name = "colMissionsDelivered";
-            colMissionsDelivered.ReadOnly = true;
-            // 
-            // colMissionsRemaining
-            // 
-            colMissionsRemaining.DataPropertyName = "Remaining";
-            colMissionsRemaining.HeaderText = "Remaining";
-            colMissionsRemaining.MinimumWidth = 8;
-            colMissionsRemaining.Name = "colMissionsRemaining";
-            colMissionsRemaining.ReadOnly = true;
-            // 
-            // colMissionsReward
-            // 
-            colMissionsReward.DataPropertyName = "Reward";
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            colMissionsReward.DefaultCellStyle = dataGridViewCellStyle3;
-            colMissionsReward.HeaderText = "Reward";
-            colMissionsReward.MinimumWidth = 8;
-            colMissionsReward.Name = "colMissionsReward";
-            colMissionsReward.ReadOnly = true;
-            // 
-            // colMissionsShared
-            // 
-            colMissionsShared.DataPropertyName = "Shared";
-            colMissionsShared.HeaderText = "Shared";
-            colMissionsShared.MinimumWidth = 8;
-            colMissionsShared.Name = "colMissionsShared";
-            colMissionsShared.ReadOnly = true;
-            colMissionsShared.Resizable = DataGridViewTriState.True;
-            colMissionsShared.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
-            // colMissionsInfluence
-            // 
-            colMissionsInfluence.DataPropertyName = "Influence";
-            colMissionsInfluence.HeaderText = "Influence";
-            colMissionsInfluence.MinimumWidth = 8;
-            colMissionsInfluence.Name = "colMissionsInfluence";
-            colMissionsInfluence.ReadOnly = true;
-            // 
-            // colMissionsReputation
-            // 
-            colMissionsReputation.DataPropertyName = "Reputation";
-            colMissionsReputation.HeaderText = "Reputation";
-            colMissionsReputation.MinimumWidth = 8;
-            colMissionsReputation.Name = "colMissionsReputation";
-            colMissionsReputation.ReadOnly = true;
-            // 
-            // colMissionsExpiry
-            // 
-            colMissionsExpiry.DataPropertyName = "Expiry";
-            colMissionsExpiry.HeaderText = "Expiry";
-            colMissionsExpiry.MinimumWidth = 8;
-            colMissionsExpiry.Name = "colMissionsExpiry";
-            colMissionsExpiry.ReadOnly = true;
             // 
             // UCMissionCourier
             // 
