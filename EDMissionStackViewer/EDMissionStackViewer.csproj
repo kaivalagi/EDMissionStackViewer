@@ -10,7 +10,7 @@
     <Company>$(Authors)</Company>
     <PackageIcon>EDMissionStackViewer.ico</PackageIcon>
     <ApplicationIcon>EDMissionStackViewer.ico</ApplicationIcon>
-    <FileVersion>0.9.4</FileVersion>
+    <FileVersion>0.9.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
