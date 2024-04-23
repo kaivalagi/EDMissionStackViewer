@@ -41,9 +41,12 @@ namespace EDMissionStackViewer
             menuSettings = new ToolStripMenuItem();
             menuSettingsJournalFolder = new ToolStripMenuItem();
             dlgJournalFolder = new FolderBrowserDialog();
+            statusStrip = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
             tabControlCommanders.SuspendLayout();
             tabPageCommander.SuspendLayout();
             menuStrip.SuspendLayout();
+            statusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // tabControlCommanders
@@ -59,6 +62,7 @@ namespace EDMissionStackViewer
             // 
             // tabPageCommander
             // 
+            tabPageCommander.Controls.Add(statusStrip);
             tabPageCommander.Controls.Add(ucMissionsCommander);
             tabPageCommander.Location = new Point(4, 34);
             tabPageCommander.Name = "tabPageCommander";
@@ -121,6 +125,22 @@ namespace EDMissionStackViewer
             // 
             dlgJournalFolder.RootFolder = Environment.SpecialFolder.UserProfile;
             // 
+            // statusStrip
+            // 
+            statusStrip.ImageScalingSize = new Size(24, 24);
+            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
+            statusStrip.Location = new Point(3, 505);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1462, 32);
+            statusStrip.TabIndex = 1;
+            statusStrip.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(179, 25);
+            toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // MissionStackViewer
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -135,8 +155,11 @@ namespace EDMissionStackViewer
             Load += MissionStackViewer_Load;
             tabControlCommanders.ResumeLayout(false);
             tabPageCommander.ResumeLayout(false);
+            tabPageCommander.PerformLayout();
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -152,5 +175,7 @@ namespace EDMissionStackViewer
         private ToolStripMenuItem menuSettingsJournalFolder;
         private FolderBrowserDialog dlgJournalFolder;
         private UCMissions ucMissionsCommander;
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }

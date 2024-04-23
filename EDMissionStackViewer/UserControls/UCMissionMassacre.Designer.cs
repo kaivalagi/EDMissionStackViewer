@@ -32,17 +32,16 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
             splitContainer = new SplitContainer();
             dgMissions = new DataGridView();
-            dgSummary = new DataGridView();
             colMissionsLocation = new DataGridViewTextBoxColumn();
             colMissionsFaction = new DataGridViewTextBoxColumn();
             colMissionsRequired = new DataGridViewTextBoxColumn();
@@ -53,6 +52,7 @@
             colMissionsInfluence = new DataGridViewTextBoxColumn();
             colMissionsReputation = new DataGridViewTextBoxColumn();
             colMissionsExpiry = new DataGridViewTextBoxColumn();
+            dgSummary = new DataGridView();
             colSummaryFaction = new DataGridViewTextBoxColumn();
             colSummaryTotalMissions = new DataGridViewTextBoxColumn();
             colSummaryRequired = new DataGridViewTextBoxColumn();
@@ -138,55 +138,6 @@
             dgMissions.Size = new Size(1369, 350);
             dgMissions.TabIndex = 5;
             dgMissions.CellFormatting += dgMissions_CellFormatting;
-            // 
-            // dgSummary
-            // 
-            dgSummary.AllowUserToAddRows = false;
-            dgSummary.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle6.BackColor = Color.Gainsboro;
-            dgSummary.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
-            dgSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = SystemColors.Control;
-            dataGridViewCellStyle7.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            dgSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgSummary.Columns.AddRange(new DataGridViewColumn[] { colSummaryFaction, colSummaryTotalMissions, colSummaryRequired, colSummaryKilled, colSummaryRemaining, colSummaryTotalReward, colSummarySharedReward, colSummaryRewardPerTon, colSummaryMinExpiry, colSummaryMaxExpiry });
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            dgSummary.DefaultCellStyle = dataGridViewCellStyle11;
-            dgSummary.Dock = DockStyle.Fill;
-            dgSummary.Location = new Point(0, 0);
-            dgSummary.Name = "dgSummary";
-            dgSummary.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = SystemColors.Control;
-            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
-            dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
-            dgSummary.RowHeadersVisible = false;
-            dgSummary.RowHeadersWidth = 62;
-            dgSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgSummary.ShowCellErrors = false;
-            dgSummary.ShowCellToolTips = false;
-            dgSummary.ShowEditingIcon = false;
-            dgSummary.ShowRowErrors = false;
-            dgSummary.Size = new Size(1369, 279);
-            dgSummary.TabIndex = 6;
-            dgSummary.CellFormatting += dgSummary_CellFormatting;
-            dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colMissionsLocation
             // 
@@ -282,6 +233,56 @@
             colMissionsExpiry.Name = "colMissionsExpiry";
             colMissionsExpiry.ReadOnly = true;
             colMissionsExpiry.Width = 95;
+            // 
+            // dgSummary
+            // 
+            dgSummary.AllowUserToAddRows = false;
+            dgSummary.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle6.BackColor = Color.Gainsboro;
+            dgSummary.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dgSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            dgSummary.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Control;
+            dataGridViewCellStyle7.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgSummary.Columns.AddRange(new DataGridViewColumn[] { colSummaryFaction, colSummaryTotalMissions, colSummaryRequired, colSummaryKilled, colSummaryRemaining, colSummaryTotalReward, colSummarySharedReward, colSummaryRewardPerTon, colSummaryMinExpiry, colSummaryMaxExpiry });
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = SystemColors.Window;
+            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            dgSummary.DefaultCellStyle = dataGridViewCellStyle11;
+            dgSummary.Dock = DockStyle.Fill;
+            dgSummary.Location = new Point(0, 0);
+            dgSummary.Name = "dgSummary";
+            dgSummary.ReadOnly = true;
+            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = SystemColors.Control;
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
+            dgSummary.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dgSummary.RowHeadersVisible = false;
+            dgSummary.RowHeadersWidth = 62;
+            dgSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgSummary.ShowCellErrors = false;
+            dgSummary.ShowCellToolTips = false;
+            dgSummary.ShowEditingIcon = false;
+            dgSummary.ShowRowErrors = false;
+            dgSummary.Size = new Size(1369, 279);
+            dgSummary.TabIndex = 6;
+            dgSummary.CellFormatting += dgSummary_CellFormatting;
+            dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             // 
             // colSummaryFaction
             // 

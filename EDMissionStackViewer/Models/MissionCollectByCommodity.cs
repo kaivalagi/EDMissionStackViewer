@@ -15,35 +15,35 @@ namespace EDMissionStackViewer.Models
         public decimal TotalReward { get; set; }
         public decimal SharedReward { get; set; }
         public decimal RewardPerTon => TotalReward / Required;
-        public DateTime MinExpiry { get; set; }
-        public DateTime MaxExpiry { get; set; }
+        public TimeSpan MinExpiry { get; set; }
+        public TimeSpan MaxExpiry { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public MissionCollectByCommodity(List<MissionCollectByCommodity> summaryDataSource)
+        public MissionCollectByCommodity(List<MissionCollectByCommodity> summaryData)
         {
             this.Commodity = "Total";
-            this.Required = summaryDataSource.Sum(m => m.Required);
-            this.Delivered = summaryDataSource.Sum(m => m.Delivered);
-            this.TotalMissions = summaryDataSource.Sum(m => m.TotalMissions);
-            this.TotalReward = summaryDataSource.Sum(m => m.TotalReward);
-            this.SharedReward = summaryDataSource.Sum(m => m.SharedReward);
-            this.MinExpiry = summaryDataSource.Min(m => m.MinExpiry);
-            this.MaxExpiry = summaryDataSource.Max(m => m.MaxExpiry);
+            this.Required = summaryData.Sum(m => m.Required);
+            this.Delivered = summaryData.Sum(m => m.Delivered);
+            this.TotalMissions = summaryData.Sum(m => m.TotalMissions);
+            this.TotalReward = summaryData.Sum(m => m.TotalReward);
+            this.SharedReward = summaryData.Sum(m => m.SharedReward);
+            this.MinExpiry = summaryData.Min(m => m.MinExpiry);
+            this.MaxExpiry = summaryData.Max(m => m.MaxExpiry);
         }
 
-        public MissionCollectByCommodity(IGrouping<string, JournalEntryMissionCollect> missions)
+        public MissionCollectByCommodity(IGrouping<string, JournalEntryMissionCollect> missionData)
         {
-            this.Commodity = missions.Key;
-            this.Required = missions.Sum(m => m.Count);
-            this.Delivered = missions.Sum(m => m.DeliveredCount);
-            this.TotalMissions = missions.Count();
-            this.TotalReward = missions.Sum(m => m.Reward);
-            this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);
-            this.MinExpiry = missions.Min(m => m.Expiry);
-            this.MaxExpiry = missions.Max(m => m.Expiry);
+            this.Commodity = missionData.Key;
+            this.Required = missionData.Sum(m => m.Count);
+            this.Delivered = missionData.Sum(m => m.DeliveredCount);
+            this.TotalMissions = missionData.Count();
+            this.TotalReward = missionData.Sum(m => m.Reward);
+            this.SharedReward = missionData.Where(m => m.Wing).Sum(m => m.Reward);
+            this.MinExpiry = missionData.Min(m => m.Expiry) - DateTime.UtcNow;
+            this.MaxExpiry = missionData.Max(m => m.Expiry) - DateTime.UtcNow;
         }
 
         #endregion

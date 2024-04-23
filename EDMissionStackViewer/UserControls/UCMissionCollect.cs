@@ -8,6 +8,14 @@ namespace EDMissionStackViewer.UserControls
     public partial class UCMissionCollect : UserControl
     {
 
+        #region Class Data
+
+        private List<MissionCollect> _missionData = null;
+        private List<MissionCollectByCommodity> _summaryData = null;
+        private MissionCollectByCommodity _summaryDataTotal = null;
+
+        #endregion
+
         #region Constructor
 
         public UCMissionCollect()
@@ -46,10 +54,34 @@ namespace EDMissionStackViewer.UserControls
             }
         }
 
+        private void dgSummary_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                if (_summaryDataTotal != null)
+                {
+                    var info = $@"
+Location: {_missionData[0].Location}
+Mission Count: {_summaryDataTotal.TotalMissions}
+Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
+Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
+                    Clipboard.SetText(info);
+                }
+            }
+        }
+
+        private void dgSummary_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Control)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
         #endregion
 
         #region Methods
-        
+
         public void LoadData(List<JournalEntryMissionCollect> missions)
         {
             dgMissions.SuspendLayout();
@@ -67,26 +99,29 @@ namespace EDMissionStackViewer.UserControls
 
         private List<Models.MissionCollect> GetMissionsData(List<JournalEntryMissionCollect> missions)
         {
-            var missionsDataSource = new List<Models.MissionCollect>();
+            _missionData = new List<Models.MissionCollect>();
 
             foreach (var mission in missions)
             {
-                missionsDataSource.Add(new Models.MissionCollect(mission));
+                _missionData.Add(new Models.MissionCollect(mission));
             }
 
-            return missionsDataSource;
+            return _missionData;
         }
 
         private List<MissionCollectByCommodity> GetSummaryData(List<JournalEntryMissionCollect> missions)
         {
-            var summaryDataSource = new List<MissionCollectByCommodity>();
+            _summaryData = new List<MissionCollectByCommodity>();
 
             foreach (var commodityMissions in missions.GroupBy(m => m.Commodity).OrderBy(m => m.Key))
             {
-                summaryDataSource.Add(new MissionCollectByCommodity(commodityMissions));
+                _summaryData.Add(new MissionCollectByCommodity(commodityMissions));
             }
 
-            return summaryDataSource;
+            _summaryDataTotal = new MissionCollectByCommodity(_summaryData);
+            _summaryData.Add(_summaryDataTotal);
+
+            return _summaryData;
         }
 
         #endregion

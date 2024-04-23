@@ -8,6 +8,14 @@ namespace EDMissionStackViewer.UserControls
     public partial class UCMissionMassacre : UserControl
     {
 
+        #region Class Data
+
+        private List<MissionMassacre> _missionData = null;
+        private List<MissionMassacreByFaction> _summaryData = null;
+        private MissionMassacreByFaction _summaryDataTotal = null;
+
+        #endregion
+
         #region Constructor
 
         public UCMissionMassacre()
@@ -46,6 +54,30 @@ namespace EDMissionStackViewer.UserControls
             }
         }
 
+        private void dgSummary_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                if (_summaryDataTotal != null)
+                {
+                    var info = $@"
+Location: {_missionData[0].Location}
+Mission Count: {_summaryDataTotal.TotalMissions}
+Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
+Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
+                    Clipboard.SetText(info);
+                }
+            }
+        }
+
+        private void dgSummary_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Control)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -67,26 +99,29 @@ namespace EDMissionStackViewer.UserControls
 
         private List<MissionMassacre> GetMissionsData(List<JournalEntryMissionMassacre> missions)
         {
-            var missionsDataSource = new List<MissionMassacre>();
+            _missionData = new List<MissionMassacre>();
 
             foreach (var mission in missions)
             {
-                missionsDataSource.Add(new MissionMassacre(mission));
+                _missionData.Add(new MissionMassacre(mission));
             }
 
-            return missionsDataSource;
+            return _missionData;
         }
 
         private List<MissionMassacreByFaction> GetSummaryData(List<JournalEntryMissionMassacre> missions)
         {
-            var summaryDataSource = new List<MissionMassacreByFaction>();
+            _summaryData = new List<MissionMassacreByFaction>();
 
             foreach (var factionMissions in missions.GroupBy(m => m.Faction).OrderBy(m => m.Key))
             {
-                summaryDataSource.Add(new MissionMassacreByFaction(factionMissions));
+                _summaryData.Add(new MissionMassacreByFaction(factionMissions));
             }
 
-            return summaryDataSource;
+            _summaryDataTotal = new MissionMassacreByFaction(_summaryData);
+            _summaryData.Add(_summaryDataTotal);
+
+            return _summaryData;
         }
 
         #endregion

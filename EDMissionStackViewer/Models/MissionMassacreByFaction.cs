@@ -15,23 +15,35 @@ namespace EDMissionStackViewer.Models
         public decimal TotalReward { get; set; }
         public decimal SharedReward { get; set; }
         public decimal RewardPerTon => TotalReward / Required;
-        public DateTime MinExpiry { get; set; }
-        public DateTime MaxExpiry { get; set; }
+        public TimeSpan MinExpiry { get; set; }
+        public TimeSpan MaxExpiry { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public MissionMassacreByFaction(IGrouping<string, JournalEntryMissionMassacre> missions)
+        public MissionMassacreByFaction(List<MissionMassacreByFaction> summaryData)
         {
-            this.Faction = missions.Key;
-            this.TotalMissions = missions.Count();
-            this.Required = missions.Sum(m => m.KillCount);
-            this.Killed = missions.Sum(m => m.VictimCount);
-            this.TotalReward = missions.Sum(m => m.Reward);
-            this.SharedReward = missions.Where(m => m.Wing).Sum(m => m.Reward);
-            this.MinExpiry = missions.Min(m => m.Expiry);
-            this.MaxExpiry = missions.Max(m => m.Expiry);
+            this.Faction = "Total";
+            this.Required = summaryData.Sum(m => m.Required);
+            this.Killed = summaryData.Sum(m => m.Killed);
+            this.TotalMissions = summaryData.Sum(m => m.TotalMissions);
+            this.TotalReward = summaryData.Sum(m => m.TotalReward);
+            this.SharedReward = summaryData.Sum(m => m.SharedReward);
+            this.MinExpiry = summaryData.Min(m => m.MinExpiry);
+            this.MaxExpiry = summaryData.Max(m => m.MaxExpiry);
+        }
+
+        public MissionMassacreByFaction(IGrouping<string, JournalEntryMissionMassacre> missionData)
+        {
+            this.Faction = missionData.Key;
+            this.TotalMissions = missionData.Count();
+            this.Required = missionData.Sum(m => m.KillCount);
+            this.Killed = missionData.Sum(m => m.VictimCount);
+            this.TotalReward = missionData.Sum(m => m.Reward);
+            this.SharedReward = missionData.Where(m => m.Wing).Sum(m => m.Reward);
+            this.MinExpiry = missionData.Min(m => m.Expiry) - DateTime.UtcNow;
+            this.MaxExpiry = missionData.Max(m => m.Expiry) - DateTime.UtcNow;
 
         }
 

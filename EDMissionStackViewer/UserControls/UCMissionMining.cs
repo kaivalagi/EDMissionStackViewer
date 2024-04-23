@@ -1,13 +1,20 @@
 ﻿using EDJournalQueue.Models;
+using EDMissionStackViewer.Forms;
 using EDMissionStackViewer.Helpers;
 using EDMissionStackViewer.Models;
 using System.ComponentModel;
-using System.Windows.Forms;
 
 namespace EDMissionStackViewer.UserControls
 {
     public partial class UCMissionMining : UserControl
     {
+        #region Class Data
+
+        private List<MissionMining> _missionData = null;
+        private List<MissionMiningByCommodity> _summaryData = null;
+        private MissionMiningByCommodity _summaryDataTotal = null;
+
+        #endregion
 
         #region Constructor
         public UCMissionMining()
@@ -52,6 +59,30 @@ namespace EDMissionStackViewer.UserControls
             }
         }
 
+        private void dgSummary_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                if (_summaryDataTotal != null)
+                {
+                    var info = $@"
+Location: {_missionData[0].Location}
+Mission Count: {_summaryDataTotal.TotalMissions}
+Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
+Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
+                    Clipboard.SetText(info);
+                }
+            }
+        }
+
+        private void dgSummary_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Control)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -65,8 +96,8 @@ namespace EDMissionStackViewer.UserControls
 
             var missionsBindingList = new SortableBindingList<MissionMining>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
-            dgMissions.Refresh();            
-            
+            dgMissions.Refresh();
+
             var summaryBindingList = new BindingList<MissionMiningByCommodity>(GetSummaryData(missions));
             dgSummary.DataSource = new BindingSource(summaryBindingList, null);
             dgSummary.Refresh();
@@ -79,28 +110,29 @@ namespace EDMissionStackViewer.UserControls
 
         private List<MissionMining> GetMissionsData(List<JournalEntryMissionMining> missions)
         {
-            var missionsDataSource = new List<MissionMining>();
+            _missionData = new List<MissionMining>();
 
             foreach (var mission in missions)
             {
-                missionsDataSource.Add(new MissionMining(mission));
+                _missionData.Add(new MissionMining(mission));
             }
 
-            return missionsDataSource;
+            return _missionData;
         }
 
         private List<MissionMiningByCommodity> GetSummaryData(List<JournalEntryMissionMining> missions)
         {
-            var summaryDataSource = new List<MissionMiningByCommodity>();
+            _summaryData = new List<MissionMiningByCommodity>();
 
             foreach (var commodityMissions in missions.GroupBy(m => m.Commodity).OrderBy(m => m.Key))
             {
-                summaryDataSource.Add(new MissionMiningByCommodity(commodityMissions));
+                _summaryData.Add(new MissionMiningByCommodity(commodityMissions));
             }
 
-            summaryDataSource.Add(new MissionMiningByCommodity(summaryDataSource));
+            _summaryDataTotal = new MissionMiningByCommodity(_summaryData);
+            _summaryData.Add(_summaryDataTotal);
 
-            return summaryDataSource;
+            return _summaryData;
         }
 
         #endregion

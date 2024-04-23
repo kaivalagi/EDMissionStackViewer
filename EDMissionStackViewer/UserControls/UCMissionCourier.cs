@@ -8,6 +8,14 @@ namespace EDMissionStackViewer.UserControls
     public partial class UCMissionCourier : UserControl
     {
 
+        #region Class Data
+
+        private List<MissionCourier> _missionData = null;
+        private List<MissionCourierByLocation> _summaryData = null;
+        private MissionCourierByLocation _summaryDataTotal = null;
+
+        #endregion
+
         #region Constructor
 
         public UCMissionCourier()
@@ -46,6 +54,30 @@ namespace EDMissionStackViewer.UserControls
             }
         }
 
+        private void dgSummary_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                if (_summaryDataTotal != null)
+                {
+                    var info = $@"
+Location: {_missionData[0].Location}
+Mission Count: {_summaryDataTotal.TotalMissions}
+Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
+Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
+                    Clipboard.SetText(info);
+                }
+            }
+        }
+
+        private void dgSummary_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Control)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -67,28 +99,31 @@ namespace EDMissionStackViewer.UserControls
 
         private List<MissionCourier> GetMissionsData(List<JournalEntryMissionCourier> missions)
         {
-            var missionsDataSource = new List<MissionCourier>();
+            _missionData = new List<MissionCourier>();
 
             foreach (var mission in missions)
             {
-                missionsDataSource.Add(new MissionCourier(mission));
+                _missionData.Add(new MissionCourier(mission));
             }
 
-            return missionsDataSource;
+            return _missionData;
         }
 
         private List<MissionCourierByLocation> GetSummaryData(List<JournalEntryMissionCourier> missions)
         {
-            var summaryDataSource = new List<MissionCourierByLocation>();
+            _summaryData = new List<MissionCourierByLocation>();
 
             var locationMissionsGroups = missions.GroupBy(m => $"{m.DestinationSystem}\\{m.DestinationStation}").OrderBy(m => m.Key);
 
             foreach (var locationMissions in locationMissionsGroups)
             {
-                summaryDataSource.Add(new MissionCourierByLocation(locationMissions));
+                _summaryData.Add(new MissionCourierByLocation(locationMissions));
             }
 
-            return summaryDataSource;
+            _summaryDataTotal = new MissionCourierByLocation(_summaryData);
+            _summaryData.Add(_summaryDataTotal);
+
+            return _summaryData;
         }
 
         #endregion
