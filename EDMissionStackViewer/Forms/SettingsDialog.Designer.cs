@@ -40,9 +40,13 @@
             labelMaxAgeDays = new Label();
             buttonCancel = new Button();
             buttonOK = new Button();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            panel1 = new Panel();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMaxAgeDays).BeginInit();
+            tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // dialogFolder
@@ -56,14 +60,15 @@
             groupBox1.Controls.Add(listViewJournalFolders);
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(808, 261);
+            groupBox1.Size = new Size(799, 177);
             groupBox1.TabIndex = 9;
             groupBox1.TabStop = false;
             groupBox1.Text = "Journal Folders";
             // 
             // buttonAdd
             // 
-            buttonAdd.Location = new Point(676, 215);
+            buttonAdd.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonAdd.Location = new Point(25, 137);
             buttonAdd.Name = "buttonAdd";
             buttonAdd.Size = new Size(112, 34);
             buttonAdd.TabIndex = 0;
@@ -73,8 +78,9 @@
             // 
             // buttonRemove
             // 
+            buttonRemove.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             buttonRemove.Enabled = false;
-            buttonRemove.Location = new Point(558, 215);
+            buttonRemove.Location = new Point(143, 138);
             buttonRemove.Name = "buttonRemove";
             buttonRemove.Size = new Size(112, 34);
             buttonRemove.TabIndex = 1;
@@ -84,9 +90,10 @@
             // 
             // listViewJournalFolders
             // 
+            listViewJournalFolders.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             listViewJournalFolders.Location = new Point(25, 30);
             listViewJournalFolders.Name = "listViewJournalFolders";
-            listViewJournalFolders.Size = new Size(763, 179);
+            listViewJournalFolders.Size = new Size(763, 102);
             listViewJournalFolders.TabIndex = 1;
             listViewJournalFolders.UseCompatibleStateImageBehavior = false;
             listViewJournalFolders.View = View.List;
@@ -97,17 +104,19 @@
             groupBox2.Controls.Add(checkBoxArchiveInactiveJournals);
             groupBox2.Controls.Add(numericUpDownMaxAgeDays);
             groupBox2.Controls.Add(labelMaxAgeDays);
-            groupBox2.Location = new Point(3, 270);
+            groupBox2.Location = new Point(3, 187);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(808, 98);
+            groupBox2.Size = new Size(799, 94);
             groupBox2.TabIndex = 10;
             groupBox2.TabStop = false;
             groupBox2.Text = "Journal Files";
             // 
             // checkBoxArchiveInactiveJournals
             // 
+            checkBoxArchiveInactiveJournals.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             checkBoxArchiveInactiveJournals.AutoSize = true;
-            checkBoxArchiveInactiveJournals.Location = new Point(379, 45);
+            checkBoxArchiveInactiveJournals.CheckAlign = ContentAlignment.MiddleRight;
+            checkBoxArchiveInactiveJournals.Location = new Point(532, 43);
             checkBoxArchiveInactiveJournals.Name = "checkBoxArchiveInactiveJournals";
             checkBoxArchiveInactiveJournals.Size = new Size(230, 29);
             checkBoxArchiveInactiveJournals.TabIndex = 2;
@@ -117,7 +126,8 @@
             // 
             // numericUpDownMaxAgeDays
             // 
-            numericUpDownMaxAgeDays.Location = new Point(175, 45);
+            numericUpDownMaxAgeDays.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            numericUpDownMaxAgeDays.Location = new Point(164, 45);
             numericUpDownMaxAgeDays.Name = "numericUpDownMaxAgeDays";
             numericUpDownMaxAgeDays.Size = new Size(180, 31);
             numericUpDownMaxAgeDays.TabIndex = 4;
@@ -125,6 +135,7 @@
             // 
             // labelMaxAgeDays
             // 
+            labelMaxAgeDays.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             labelMaxAgeDays.AutoSize = true;
             labelMaxAgeDays.Location = new Point(22, 47);
             labelMaxAgeDays.Name = "labelMaxAgeDays";
@@ -134,10 +145,11 @@
             // 
             // buttonCancel
             // 
+            buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             buttonCancel.DialogResult = DialogResult.Cancel;
-            buttonCancel.Location = new Point(582, 383);
+            buttonCancel.Location = new Point(561, 7);
             buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new Size(112, 34);
+            buttonCancel.Size = new Size(112, 30);
             buttonCancel.TabIndex = 11;
             buttonCancel.Text = "&Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
@@ -145,26 +157,50 @@
             // 
             // buttonOK
             // 
+            buttonOK.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             buttonOK.DialogResult = DialogResult.OK;
-            buttonOK.Location = new Point(700, 383);
+            buttonOK.Location = new Point(679, 7);
             buttonOK.Name = "buttonOK";
-            buttonOK.Size = new Size(112, 34);
+            buttonOK.Size = new Size(112, 30);
             buttonOK.TabIndex = 12;
             buttonOK.Text = "&OK";
             buttonOK.UseVisualStyleBackColor = true;
             buttonOK.Click += buttonOK_Click;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
+            tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
+            tableLayoutPanel1.Controls.Add(groupBox2, 0, 1);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayoutPanel1.Size = new Size(805, 334);
+            tableLayoutPanel1.TabIndex = 13;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(buttonOK);
+            panel1.Controls.Add(buttonCancel);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 287);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(799, 44);
+            panel1.TabIndex = 0;
+            // 
             // SettingsDialog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(826, 427);
-            ControlBox = false;
-            Controls.Add(buttonCancel);
-            Controls.Add(buttonOK);
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            ClientSize = new Size(805, 334);
+            Controls.Add(tableLayoutPanel1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SettingsDialog";
             StartPosition = FormStartPosition.CenterParent;
@@ -174,6 +210,8 @@
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMaxAgeDays).EndInit();
+            tableLayoutPanel1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -189,5 +227,7 @@
         private Label labelMaxAgeDays;
         private Button buttonCancel;
         private Button buttonOK;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel1;
     }
 }
