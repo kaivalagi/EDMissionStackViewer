@@ -89,8 +89,6 @@ Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
 
         public void LoadData(List<JournalEntryMissionMining> missions)
         {
-            this.SuspendLayout();
-            splitContainer.SuspendLayout();
             dgMissions.SuspendLayout();
             dgSummary.SuspendLayout();
 
@@ -104,8 +102,6 @@ Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
 
             dgMissions.ResumeLayout(false);
             dgSummary.ResumeLayout(false);
-            splitContainer.ResumeLayout(false);
-            this.ResumeLayout(false);
         }
 
         private List<MissionMining> GetMissionsData(List<JournalEntryMissionMining> missions)

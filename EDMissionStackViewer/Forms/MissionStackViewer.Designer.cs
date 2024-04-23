@@ -41,33 +41,31 @@ namespace EDMissionStackViewer
             menuSettings = new ToolStripMenuItem();
             menuSettingsJournalFolder = new ToolStripMenuItem();
             dlgJournalFolder = new FolderBrowserDialog();
-            statusStrip = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
             tabControlCommanders.SuspendLayout();
             tabPageCommander.SuspendLayout();
             menuStrip.SuspendLayout();
-            statusStrip.SuspendLayout();
             SuspendLayout();
             // 
             // tabControlCommanders
             // 
             tabControlCommanders.Controls.Add(tabPageCommander);
             tabControlCommanders.Dock = DockStyle.Fill;
-            tabControlCommanders.Location = new Point(0, 32);
+            tabControlCommanders.Location = new Point(0, 30);
+            tabControlCommanders.Margin = new Padding(2);
             tabControlCommanders.Name = "tabControlCommanders";
             tabControlCommanders.SelectedIndex = 0;
-            tabControlCommanders.Size = new Size(1476, 578);
+            tabControlCommanders.Size = new Size(1023, 313);
             tabControlCommanders.TabIndex = 3;
             tabControlCommanders.Visible = false;
             // 
             // tabPageCommander
             // 
-            tabPageCommander.Controls.Add(statusStrip);
             tabPageCommander.Controls.Add(ucMissionsCommander);
-            tabPageCommander.Location = new Point(4, 34);
+            tabPageCommander.Location = new Point(4, 24);
+            tabPageCommander.Margin = new Padding(2);
             tabPageCommander.Name = "tabPageCommander";
-            tabPageCommander.Padding = new Padding(3);
-            tabPageCommander.Size = new Size(1468, 540);
+            tabPageCommander.Padding = new Padding(2);
+            tabPageCommander.Size = new Size(1015, 285);
             tabPageCommander.TabIndex = 0;
             tabPageCommander.Text = "Commander";
             tabPageCommander.UseVisualStyleBackColor = true;
@@ -75,9 +73,10 @@ namespace EDMissionStackViewer
             // ucMissionsCommander
             // 
             ucMissionsCommander.Dock = DockStyle.Fill;
-            ucMissionsCommander.Location = new Point(3, 3);
+            ucMissionsCommander.Location = new Point(2, 2);
+            ucMissionsCommander.Margin = new Padding(1);
             ucMissionsCommander.Name = "ucMissionsCommander";
-            ucMissionsCommander.Size = new Size(1462, 534);
+            ucMissionsCommander.Size = new Size(1011, 281);
             ucMissionsCommander.TabIndex = 0;
             // 
             // refreshTimer
@@ -90,9 +89,10 @@ namespace EDMissionStackViewer
             // 
             lblNoCommander.AutoSize = true;
             lblNoCommander.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblNoCommander.Location = new Point(31, 48);
+            lblNoCommander.Location = new Point(22, 29);
+            lblNoCommander.Margin = new Padding(2, 0, 2, 0);
             lblNoCommander.Name = "lblNoCommander";
-            lblNoCommander.Size = new Size(572, 38);
+            lblNoCommander.Size = new Size(390, 25);
             lblNoCommander.TabIndex = 4;
             lblNoCommander.Text = "No commander(s) with active missions found";
             lblNoCommander.Visible = false;
@@ -103,8 +103,9 @@ namespace EDMissionStackViewer
             menuStrip.Items.AddRange(new ToolStripItem[] { menuSettings });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
+            menuStrip.Padding = new Padding(4, 1, 0, 1);
             menuStrip.RightToLeft = RightToLeft.Yes;
-            menuStrip.Size = new Size(1476, 32);
+            menuStrip.Size = new Size(1023, 30);
             menuStrip.TabIndex = 5;
             menuStrip.Text = "menuStrip";
             // 
@@ -113,53 +114,35 @@ namespace EDMissionStackViewer
             menuSettings.DropDownItems.AddRange(new ToolStripItem[] { menuSettingsJournalFolder });
             menuSettings.Image = Properties.Resources.settings;
             menuSettings.Name = "menuSettings";
-            menuSettings.Size = new Size(40, 28);
+            menuSettings.Size = new Size(36, 28);
             menuSettings.Click += menuSettings_Click;
             // 
             // menuSettingsJournalFolder
             // 
             menuSettingsJournalFolder.Name = "menuSettingsJournalFolder";
-            menuSettingsJournalFolder.Size = new Size(102, 34);
+            menuSettingsJournalFolder.Size = new Size(67, 22);
             // 
             // dlgJournalFolder
             // 
             dlgJournalFolder.RootFolder = Environment.SpecialFolder.UserProfile;
             // 
-            // statusStrip
-            // 
-            statusStrip.ImageScalingSize = new Size(24, 24);
-            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1 });
-            statusStrip.Location = new Point(3, 505);
-            statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1462, 32);
-            statusStrip.TabIndex = 1;
-            statusStrip.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(179, 25);
-            toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
             // MissionStackViewer
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1476, 610);
+            ClientSize = new Size(1023, 343);
             Controls.Add(tabControlCommanders);
             Controls.Add(lblNoCommander);
             Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2);
             Name = "MissionStackViewer";
             Text = "ED Mission Stack Viewer";
             Load += MissionStackViewer_Load;
             tabControlCommanders.ResumeLayout(false);
             tabPageCommander.ResumeLayout(false);
-            tabPageCommander.PerformLayout();
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
-            statusStrip.ResumeLayout(false);
-            statusStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -175,7 +158,5 @@ namespace EDMissionStackViewer
         private ToolStripMenuItem menuSettingsJournalFolder;
         private FolderBrowserDialog dlgJournalFolder;
         private UCMissions ucMissionsCommander;
-        private StatusStrip statusStrip;
-        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
