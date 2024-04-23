@@ -30,40 +30,40 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsDialog));
             dialogFolder = new FolderBrowserDialog();
-            groupBox1 = new GroupBox();
+            groupBoxJournalFolders = new GroupBox();
             buttonAdd = new Button();
             buttonRemove = new Button();
             listViewJournalFolders = new ListView();
-            groupBox2 = new GroupBox();
+            groupBoxJournalFiles = new GroupBox();
             checkBoxArchiveInactiveJournals = new CheckBox();
             numericUpDownMaxAgeDays = new NumericUpDown();
             labelMaxAgeDays = new Label();
             buttonCancel = new Button();
             buttonOK = new Button();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            panel1 = new Panel();
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
+            layoutSettings = new TableLayoutPanel();
+            panelActions = new Panel();
+            groupBoxJournalFolders.SuspendLayout();
+            groupBoxJournalFiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMaxAgeDays).BeginInit();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
+            layoutSettings.SuspendLayout();
+            panelActions.SuspendLayout();
             SuspendLayout();
             // 
             // dialogFolder
             // 
             dialogFolder.RootFolder = Environment.SpecialFolder.UserProfile;
             // 
-            // groupBox1
+            // groupBoxJournalFolders
             // 
-            groupBox1.Controls.Add(buttonAdd);
-            groupBox1.Controls.Add(buttonRemove);
-            groupBox1.Controls.Add(listViewJournalFolders);
-            groupBox1.Location = new Point(3, 3);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(799, 177);
-            groupBox1.TabIndex = 9;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Journal Folders";
+            groupBoxJournalFolders.Controls.Add(buttonAdd);
+            groupBoxJournalFolders.Controls.Add(buttonRemove);
+            groupBoxJournalFolders.Controls.Add(listViewJournalFolders);
+            groupBoxJournalFolders.Location = new Point(3, 3);
+            groupBoxJournalFolders.Name = "groupBoxJournalFolders";
+            groupBoxJournalFolders.Size = new Size(799, 177);
+            groupBoxJournalFolders.TabIndex = 9;
+            groupBoxJournalFolders.TabStop = false;
+            groupBoxJournalFolders.Text = "Journal Folders";
             // 
             // buttonAdd
             // 
@@ -99,17 +99,17 @@
             listViewJournalFolders.View = View.List;
             listViewJournalFolders.SelectedIndexChanged += listViewJournalFolders_SelectedIndexChanged;
             // 
-            // groupBox2
+            // groupBoxJournalFiles
             // 
-            groupBox2.Controls.Add(checkBoxArchiveInactiveJournals);
-            groupBox2.Controls.Add(numericUpDownMaxAgeDays);
-            groupBox2.Controls.Add(labelMaxAgeDays);
-            groupBox2.Location = new Point(3, 187);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(799, 94);
-            groupBox2.TabIndex = 10;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Journal Files";
+            groupBoxJournalFiles.Controls.Add(checkBoxArchiveInactiveJournals);
+            groupBoxJournalFiles.Controls.Add(numericUpDownMaxAgeDays);
+            groupBoxJournalFiles.Controls.Add(labelMaxAgeDays);
+            groupBoxJournalFiles.Location = new Point(3, 187);
+            groupBoxJournalFiles.Name = "groupBoxJournalFiles";
+            groupBoxJournalFiles.Size = new Size(799, 94);
+            groupBoxJournalFiles.TabIndex = 10;
+            groupBoxJournalFiles.TabStop = false;
+            groupBoxJournalFiles.Text = "Journal Files";
             // 
             // checkBoxArchiveInactiveJournals
             // 
@@ -149,7 +149,7 @@
             buttonCancel.DialogResult = DialogResult.Cancel;
             buttonCancel.Location = new Point(561, 7);
             buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new Size(112, 30);
+            buttonCancel.Size = new Size(112, 40);
             buttonCancel.TabIndex = 11;
             buttonCancel.Text = "&Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
@@ -161,73 +161,73 @@
             buttonOK.DialogResult = DialogResult.OK;
             buttonOK.Location = new Point(679, 7);
             buttonOK.Name = "buttonOK";
-            buttonOK.Size = new Size(112, 30);
+            buttonOK.Size = new Size(112, 40);
             buttonOK.TabIndex = 12;
             buttonOK.Text = "&OK";
             buttonOK.UseVisualStyleBackColor = true;
             buttonOK.Click += buttonOK_Click;
             // 
-            // tableLayoutPanel1
+            // layoutSettings
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
-            tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
-            tableLayoutPanel1.Controls.Add(groupBox2, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel1.Size = new Size(805, 334);
-            tableLayoutPanel1.TabIndex = 13;
+            layoutSettings.ColumnCount = 1;
+            layoutSettings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            layoutSettings.Controls.Add(panelActions, 0, 2);
+            layoutSettings.Controls.Add(groupBoxJournalFolders, 0, 0);
+            layoutSettings.Controls.Add(groupBoxJournalFiles, 0, 1);
+            layoutSettings.Dock = DockStyle.Fill;
+            layoutSettings.Location = new Point(0, 0);
+            layoutSettings.Name = "layoutSettings";
+            layoutSettings.RowCount = 3;
+            layoutSettings.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            layoutSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            layoutSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            layoutSettings.Size = new Size(805, 344);
+            layoutSettings.TabIndex = 13;
             // 
-            // panel1
+            // panelActions
             // 
-            panel1.Controls.Add(buttonOK);
-            panel1.Controls.Add(buttonCancel);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 287);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(799, 44);
-            panel1.TabIndex = 0;
+            panelActions.Controls.Add(buttonOK);
+            panelActions.Controls.Add(buttonCancel);
+            panelActions.Dock = DockStyle.Fill;
+            panelActions.Location = new Point(3, 287);
+            panelActions.Name = "panelActions";
+            panelActions.Size = new Size(799, 54);
+            panelActions.TabIndex = 0;
             // 
             // SettingsDialog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(805, 334);
-            Controls.Add(tableLayoutPanel1);
+            ClientSize = new Size(805, 344);
+            Controls.Add(layoutSettings);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "SettingsDialog";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Settings";
             Load += FormJournalFolders_Load;
-            groupBox1.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
+            groupBoxJournalFolders.ResumeLayout(false);
+            groupBoxJournalFiles.ResumeLayout(false);
+            groupBoxJournalFiles.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDownMaxAgeDays).EndInit();
-            tableLayoutPanel1.ResumeLayout(false);
-            panel1.ResumeLayout(false);
+            layoutSettings.ResumeLayout(false);
+            panelActions.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
         private FolderBrowserDialog dialogFolder;
-        private GroupBox groupBox1;
+        private GroupBox groupBoxJournalFolders;
         private Button buttonAdd;
         private Button buttonRemove;
         private ListView listViewJournalFolders;
-        private GroupBox groupBox2;
+        private GroupBox groupBoxJournalFiles;
         private CheckBox checkBoxArchiveInactiveJournals;
         private NumericUpDown numericUpDownMaxAgeDays;
         private Label labelMaxAgeDays;
         private Button buttonCancel;
         private Button buttonOK;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Panel panel1;
+        private TableLayoutPanel layoutSettings;
+        private Panel panelActions;
     }
 }
