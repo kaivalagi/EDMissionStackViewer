@@ -283,6 +283,7 @@
             dgSummary.TabIndex = 6;
             dgSummary.CellFormatting += dgSummary_CellFormatting;
             dgSummary.RowPrePaint += dgSummary_RowPrePaint;
+            dgSummary.KeyDown += dgSummary_KeyDown;
             // 
             // colSummaryLocation
             // 
@@ -390,6 +391,7 @@
             Controls.Add(splitContainer);
             Name = "UCMissionCourier";
             Size = new Size(1369, 633);
+            KeyDown += dgSummary_KeyDown;
             splitContainer.Panel1.ResumeLayout(false);
             splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();

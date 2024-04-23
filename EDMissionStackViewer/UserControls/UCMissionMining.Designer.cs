@@ -388,6 +388,7 @@
             Controls.Add(splitContainer);
             Name = "UCMissionMining";
             Size = new Size(1369, 633);
+            KeyDown += dgSummary_KeyDown;
             splitContainer.Panel1.ResumeLayout(false);
             splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
