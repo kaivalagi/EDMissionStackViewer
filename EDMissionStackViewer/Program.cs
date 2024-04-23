@@ -1,11 +1,9 @@
+using EDJournalQueue;
 using EDMissionStackViewer.Helpers;
 using Microsoft.Extensions.DependencyInjection;
-using System.ServiceProcess;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
-using EDJournalQueue;
 
 namespace EDMissionStackViewer
 {
@@ -33,7 +31,7 @@ namespace EDMissionStackViewer
                   .CreateLogger();
                   services.AddLogging(x =>
                   {
-                      x.SetMinimumLevel(LogLevel.Information);
+                      x.SetMinimumLevel(LogLevel.Debug);
                       x.AddSerilog(logger: serilogLogger, dispose: true);
                   });
               });

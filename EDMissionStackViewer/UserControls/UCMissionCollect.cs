@@ -36,14 +36,18 @@ namespace EDMissionStackViewer.UserControls
 
         private void dgMissions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value != null && dgMissions.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+            if (e.Value != null && e.Value is TimeSpan)
+            {
                 e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+            }
         }
 
         private void dgSummary_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value != null && dgSummary.Columns[e.ColumnIndex].DataPropertyName.EndsWith("Expiry"))
+            if (e.Value != null && e.Value is TimeSpan)
+            {
                 e.Value = ((TimeSpan)e.Value).ToDaysHoursMins();
+            }
         }
 
         private void dgSummary_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -26,21 +27,21 @@ namespace EDJournalQueue.Models
 
         public JournalEntryMissionMining(JToken entry) : base(entry)
         {
-            DestinationSystem = (string)entry["DestinationSystem"];
-            DestinationStation = (string)entry["DestinationStation"];
-            Faction = (string)entry["Faction"];
-            Reward = (int)entry["Reward"];
+            DestinationSystem = entry.GetValue<string>("DestinationSystem");
+            DestinationStation = entry.GetValue<string>("DestinationStation");
+            Faction = entry.GetValue<string>("Faction");
+            Reward = entry.GetValue<int>("Reward");
 
             if (entry["Wing"] != null)
             {
                 Wing = true;
             }
-            Expiry = (DateTime)entry["Expiry"];
+            Expiry = entry.GetValue<DateTime>("Expiry");
             Type = JournalEntryType.Mining;
-            Commodity = (string)entry["Commodity_Localised"];
-            Count = (int)entry["Count"];
-            Influence = (string)entry["Influence"];
-            Reputation  = (string)entry["Reputation"];
+            Commodity = entry.GetValue<string>("Commodity_Localised");
+            Count = entry.GetValue<int>("Count");
+            Influence = entry.GetValue<string>("Influence");
+            Reputation  = entry.GetValue<string>("Reputation");
         }
 
         #endregion

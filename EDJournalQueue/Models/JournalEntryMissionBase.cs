@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -17,8 +18,8 @@ namespace EDJournalQueue.Models
 
         public JournalEntryMissionBase(JToken entry) : base(entry)
         {
-            MissionId = (long)entry["MissionID"];
-            Name = (string)entry["Name"];
+            MissionId = entry.GetValue<long>("MissionID");
+            Name = entry.GetValue<string>("Name");
         }
 
         #endregion

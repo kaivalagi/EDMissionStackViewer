@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -18,9 +19,9 @@ namespace EDJournalQueue.Models
         public JournalEntryBounty(JToken entry) : base(entry)
         {
             Type = JournalEntryType.Bounty;
-            VictimFaction = (string)entry["VictimFaction"];
-            TotalReward = (int)entry["TotalReward"];
-            PilotName = (string)entry["PilotName_Localised"];
+            VictimFaction = entry.GetValue<string>("VictimFaction");
+            TotalReward = entry.GetValue<int>("TotalReward");
+            PilotName = entry.GetValue<string>("PilotName_Localised");
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -31,8 +32,8 @@ namespace EDJournalQueue.Models
         public JournalEntryBase(JToken entry)
         {
             JToken = entry;
-            Timestamp = (DateTime)entry["timestamp"];
-            Event = (string)entry["event"];
+            Timestamp = entry.GetValue<DateTime>("timestamp");
+            Event = entry.GetValue<string>("event");
         }
 
         #endregion

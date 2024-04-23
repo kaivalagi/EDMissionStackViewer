@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -20,10 +21,10 @@ namespace EDJournalQueue.Models
         public JournalEntryCargoDepot(JToken entry) : base(entry)
         {
             Type = JournalEntryType.CargoDepot;
-            MissionId = (long)entry["MissionID"];
-            UpdateType = (string)entry["UpdateType"];
-            CargoType = (string)entry["CargoType_Localised"];
-            Count = (int)entry["Count"];
+            MissionId = entry.GetValue<long>("MissionID");
+            UpdateType = entry.GetValue<string>("UpdateType");
+            CargoType = entry.GetValue<string>("CargoType_Localised");
+            Count = entry.GetValue<int>("Count");
         }
 
         #endregion

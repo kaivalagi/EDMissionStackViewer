@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDJournalQueue.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace EDJournalQueue.Models
 {
@@ -11,7 +12,7 @@ namespace EDJournalQueue.Models
         public long MissionId { get; set; }
         public string Name { get; set; }
         public bool PassengerMission { get; set; }
-        public long Expires { get; set; } = 0;
+        public long Expires { get; set; }
 
         #endregion
 
@@ -20,16 +21,9 @@ namespace EDJournalQueue.Models
         public Mission(JToken activeMission)
         {
             JToken = activeMission;
-            MissionId = (long)activeMission["MissionID"];
-            Name = (string)activeMission["Name"];
-            Expires = (long)activeMission["Expires"];
-        }
-
-        public Mission(JournalEntryMissionBase acceptedMission)
-        {
-            JToken = acceptedMission.JToken;
-            MissionId = acceptedMission.MissionId;
-            Name = acceptedMission.Name;
+            MissionId = activeMission.GetValue<long>("MissionID");
+            Name = activeMission.GetValue<string>("Name");
+            Expires = activeMission.GetValue<long>("Expires", 0);
         }
 
         #endregion
