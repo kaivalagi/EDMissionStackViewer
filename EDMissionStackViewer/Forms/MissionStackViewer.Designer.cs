@@ -34,7 +34,6 @@ namespace EDMissionStackViewer
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionStackViewer));
             tabControlCommanders = new TabControl();
             tabPageCommander = new TabPage();
-            ucMissionsCommander = new UCMissions();
             refreshTimer = new System.Windows.Forms.Timer(components);
             lblNoCommander = new Label();
             menuStrip = new MenuStrip();
@@ -42,7 +41,6 @@ namespace EDMissionStackViewer
             menuSettingsJournalFolder = new ToolStripMenuItem();
             dlgJournalFolder = new FolderBrowserDialog();
             tabControlCommanders.SuspendLayout();
-            tabPageCommander.SuspendLayout();
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -60,7 +58,6 @@ namespace EDMissionStackViewer
             // 
             // tabPageCommander
             // 
-            tabPageCommander.Controls.Add(ucMissionsCommander);
             tabPageCommander.Location = new Point(4, 24);
             tabPageCommander.Margin = new Padding(2);
             tabPageCommander.Name = "tabPageCommander";
@@ -69,15 +66,6 @@ namespace EDMissionStackViewer
             tabPageCommander.TabIndex = 0;
             tabPageCommander.Text = "Commander";
             tabPageCommander.UseVisualStyleBackColor = true;
-            // 
-            // ucMissionsCommander
-            // 
-            ucMissionsCommander.Dock = DockStyle.Fill;
-            ucMissionsCommander.Location = new Point(2, 2);
-            ucMissionsCommander.Margin = new Padding(1);
-            ucMissionsCommander.Name = "ucMissionsCommander";
-            ucMissionsCommander.Size = new Size(1011, 281);
-            ucMissionsCommander.TabIndex = 0;
             // 
             // refreshTimer
             // 
@@ -95,7 +83,6 @@ namespace EDMissionStackViewer
             lblNoCommander.Size = new Size(390, 25);
             lblNoCommander.TabIndex = 4;
             lblNoCommander.Text = "No commander(s) with active missions found";
-            lblNoCommander.Visible = false;
             // 
             // menuStrip
             // 
@@ -140,7 +127,6 @@ namespace EDMissionStackViewer
             Text = "ED Mission Stack Viewer";
             Load += MissionStackViewer_Load;
             tabControlCommanders.ResumeLayout(false);
-            tabPageCommander.ResumeLayout(false);
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();
             ResumeLayout(false);

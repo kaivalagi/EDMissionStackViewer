@@ -27,7 +27,7 @@ namespace EDMissionStackViewer
                   services.AddSingleton<Watcher>();
 
                   var serilogLogger = new LoggerConfiguration()
-                  .WriteTo.File("EDMissionStackViewer.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                  .ReadFrom.AppSettings()
                   .CreateLogger();
                   services.AddLogging(x =>
                   {

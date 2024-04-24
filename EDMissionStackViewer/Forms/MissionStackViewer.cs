@@ -16,11 +16,11 @@ namespace EDMissionStackViewer
 
         private Watcher _watcher;
 
-        public Dictionary<string, Dictionary<long, Mission>> Missions = new Dictionary<string, Dictionary<long, Mission>>();
-        public Dictionary<string, List<JournalEntryMissionMassacre>> JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
-        public Dictionary<string, List<JournalEntryMissionMining>> JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
-        public Dictionary<string, List<JournalEntryMissionCollect>> JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
-        public Dictionary<string, List<JournalEntryMissionCourier>> JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
+        public Dictionary<string, Dictionary<long, Mission>> Missions;
+        public Dictionary<string, List<JournalEntryMissionMassacre>> JournalEntryMissionMassacreList;
+        public Dictionary<string, List<JournalEntryMissionMining>> JournalEntryMissionMiningList;
+        public Dictionary<string, List<JournalEntryMissionCollect>> JournalEntryMissionCollectList;
+        public Dictionary<string, List<JournalEntryMissionCourier>> JournalEntryMissionCourierList;
 
         public List<string> _journalFolderPaths;
         private int _journalMaxAgeDays = 28;
@@ -46,43 +46,57 @@ namespace EDMissionStackViewer
 
             try
             {
-                _logger.LogInformation("Loading Mission Stack Viewer");
+                _logger.LogInformation("Loading mission stack viewer");
 
                 tabControlCommanders.TabPages.Clear(); // Shouldn't need this but we have dummy controls there for now to help with dev            
 
-                if (Properties.Settings.Default.JournalFolders == "")
+                if (Properties.Settings.Default.JournalFolders == string.Empty)
                 {
                     Properties.Settings.Default.JournalFolders = Helpers.Journal.GetDefaultJournalFolder().FullName;
                     Properties.Settings.Default.Save();
                 }
                 _journalFolderPaths = Properties.Settings.Default.JournalFolders.Split(",").ToList();
-
                 _journalMaxAgeDays = Properties.Settings.Default.JournalMaxAgeDays;
                 _archiveInactiveJournals = Properties.Settings.Default.ArchiveInactiveJournals;
 
+                Missions = new Dictionary<string, Dictionary<long, Mission>>();
+                JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
+                JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
+                JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
+                JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
                 await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
             } 
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error Loading Mission Stack Viewer");
+                _logger.LogError(ex, "Error loading mission stack viewer");
             }
         }
 
         private async void refreshTimer_Tick(object sender, EventArgs e)
         {
-            refreshTimer.Enabled = false;
-            foreach (var commanderName in _watcher.JournalEntryQueue.Keys)
-            {
-                await CreateControls(commanderName);
-                await ProcessMissions(commanderName);
-
-                if (_watcher.JournalEntryQueue[commanderName].Count > 0)
+            try {
+                refreshTimer.Enabled = false;
+                foreach (var commanderName in _watcher.JournalEntryQueue.Keys)
                 {
-                    await ProcessJournalEntryQueue(commanderName);
-                    await RefreshMissions(commanderName);
+                    await CreateControls(commanderName);
+                    await ProcessMissions(commanderName);
+
+                    if (_watcher.JournalEntryQueue[commanderName].Count > 0)
+                    {
+                        await ProcessJournalEntryQueue(commanderName);
+                        await RefreshMissions(commanderName);
+                    }
                 }
+                refreshTimer.Enabled = true;
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error refreshing mission stack viewer");
             }
-            refreshTimer.Enabled = true;
+            finally
+            {
+                refreshTimer.Enabled = true;
+            }
         }
 
         private async void menuSettings_Click(object sender, EventArgs e)
@@ -93,15 +107,20 @@ namespace EDMissionStackViewer
             {
                 if (settingsDialog.JournalFolders != _journalFolderPaths)
                 {
-                    _journalFolderPaths = settingsDialog.JournalFolders;
-                    Missions = new Dictionary<string, Dictionary<long, Mission>>();
-                    JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
-                    JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
-                    JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
-                    JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
-                    lblNoCommander.Visible = true;
-                    tabPageCommander.Parent = null;
-                    await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
+                    try {
+                        _journalFolderPaths = settingsDialog.JournalFolders;
+                        Missions = new Dictionary<string, Dictionary<long, Mission>>();
+                        JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
+                        JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
+                        JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
+                        JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
+                        tabControlCommanders.Controls.Clear();
+                        await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
+                    } 
+                    catch (Exception ex)
+                    {
+                            _logger.LogError(ex, "Error reloading mission stack viewer after settings update");
+                    }
                 }
             }
         }
