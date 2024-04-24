@@ -114,7 +114,10 @@ namespace EDMissionStackViewer
                         JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
                         JournalEntryMissionCollectList = new Dictionary<string, List<JournalEntryMissionCollect>>();
                         JournalEntryMissionCourierList = new Dictionary<string, List<JournalEntryMissionCourier>>();
-                        tabControlCommanders.Controls.Clear();
+
+                        lblNoCommander.Visible = true;
+                        tabControlCommanders.Visible = false;
+
                         await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
                     } 
                     catch (Exception ex)
@@ -265,7 +268,6 @@ namespace EDMissionStackViewer
                 uiMissions.Name = $"uiMissions{commanderName}";
                 uiMissions.Size = new Size(1439, 715);
                 uiMissions.TabIndex = 0;
-                uiMissions.HideAllMissions();
                 tabPageCommander.Controls.Add(uiMissions);
             }
         }
@@ -312,17 +314,6 @@ namespace EDMissionStackViewer
             else
             {
                 uiMissions.HideMissionMining();
-            }
-
-            if (uiMissions.ActiveMissions)
-            {
-                lblNoCommander.Visible = false;
-                tabPageCommander.Parent = tabControlCommanders;
-            }
-            else
-            {
-                lblNoCommander.Visible = true;
-                tabPageCommander.Parent = null;
             }
         }
 
