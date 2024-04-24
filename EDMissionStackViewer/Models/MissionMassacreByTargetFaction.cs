@@ -2,12 +2,12 @@
 
 namespace EDMissionStackViewer.Models
 {
-    public class MissionMassacreByFaction
+    public class MissionMassacreByTargetFaction
     {
 
         #region Properties
 
-        public string Faction { get; set; }
+        public string TargetFaction { get; set; }
         public int TotalMissions { get; set; }
         public int Required { get; set; }
         public int Killed { get; set; }
@@ -22,9 +22,9 @@ namespace EDMissionStackViewer.Models
 
         #region Constructor
 
-        public MissionMassacreByFaction(List<MissionMassacreByFaction> summaryData)
+        public MissionMassacreByTargetFaction(List<MissionMassacreByTargetFaction> summaryData)
         {
-            this.Faction = "Total";
+            this.TargetFaction = "Total";
             this.Required = summaryData.Sum(m => m.Required);
             this.Killed = summaryData.Sum(m => m.Killed);
             this.TotalMissions = summaryData.Sum(m => m.TotalMissions);
@@ -34,9 +34,9 @@ namespace EDMissionStackViewer.Models
             this.MaxExpiry = summaryData.Max(m => m.MaxExpiry);
         }
 
-        public MissionMassacreByFaction(IGrouping<string, JournalEntryMissionMassacre> missionData)
+        public MissionMassacreByTargetFaction(IGrouping<string, JournalEntryMissionMassacre> missionData)
         {
-            this.Faction = missionData.Key;
+            this.TargetFaction = missionData.Key;
             this.TotalMissions = missionData.Count();
             this.Required = missionData.Sum(m => m.KillCount);
             this.Killed = missionData.Sum(m => m.VictimCount);

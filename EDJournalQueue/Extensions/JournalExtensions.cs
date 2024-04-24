@@ -75,7 +75,7 @@ namespace EDJournalQueue.Extensions
             {
                 if (!factions.Contains(mission.Faction))
                 {
-                    if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
+                    if (mission.VictimCount < mission.KillCount)
                     {
                         mission.VictimCount++;
                         factions.Add(mission.Faction);
@@ -87,6 +87,23 @@ namespace EDJournalQueue.Extensions
                 }
             }
         }
+
+        //public static void PopulateMissionFromBounty(this List<object> journalEvents, JournalEntryBounty bounty)
+        //{
+        //    var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+
+        //    foreach (var mission in associatedMissions)
+        //    {
+        //        if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
+        //        {
+        //            mission.VictimCount++;
+        //        }
+        //        else
+        //        {
+        //            continue;
+        //        }
+        //    }
+        //}
 
         public static void PopulateMissionFromBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
         {

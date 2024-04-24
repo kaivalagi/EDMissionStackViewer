@@ -66,7 +66,7 @@ namespace EDMissionStackViewer.UserControls
                 if (_summaryDataTotal != null)
                 {
                     var info = $@"
-Location: {_missionData[0].Location}
+Locations: {string.Join(",", _missionData.DistinctBy(m => m.Location).Select(m => m.Location).ToList())}
 Mission Count: {_summaryDataTotal.TotalMissions}
 Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
 Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";

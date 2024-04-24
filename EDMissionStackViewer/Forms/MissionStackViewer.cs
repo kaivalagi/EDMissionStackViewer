@@ -109,6 +109,7 @@ namespace EDMissionStackViewer
                 {
                     try {
                         _journalFolderPaths = settingsDialog.JournalFolders;
+
                         Missions = new Dictionary<string, Dictionary<long, Mission>>();
                         JournalEntryMissionMassacreList = new Dictionary<string, List<JournalEntryMissionMassacre>>();
                         JournalEntryMissionMiningList = new Dictionary<string, List<JournalEntryMissionMining>>();
@@ -117,6 +118,7 @@ namespace EDMissionStackViewer
 
                         lblNoCommander.Visible = true;
                         tabControlCommanders.Visible = false;
+                        tabControlCommanders.Controls.Clear();
 
                         await _watcher.InitializeAsync(_journalFolderPaths, _journalMaxAgeDays, _archiveInactiveJournals);
                     } 

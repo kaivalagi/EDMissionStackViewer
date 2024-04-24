@@ -11,8 +11,8 @@ namespace EDMissionStackViewer.UserControls
         #region Class Data
 
         private List<MissionMassacre> _missionData = null;
-        private List<MissionMassacreByFaction> _summaryData = null;
-        private MissionMassacreByFaction _summaryDataTotal = null;
+        private List<MissionMassacreByTargetFaction> _summaryData = null;
+        private MissionMassacreByTargetFaction _summaryDataTotal = null;
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace EDMissionStackViewer.UserControls
                 if (_summaryDataTotal != null)
                 {
                     var info = $@"
-Location: {_missionData[0].Location}
+Locations: {string.Join(",", _missionData.DistinctBy(m => m.Location).Select(m => m.Location).ToList())}
 Mission Count: {_summaryDataTotal.TotalMissions}
 Current Value: {_summaryDataTotal.TotalReward.ToString("N0")} Cr
 Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
@@ -94,7 +94,7 @@ Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
             var missionsBindingList = new SortableBindingList<MissionMassacre>(GetMissionsData(missions));
             dgMissions.DataSource = new BindingSource(missionsBindingList, null);
 
-            var summaryBindingList = new BindingList<MissionMassacreByFaction>(GetSummaryData(missions));
+            var summaryBindingList = new BindingList<MissionMassacreByTargetFaction>(GetSummaryData(missions));
             dgSummary.DataSource = new BindingSource(summaryBindingList, null);
 
             dgMissions.ResumeLayout(false);
@@ -113,16 +113,16 @@ Expiry: {_summaryDataTotal.MinExpiry.ToDaysHoursMins()}";
             return _missionData;
         }
 
-        private List<MissionMassacreByFaction> GetSummaryData(List<JournalEntryMissionMassacre> missions)
+        private List<MissionMassacreByTargetFaction> GetSummaryData(List<JournalEntryMissionMassacre> missions)
         {
-            _summaryData = new List<MissionMassacreByFaction>();
+            _summaryData = new List<MissionMassacreByTargetFaction>();
 
-            foreach (var factionMissions in missions.GroupBy(m => m.Faction).OrderBy(m => m.Key))
+            foreach (var targetFactionMissions in missions.GroupBy(m => m.TargetFaction).OrderBy(m => m.Key))
             {
-                _summaryData.Add(new MissionMassacreByFaction(factionMissions));
+                _summaryData.Add(new MissionMassacreByTargetFaction(targetFactionMissions));
             }
 
-            _summaryDataTotal = new MissionMassacreByFaction(_summaryData);
+            _summaryDataTotal = new MissionMassacreByTargetFaction(_summaryData);
             _summaryData.Add(_summaryDataTotal);
 
             return _summaryData;
