@@ -54,7 +54,7 @@
             colMissionsReputation = new DataGridViewTextBoxColumn();
             colMissionsExpiry = new DataGridViewTextBoxColumn();
             dgSummary = new DataGridView();
-            colSummaryFaction = new DataGridViewTextBoxColumn();
+            colSummaryTargetFaction = new DataGridViewTextBoxColumn();
             colSummaryTotalMissions = new DataGridViewTextBoxColumn();
             colSummaryRequired = new DataGridViewTextBoxColumn();
             colSummaryKilled = new DataGridViewTextBoxColumn();
@@ -263,7 +263,7 @@
             dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
             dgSummary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgSummary.Columns.AddRange(new DataGridViewColumn[] { colSummaryFaction, colSummaryTotalMissions, colSummaryRequired, colSummaryKilled, colSummaryRemaining, colSummaryTotalReward, colSummarySharedReward, colSummaryRewardPerTon, colSummaryMinExpiry, colSummaryMaxExpiry });
+            dgSummary.Columns.AddRange(new DataGridViewColumn[] { colSummaryTargetFaction, colSummaryTotalMissions, colSummaryRequired, colSummaryKilled, colSummaryRemaining, colSummaryTotalReward, colSummarySharedReward, colSummaryRewardPerTon, colSummaryMinExpiry, colSummaryMaxExpiry });
             dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = SystemColors.Window;
             dataGridViewCellStyle11.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -298,14 +298,14 @@
             dgSummary.RowPrePaint += dgSummary_RowPrePaint;
             dgSummary.KeyDown += dgSummary_KeyDown;
             // 
-            // colSummaryFaction
+            // colSummaryTargetFaction
             // 
-            colSummaryFaction.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colSummaryFaction.DataPropertyName = "TargetFaction";
-            colSummaryFaction.HeaderText = "Faction";
-            colSummaryFaction.MinimumWidth = 8;
-            colSummaryFaction.Name = "colSummaryFaction";
-            colSummaryFaction.ReadOnly = true;
+            colSummaryTargetFaction.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colSummaryTargetFaction.DataPropertyName = "TargetFaction";
+            colSummaryTargetFaction.HeaderText = "Target Faction";
+            colSummaryTargetFaction.MinimumWidth = 8;
+            colSummaryTargetFaction.Name = "colSummaryTargetFaction";
+            colSummaryTargetFaction.ReadOnly = true;
             // 
             // colSummaryTotalMissions
             // 
@@ -432,7 +432,7 @@
         private DataGridViewTextBoxColumn colMissionsInfluence;
         private DataGridViewTextBoxColumn colMissionsReputation;
         private DataGridViewTextBoxColumn colMissionsExpiry;
-        private DataGridViewTextBoxColumn colSummaryFaction;
+        private DataGridViewTextBoxColumn colSummaryTargetFaction;
         private DataGridViewTextBoxColumn colSummaryTotalMissions;
         private DataGridViewTextBoxColumn colSummaryRequired;
         private DataGridViewTextBoxColumn colSummaryKilled;

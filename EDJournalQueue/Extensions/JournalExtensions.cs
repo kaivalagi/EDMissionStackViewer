@@ -66,44 +66,38 @@ namespace EDJournalQueue.Extensions
             return entry;
         }
 
-        public static void PopulateMissionFromBounty(this List<object> journalEvents, JournalEntryBounty bounty)
-        {
-            var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
-            var factions = new List<string>();
-
-            foreach (var mission in associatedMissions)
-            {
-                if (!factions.Contains(mission.Faction))
-                {
-                    if (mission.VictimCount < mission.KillCount)
-                    {
-                        mission.VictimCount++;
-                        factions.Add(mission.Faction);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-            }
-        }
-
+        //Original
         //public static void PopulateMissionFromBounty(this List<object> journalEvents, JournalEntryBounty bounty)
         //{
         //    var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction).ToList();
+        //    var factions = new List<string>();
 
         //    foreach (var mission in associatedMissions)
         //    {
-        //        if (mission.VictimCount == 0 || mission.VictimCount < mission.KillCount)
+        //        if (!factions.Contains(mission.Faction))
         //        {
-        //            mission.VictimCount++;
-        //        }
-        //        else
-        //        {
-        //            continue;
+        //            if (mission.VictimCount < mission.KillCount)
+        //            {
+        //                mission.VictimCount++;
+        //                factions.Add(mission.Faction);
+        //            }
+        //            else
+        //            {
+        //                continue;
+        //            }
         //        }
         //    }
         //}
+
+        public static void PopulateMissionFromBounty(this List<object> journalEvents, JournalEntryBounty bounty)
+        {
+            var associatedMissions = journalEvents.OfType<JournalEntryMissionMassacre>().Where(j => j.TargetFaction == bounty.VictimFaction && j.VictimCount < j.KillCount).ToList().DistinctBy(j => j.Faction);
+
+            foreach (var mission in associatedMissions)
+            {
+                mission.VictimCount++;
+            }
+        }
 
         public static void PopulateMissionFromBounty(this List<JournalEntryMissionMassacre> journalEvents, JournalEntryBounty bounty)
         {
