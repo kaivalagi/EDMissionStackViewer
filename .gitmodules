@@ -1,0 +1,3 @@
+[submodule "EDJournalQueue"]
+	path = EDJournalQueue
+	url = https://github.com/kaivalagi/EDJournalQueue.git

@@ -57,6 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EDJournalQueue\EDJournalQueue.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
